@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "architecture-blueprint-generator": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/architecture-blueprint-generator/SKILL.md",
+      "computedHash": "9b20f13d1d96ba1c2550e1ce535f932e943c42939d3fae906a9e0d6c1bfb471a"
+    },
+    "brainstorming": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/brainstorming/SKILL.md",
+      "computedHash": "0eb8e9ba100985eb4da20c46807268cafd72ec1c4ea58132edf9be6c469867fe"
+    },
+    "color-palette": {
+      "source": "jezweb/claude-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/design-assets/skills/color-palette/SKILL.md",
+      "computedHash": "ca6093803bc93cfe329d8121c9ac066a8870c88d0d9ece6a1c3118d86af57943"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "93f53fd1c0352d3d7ec17b8f73d7351bf76f4821e55d123c9d2abc2c53ba48e4"
+    },
+    "razorpay": {
+      "source": "membranedev/application-skills",
+      "sourceType": "github",
+      "skillPath": "skills/razorpay/SKILL.md",
+      "computedHash": "fb269604cac997a3fc139d0a5fdea21255597c1d997337f345866ac3b7e1f96d"
+    }
+  }
+}

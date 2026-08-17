@@ -1,0 +1,341 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap");
+@import "tailwindcss";
+
+/* ─── Brand Design Tokens ──────────────────────────────────────── */
+@theme inline {
+  /* Brand Colors */
+  --color-brand-blue:       #1a3a8f;
+  --color-brand-blue-dark:  #122870;
+  --color-brand-blue-light: #2a52b8;
+  --color-brand-blue-50:    #eef1fb;
+  --color-brand-blue-100:   #d5dcf5;
+  --color-brand-gold:       #f5c518;
+  --color-brand-gold-dark:  #d4a812;
+  --color-brand-gold-light: #fad84a;
+  --color-brand-gold-50:    #fffbeb;
+
+  /* Neutrals */
+  --color-neutral-50:   #f8f9fc;
+  --color-neutral-100:  #f1f3f9;
+  --color-neutral-200:  #e2e6f0;
+  --color-neutral-300:  #c8cfe3;
+  --color-neutral-400:  #9aa5c4;
+  --color-neutral-500:  #6b7a99;
+  --color-neutral-600:  #4a5568;
+  --color-neutral-700:  #334155;
+  --color-neutral-800:  #1e293b;
+  --color-neutral-900:  #0f172a;
+
+  /* Semantic */
+  --color-success:  #16a34a;
+  --color-error:    #dc2626;
+  --color-warning:  #f59e0b;
+
+  /* Typography */
+  --font-sans:    "Inter", system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+
+  /* Shadows */
+  --shadow-card:       0 2px 8px 0 rgba(0, 0, 0, 0.07);
+  --shadow-card-hover: 0 8px 24px 0 rgba(26, 58, 143, 0.12);
+  --shadow-button:     0 2px 6px 0 rgba(26, 58, 143, 0.3);
+}
+
+/* ─── Base Styles ───────────────────────────────────────────────── */
+:root {
+  --background: #ffffff;
+  --foreground: #1e293b;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Utility Classes ───────────────────────────────────────────── */
+
+/* Container */
+.container-site {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container-site {
+    padding-inline: 2rem;
+  }
+}
+
+/* Heading display font */
+h1, h2, h3,
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Section spacing */
+.section {
+  padding-block: 4rem;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-block: 5rem;
+  }
+}
+
+/* ─── Brand Button Styles ───────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--color-brand-gold);
+  color: var(--color-brand-blue);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-brand-gold-dark);
+  box-shadow: var(--shadow-button);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-brand-gold);
+  outline-offset: 3px;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  color: var(--color-brand-blue);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  padding: 0.6875rem 1.75rem;
+  border-radius: 0.75rem;
+  border: 2px solid var(--color-brand-blue);
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.12s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-brand-blue);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--color-brand-blue);
+  outline-offset: 3px;
+}
+
+/* ─── Card ──────────────────────────────────────────────────────── */
+.card {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-neutral-100);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-3px);
+}
+
+/* ─── Badge ─────────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.badge-blue {
+  background-color: var(--color-brand-blue-50);
+  color: var(--color-brand-blue);
+}
+
+.badge-gold {
+  background-color: var(--color-brand-gold-50);
+  color: var(--color-brand-gold-dark);
+}
+
+/* ─── Section Title ─────────────────────────────────────────────── */
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  color: var(--color-brand-blue);
+  line-height: 1.2;
+}
+
+.section-subtitle {
+  font-size: 1.0625rem;
+  color: var(--color-neutral-600);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+/* ─── Price ─────────────────────────────────────────────────────── */
+.price-current {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--color-brand-blue);
+}
+
+.price-ref {
+  font-size: 1rem;
+  color: var(--color-neutral-400);
+  text-decoration: line-through;
+}
+
+.price-discount {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-success);
+  background: #dcfce7;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+}
+
+/* ─── Trust Indicator ───────────────────────────────────────────── */
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-neutral-700);
+}
+
+.trust-item::before {
+  content: "✓";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--color-brand-gold);
+  color: var(--color-brand-blue);
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* ─── Accordion (FAQ) ───────────────────────────────────────────── */
+.faq-item {
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  font-weight: 600;
+  color: var(--color-brand-blue);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  transition: color 0.15s;
+}
+
+/* ─── Step (How It Works) ───────────────────────────────────────── */
+.step-number {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  background: var(--color-brand-blue);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── Input ─────────────────────────────────────────────────────── */
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--color-neutral-200);
+  border-radius: 0.625rem;
+  font-size: 0.9375rem;
+  font-family: var(--font-sans);
+  color: var(--color-neutral-900);
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: var(--color-brand-blue);
+  box-shadow: 0 0 0 3px rgba(26, 58, 143, 0.1);
+}
+
+.input-field::placeholder {
+  color: var(--color-neutral-400);
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

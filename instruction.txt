@@ -1,0 +1,1712 @@
+# OlympiadPDFs — Complete Website Specification
+
+## 1. Website Overview
+
+**OlympiadPDFs** is a modern Indian EdTech e-commerce platform that sells **expert-designed Olympiad practice/sample question papers in PDF format** for students of **Classes 6 to 10**.
+
+The website is designed around one simple customer journey:
+
+> **Discover → Explore → Purchase → Pay → Receive PDF → Practice**
+
+The website should be **clean, trustworthy, affordable, student-friendly, and highly conversion-focused**, while also looking professional enough for parents to trust the product.
+
+### Brand
+
+**OlympiadPDFs**
+
+### Tagline
+
+**Expert Practice. Better Preparation.**
+
+### Brand colors
+
+* **Primary:** Deep/Royal Blue
+* **Secondary:** White
+* **Accent:** Yellow/Gold
+
+The visual language should consistently use these three colors across the website, PDF covers, social media, advertisements, buttons, icons, and promotional material.
+
+---
+
+# 2. Main Business Model
+
+OlympiadPDFs is a **digital-product business**.
+
+There is no physical delivery.
+
+A customer:
+
+1. Visits the website.
+2. Selects their class.
+3. Selects a subject or bundle.
+4. Views the available practice papers.
+5. Applies a coupon if available.
+6. Pays using Razorpay.
+7. Payment is verified automatically.
+8. The purchased PDF is automatically delivered to their email.
+9. The customer downloads the PDF and starts practicing.
+
+### Complete flow
+
+```text
+Instagram / Facebook / Meta Ads
+              ↓
+        OlympiadPDFs
+           Website
+              ↓
+       Select Class
+              ↓
+      Select Subject
+              ↓
+      View Product
+              ↓
+          Buy Now
+              ↓
+        Apply Coupon
+              ↓
+      Razorpay Checkout
+              ↓
+      Payment Verification
+              ↓
+       Order Confirmation
+              ↓
+      Automatic PDF Email
+              ↓
+        Download PDF
+              ↓
+       Start Practicing
+```
+
+There should be **no manual PDF delivery** after launch.
+
+---
+
+# 3. Target Audience
+
+## Primary Audience
+
+### Students
+
+Students from:
+
+* Class 6
+* Class 7
+* Class 8
+* Class 9
+* Class 10
+
+who want additional Olympiad-style practice.
+
+### Parents
+
+Parents looking for:
+
+* Affordable preparation material
+* Practice papers
+* Additional question practice
+* Concept-based preparation
+* Printable/downloadable material
+
+### Secondary Audience
+
+Later, the platform can target:
+
+* Private tutors
+* Coaching institutes
+* Schools
+* Educational organizations
+
+The initial website should focus primarily on **individual student/parent purchases**.
+
+---
+
+# 4. Subjects
+
+The initial platform contains six subjects:
+
+### 1. Mathematics
+
+Olympiad-style mathematical problem solving and application.
+
+### 2. Science
+
+Conceptual and application-based science practice.
+
+### 3. English
+
+Grammar, vocabulary, comprehension, language ability and reasoning-oriented English questions.
+
+### 4. Computer Science
+
+Computer fundamentals, logical thinking, programming/computational concepts and CS-related questions appropriate to the target level.
+
+### 5. General Knowledge
+
+General awareness and age-appropriate GK practice.
+
+### 6. Reasoning
+
+Logical reasoning, analytical thinking, patterns, sequences and problem-solving.
+
+---
+
+# 5. Class Structure
+
+The main navigation should allow users to browse by:
+
+**Class 6 | Class 7 | Class 8 | Class 9 | Class 10**
+
+The website should make it immediately obvious which products belong to which class.
+
+---
+
+# 6. Product Structure
+
+For class-specific products, the basic structure can be:
+
+### Class 6
+
+* Mathematics
+* Science
+* English
+* Computer Science
+* GK
+* Reasoning
+
+### Class 7
+
+* Mathematics
+* Science
+* English
+* Computer Science
+* GK
+* Reasoning
+
+And similarly for Classes 8, 9 and 10.
+
+However, according to the current content requirement, **English, GK, Computer Science and Reasoning may use common content across Classes 6–10**. The database should therefore support both class-specific and common products rather than hardcoding the structure.
+
+---
+
+# 7. Homepage
+
+The homepage should be the primary sales page.
+
+It should immediately answer:
+
+> **What is OlympiadPDFs?**
+
+> **Who is it for?**
+
+> **What do I get?**
+
+> **How much does it cost?**
+
+> **How do I purchase it?**
+
+---
+
+# 8. Header
+
+The website header should contain:
+
+### Left
+
+**OlympiadPDFs logo**
+
+### Navigation
+
+* Home
+* Classes
+* Subjects
+* Bundles
+* How It Works
+* FAQ
+
+### Right
+
+**Explore Papers**
+
+On mobile, use a clean hamburger menu.
+
+The header should remain simple and should not contain unnecessary links.
+
+---
+
+# 9. Hero Section
+
+The hero is the most important section of the homepage.
+
+### Main heading
+
+# Prepare Smarter for Olympiads.
+
+### Supporting text
+
+> Expert-designed Olympiad practice papers for Classes 6–10. Build concepts, improve problem-solving skills, and practice with confidence.
+
+### Primary CTA
+
+**Explore Practice Papers →**
+
+### Secondary CTA
+
+**View All Subjects**
+
+The hero can include a visual representation of the OlympiadPDFs Class 6–10 paper covers.
+
+---
+
+# 10. Hero Trust Points
+
+Under the main CTA, show small trust/value indicators:
+
+**✓ Expert Designed**
+
+**✓ Concept Focused**
+
+**✓ Answer Key Included**
+
+**✓ Instant Digital Delivery**
+
+This quickly communicates the value proposition.
+
+---
+
+# 11. Browse by Class
+
+Create a dedicated section:
+
+# Choose Your Class
+
+Five large cards:
+
+### CLASS 6
+
+Explore Papers →
+
+### CLASS 7
+
+Explore Papers →
+
+### CLASS 8
+
+Explore Papers →
+
+### CLASS 9
+
+Explore Papers →
+
+### CLASS 10
+
+Explore Papers →
+
+Each class card should use the same blue/white/yellow visual identity.
+
+The class number should be visually prominent.
+
+---
+
+# 12. Product Cards
+
+The product cards should follow the visual direction we established from your reference.
+
+Each card should have:
+
+### Top
+
+Professional PDF/product cover.
+
+Example:
+
+**OlympiadPDFs**
+
+**CLASS 6**
+
+**PRACTICE PAPERS**
+
+### Middle
+
+**Class 6 | Science**
+
+**Olympiad Practice Papers**
+
+### Information area
+
+For example:
+
+**10 Papers**
+
+**350 Questions**
+
+### Price
+
+**₹99**
+
+with a genuine reference price where applicable, e.g.
+
+~~₹199~~
+
+### CTA
+
+**Buy Now →**
+
+---
+
+# 13. Product Card Example
+
+```text
+┌───────────────────────────────┐
+│                               │
+│       OlympiadPDFs            │
+│                               │
+│          CLASS 6              │
+│      PRACTICE PAPERS          │
+│                               │
+│       [Product Image]         │
+│                               │
+├───────────────────────────────┤
+│                               │
+│ Class 6 | Science             │
+│ Olympiad Practice Papers      │
+│                               │
+│  📄 10 Papers   🎯 350 Qs     │
+│                               │
+│       ₹99   ₹199              │
+│                               │
+│      [ BUY NOW → ]            │
+│                               │
+└───────────────────────────────┘
+```
+
+The same structure should be used across all subjects.
+
+---
+
+# 14. Subject Section
+
+Create:
+
+# Explore by Subject
+
+Six cards:
+
+### Mathematics
+
+**Think. Solve. Excel.**
+
+### Science
+
+**Understand. Apply. Practice.**
+
+### English
+
+**Read. Reason. Master.**
+
+### Computer Science
+
+**Think Computationally.**
+
+### General Knowledge
+
+**Know More. Learn More.**
+
+### Reasoning
+
+**Challenge Your Thinking.**
+
+Each card should lead to the appropriate product listing.
+
+---
+
+# 15. Bundle Section
+
+Bundles should be a major part of the website because they increase average order value.
+
+Create:
+
+# Save More with Bundles
+
+### Subject Bundle
+
+Example:
+
+**Class 6 Mathematics Bundle**
+
+Multiple practice papers at a discounted price.
+
+---
+
+### Complete Class Bundle
+
+Example:
+
+# Class 6 Complete Bundle
+
+Includes:
+
+* Mathematics
+* Science
+* English
+* Computer Science
+* GK
+* Reasoning
+
+CTA:
+
+**Get Complete Bundle →**
+
+---
+
+# 16. All Subjects Bundle
+
+Create a premium bundle:
+
+# Complete Olympiad Preparation Bundle
+
+### Includes
+
+**6 Subjects**
+
+**Classes 6–10**
+
+**60+ Papers**
+
+**2,100+ Questions**
+
+The exact numbers should automatically reflect the final approved content catalogue.
+
+CTA:
+
+**Get the Complete Bundle →**
+
+This should be positioned as the **best-value option**.
+
+---
+
+# 17. Important Content Number Issue
+
+The original requirement says:
+
+> 60 papers × 35 questions
+
+which equals:
+
+**2,100 questions**
+
+But another requirement says:
+
+> 4,900 questions = 140 × 35
+
+Therefore, the final website should **not hardcode 4,900 questions** until the content team confirms the actual number.
+
+The product system should allow:
+
+* Paper count
+* Question count
+* Class
+* Subject
+
+to be configured dynamically.
+
+---
+
+# 18. Why OlympiadPDFs?
+
+Create a section:
+
+# Why Choose OlympiadPDFs?
+
+Use four or five cards.
+
+### Expert Designed
+
+Created with Olympiad-style preparation and appropriate academic difficulty in mind.
+
+### Concept Focused
+
+Questions emphasize understanding, application and problem-solving rather than simple memorization.
+
+### Structured Practice
+
+Multiple practice papers provide consistent preparation.
+
+### Affordable
+
+High-quality digital preparation material at accessible prices.
+
+### Instant Access
+
+No shipping and no waiting. Receive the digital product electronically after successful payment.
+
+---
+
+# 19. How It Works
+
+Keep this section extremely simple.
+
+# How It Works
+
+### 01 — Choose
+
+Select your class, subject or bundle.
+
+### 02 — Purchase
+
+Apply your coupon and pay securely through Razorpay.
+
+### 03 — Receive
+
+Your purchased PDF is delivered to your registered email.
+
+### 04 — Practice
+
+Download the paper and start preparing.
+
+Visual:
+
+```text
+CHOOSE
+   ↓
+BUY
+   ↓
+RECEIVE
+   ↓
+PRACTICE
+```
+
+---
+
+# 20. Content Quality Section
+
+Create a section explaining what makes the papers different.
+
+### Heading
+
+# Practice Beyond the Textbook.
+
+Supporting text:
+
+> OlympiadPDFs practice papers are designed to encourage conceptual understanding, logical thinking, application and problem-solving.
+
+Show small visual tags:
+
+**Conceptual**
+
+**Application-Based**
+
+**Logical**
+
+**Analytical**
+
+**Olympiad-Style**
+
+Avoid claiming that these are official examination papers unless there is an actual official affiliation.
+
+---
+
+# 21. Pricing Section
+
+The pricing should emphasize affordability.
+
+Example:
+
+### Individual Paper
+
+Starting from:
+
+**₹19**
+
+### Subject Pack
+
+Starting from:
+
+**₹99**
+
+### Class Bundle
+
+Starting from:
+
+**₹199**
+
+### Complete Bundle
+
+Starting from:
+
+**₹499**
+
+These values should be configurable.
+
+---
+
+# 22. Discount Presentation
+
+Use discounts carefully.
+
+Example:
+
+**₹99**
+
+~~₹199~~
+
+**50% OFF**
+
+But the reference price should be genuine and compliant with applicable consumer/pricing requirements.
+
+Don't create fake inflated prices simply to show a larger discount.
+
+---
+
+# 23. Social Coupon Strategy
+
+The website should support coupons promoted through social media.
+
+Example:
+
+### Instagram
+
+> Follow @OlympiadPDFs
+> Use code **INSTA20**
+> Get 20% OFF
+
+### Facebook
+
+> Use code **FB20**
+
+This lets you track purchases generated by each social channel.
+
+---
+
+# 24. Product Detail Page
+
+When a user clicks a product, open a dedicated product page.
+
+Example:
+
+# Class 6 Science Olympiad Practice Papers
+
+### Product Summary
+
+**10 Practice Papers**
+
+**350 Questions**
+
+**Answer Key Included**
+
+**PDF Format**
+
+**Digital Delivery**
+
+### Price
+
+**₹99**
+
+~~₹199~~
+
+### CTA
+
+# Buy Now
+
+---
+
+# 25. Product Description
+
+The product page should explain:
+
+### What's Included?
+
+* 10 practice papers
+* 35 questions per paper
+* Answer key
+* PDF format
+* Digital delivery
+* Mobile-friendly downloadable material
+
+### Suitable For
+
+* Class 6 students
+* Olympiad practice
+* School-level competitive preparation
+* Additional question practice
+
+---
+
+# 26. Checkout
+
+The checkout should be extremely simple.
+
+Collect:
+
+### Full Name
+
+### Email Address
+
+### Mobile Number
+
+### Coupon Code
+
+Then show:
+
+```text
+Product
+₹199
+
+Discount
+-₹100
+
+Total
+₹99
+```
+
+Then:
+
+# Pay Securely with Razorpay
+
+Avoid forcing customers to create an account before purchasing unless there is a strong business reason.
+
+---
+
+# 27. Razorpay Payment
+
+The website must integrate Razorpay.
+
+Flow:
+
+```text
+BUY NOW
+   ↓
+Create Order
+   ↓
+Razorpay Checkout
+   ↓
+Payment
+   ↓
+Server Verification
+   ↓
+Order = PAID
+```
+
+The backend must verify the payment.
+
+Do not trust only the frontend response.
+
+---
+
+# 28. Order Confirmation
+
+After payment:
+
+# Payment Successful 🎉
+
+Show:
+
+> Thank you for purchasing from OlympiadPDFs.
+
+Display:
+
+**Order ID**
+
+**Product**
+
+**Amount Paid**
+
+Then:
+
+> Your practice papers have been sent to your email.
+
+Button:
+
+**Check Your Email →**
+
+Optionally provide a secure download button as well.
+
+---
+
+# 29. Automated PDF Delivery
+
+This is one of the core features of the website.
+
+After successful payment:
+
+```text
+Razorpay Payment
+       ↓
+Payment Verified
+       ↓
+Order Created
+       ↓
+PDF Retrieved
+       ↓
+Secure Download Link
+       ↓
+Email Sent
+```
+
+The customer should receive the PDF automatically.
+
+No WhatsApp/manual delivery should be required.
+
+---
+
+# 30. Customer Email
+
+Email example:
+
+### Subject
+
+**Your OlympiadPDFs Practice Papers Are Ready 🎯**
+
+### Content
+
+> Hi Rahul,
+>
+> Thank you for purchasing from OlympiadPDFs.
+>
+> **Product:** Class 6 Science Practice Papers
+> **Papers:** 10
+> **Questions:** 350
+> **Order ID:** OLY-XXXX
+>
+> Your practice papers are ready.
+>
+> **[Download Your PDF]**
+>
+> Happy Practicing!
+> **Team OlympiadPDFs**
+
+---
+
+# 31. Secure PDF Delivery
+
+PDFs should not be publicly accessible through predictable URLs.
+
+Use private storage and secure/temporary download links.
+
+For example:
+
+```text
+Payment Verified
+       ↓
+Authorized Download Request
+       ↓
+Temporary Secure URL
+       ↓
+PDF Download
+```
+
+Optional:
+
+Watermark the purchased PDF with:
+
+**Customer Email + Order ID**
+
+This can discourage casual redistribution.
+
+---
+
+# 32. FAQ Section
+
+Create a clean FAQ accordion.
+
+### What is OlympiadPDFs?
+
+OlympiadPDFs provides expert-designed Olympiad-style practice and sample papers for Classes 6–10.
+
+### Are these official Olympiad papers?
+
+No. Unless explicitly stated, these are independently created practice/sample papers and are not official papers of an Olympiad organization.
+
+### Which classes are available?
+
+Classes 6–10.
+
+### Which subjects are available?
+
+Mathematics, Science, English, Computer Science, GK and Reasoning.
+
+### How will I receive my purchase?
+
+Your PDF will be delivered digitally to the email address provided during checkout.
+
+### Can I access the PDF on mobile?
+
+Yes. The PDFs are digital files and can be accessed on compatible phones, tablets and computers.
+
+### Do I need an account?
+
+The initial purchase flow can work without requiring account registration.
+
+### What payment methods are supported?
+
+Payments are processed through Razorpay and the available payment methods shown at checkout.
+
+---
+
+# 33. Testimonials
+
+Once real customers have purchased the products, create:
+
+# What Parents & Students Say
+
+Use genuine reviews only.
+
+Example structure:
+
+> ⭐⭐⭐⭐⭐
+> "The questions were very useful for additional practice and the PDF delivery was instant."
+
+**— Parent of Class 7 Student**
+
+Do not create fake testimonials for launch.
+
+Until real reviews exist, replace this section with:
+
+### Why Parents Choose Affordable Digital Practice
+
+or another trust-building section.
+
+---
+
+# 34. Footer
+
+The footer should contain:
+
+### OlympiadPDFs
+
+**Expert Practice. Better Preparation.**
+
+### Quick Links
+
+* Home
+* Classes
+* Subjects
+* Bundles
+* FAQ
+* Contact
+
+### Legal
+
+* Privacy Policy
+* Terms & Conditions
+* Refund Policy
+* Digital Product Policy
+
+### Social
+
+* Instagram
+* Facebook
+
+### Contact
+
+Official support email.
+
+---
+
+# 35. Mobile Website
+
+Mobile is extremely important because a large amount of traffic will come from Instagram and Facebook.
+
+The website must be **mobile-first**.
+
+### Mobile layout
+
+```text
+Logo
+☰
+
+Hero
+↓
+Explore Papers
+↓
+Choose Class
+↓
+Product Cards
+↓
+Subjects
+↓
+Bundles
+↓
+Why OlympiadPDFs
+↓
+How It Works
+↓
+FAQ
+↓
+Footer
+```
+
+Product cards should become **one card per row** on mobile.
+
+Buttons should be large enough to comfortably tap.
+
+---
+
+# 36. Desktop Layout
+
+On desktop:
+
+### Product Grid
+
+**4 cards per row** where screen size permits.
+
+### Tablet
+
+**2 cards per row**
+
+### Mobile
+
+**1 card per row**
+
+The card dimensions should remain visually consistent.
+
+---
+
+# 37. Visual Style
+
+The website should be inspired by the clean card-based reference you provided, but **should not copy the design**.
+
+Use:
+
+* Rounded cards
+* White surfaces
+* Soft shadows
+* Deep blue typography
+* Yellow CTAs
+* Professional PDF covers
+* Minimal icons
+* Large clean headings
+* Generous spacing
+
+Avoid:
+
+* Excessive animations
+* Neon colors
+* Too many gradients
+* Cluttered backgrounds
+* Cartoonish designs
+* Excessive text
+* Complicated navigation
+
+---
+
+# 38. Product Cover Style
+
+Every PDF cover should follow the same brand system.
+
+For example:
+
+### OlympiadPDFs
+
+**CLASS 6**
+
+# SCIENCE
+
+**PRACTICE PAPERS**
+
+Then an appropriate educational illustration.
+
+Bottom:
+
+**10 PAPERS | 350 QUESTIONS**
+
+The same design language should be adapted for:
+
+* Mathematics
+* Science
+* English
+* Computer Science
+* GK
+* Reasoning
+
+And for:
+
+* Class 6
+* Class 7
+* Class 8
+* Class 9
+* Class 10
+
+---
+
+# 39. Bundle Cover
+
+Create a special cover for:
+
+# COMPLETE OLYMPIAD BUNDLE
+
+Include visual icons for:
+
+**Maths | Science | English | CS | GK | Reasoning**
+
+Then:
+
+**Classes 6–10**
+
+**Complete Practice Collection**
+
+This should visually look more premium than individual products.
+
+---
+
+# 40. Admin Panel
+
+The admin should be able to manage the entire catalogue.
+
+### Products
+
+* Add product
+* Edit product
+* Delete/archive product
+* Upload PDF
+* Change price
+* Change reference price
+* Set class
+* Set subject
+* Set paper count
+* Set question count
+* Enable/disable product
+
+### Orders
+
+View:
+
+* Order ID
+* Customer
+* Email
+* Product
+* Amount
+* Payment status
+* Delivery status
+* Date
+
+### Coupons
+
+Create:
+
+* Coupon code
+* Percentage discount
+* Fixed discount
+* Expiry
+* Usage limit
+
+### Analytics
+
+Display:
+
+* Revenue
+* Orders
+* Products sold
+* Best-selling products
+* Coupon usage
+* Downloads
+
+---
+
+# 41. Search and Filters
+
+As the catalogue grows, add:
+
+### Search
+
+Search:
+
+> Class 7 Science
+
+### Filters
+
+**Class**
+
+* 6
+* 7
+* 8
+* 9
+* 10
+
+**Subject**
+
+* Maths
+* Science
+* English
+* CS
+* GK
+* Reasoning
+
+**Product Type**
+
+* Individual
+* Subject Pack
+* Class Bundle
+* Complete Bundle
+
+This should make the catalogue scalable.
+
+---
+
+# 42. SEO
+
+Every product should have a unique SEO-friendly URL.
+
+Example:
+
+```text
+/olympiad-papers/class-6/science
+```
+
+or:
+
+```text
+/products/class-6-science-olympiad-practice-papers
+```
+
+SEO title example:
+
+> Class 6 Science Olympiad Practice Papers | OlympiadPDFs
+
+Meta description:
+
+> Download expert-designed Class 6 Science Olympiad practice papers with multiple practice sets and answer keys at an affordable price.
+
+Create:
+
+* Sitemap
+* Robots.txt
+* Open Graph images
+* Proper metadata
+* Canonical URLs
+* Structured headings
+
+---
+
+# 43. Meta Ads Integration
+
+The website should be prepared for Meta advertising.
+
+Install:
+
+### Meta Pixel
+
+Track:
+
+* PageView
+* ViewContent
+* InitiateCheckout
+* Purchase
+
+Where appropriate, supplement browser tracking with server-side conversion tracking.
+
+The most important event:
+
+# Purchase
+
+Because the business ultimately cares about **paid customers**, not just clicks.
+
+---
+
+# 44. Analytics
+
+Track the complete funnel:
+
+```text
+Ad Impression
+      ↓
+Website Visit
+      ↓
+Product View
+      ↓
+Checkout Started
+      ↓
+Payment Initiated
+      ↓
+Payment Successful
+      ↓
+PDF Delivered
+      ↓
+PDF Downloaded
+```
+
+This allows you to determine where customers are dropping off.
+
+---
+
+# 45. Security
+
+The production website must implement:
+
+* HTTPS
+* Secure environment variables
+* Server-side payment verification
+* Razorpay webhook verification
+* Input validation
+* Admin authentication
+* Admin authorization
+* Private PDF storage
+* Secure download links
+* Rate limiting where necessary
+* Database security
+* Protection against duplicate payment processing
+* Server-side coupon validation
+
+Never expose payment secrets or API keys in frontend code.
+
+---
+
+# 46. Performance
+
+The site should be fast, especially on mobile.
+
+Optimize:
+
+* Product images
+* PDF thumbnails
+* Logo
+* Fonts
+* JavaScript
+* CSS
+* API calls
+
+Use appropriate caching and server-side/static rendering.
+
+The landing page should feel almost instantaneous.
+
+---
+
+# 47. Legal Pages
+
+Before accepting real customers, provide:
+
+* Privacy Policy
+* Terms & Conditions
+* Refund/Cancellation Policy
+* Digital Product Delivery Policy
+* Contact/Support page
+
+Clearly explain that the product is a **digital PDF**.
+
+Also ensure the final business/payment/tax setup complies with applicable Indian requirements.
+
+---
+
+# 48. Recommended Technology
+
+For the MVP:
+
+### Frontend
+
+**Next.js + TypeScript**
+
+### UI
+
+**Tailwind CSS**
+
+### Backend
+
+**Next.js server/API routes or Node.js**
+
+### Database
+
+**PostgreSQL**
+
+### Authentication/Admin
+
+Secure admin authentication.
+
+### Payment
+
+**Razorpay**
+
+### Storage
+
+Private:
+
+* S3
+* Cloudflare R2
+* Supabase Storage
+
+### Email
+
+Transactional email service such as:
+
+* Resend
+* Amazon SES
+
+### Hosting
+
+A production platform such as:
+
+* Vercel
+
+---
+
+# 49. Website Architecture
+
+```text
+                    OlympiadPDFs
+                         │
+        ┌────────────────┼────────────────┐
+        │                │                │
+      Classes         Subjects         Bundles
+        │                │                │
+        └────────────────┼────────────────┘
+                         │
+                    Product Page
+                         │
+                       Cart/
+                     Checkout
+                         │
+                      Razorpay
+                         │
+                 Payment Verification
+                         │
+                      Order DB
+                         │
+               ┌─────────┴─────────┐
+               │                   │
+          PDF Storage          Email Service
+               │                   │
+               └─────────┬─────────┘
+                         │
+                   Customer
+```
+
+---
+
+# 50. Core Database Structure
+
+The system should have at least:
+
+### Customers
+
+* ID
+* Name
+* Email
+* Mobile
+
+### Products
+
+* ID
+* Name
+* Class
+* Subject
+* Description
+* Paper Count
+* Question Count
+* Price
+* Reference Price
+* PDF
+* Status
+
+### Orders
+
+* Order ID
+* Customer
+* Product
+* Amount
+* Discount
+* Coupon
+* Payment Status
+* Delivery Status
+* Date
+
+### Payments
+
+* Razorpay Order ID
+* Razorpay Payment ID
+* Amount
+* Status
+
+### Coupons
+
+* Code
+* Discount
+* Expiry
+* Usage limit
+* Status
+
+### Downloads
+
+* Order
+* Product
+* Download token
+* Expiry
+* Download count
+
+---
+
+# 51. Initial Website Pages
+
+The MVP should have:
+
+### `/`
+
+Homepage
+
+### `/classes`
+
+All classes
+
+### `/class/6`
+
+Class 6 products
+
+### `/class/7`
+
+Class 7 products
+
+etc.
+
+### `/subjects`
+
+All subjects
+
+### `/subject/science`
+
+Science products
+
+### `/bundles`
+
+All bundles
+
+### `/product/[slug]`
+
+Individual product page
+
+### `/checkout`
+
+Checkout
+
+### `/payment/success`
+
+Payment success
+
+### `/payment/failed`
+
+Payment failure
+
+### `/faq`
+
+FAQ
+
+### `/contact`
+
+Contact
+
+### `/privacy`
+
+Privacy Policy
+
+### `/terms`
+
+Terms
+
+### `/refund-policy`
+
+Refund Policy
+
+---
+
+# 52. The Most Important Website Principle
+
+The website should **not feel like a complicated EdTech platform**.
+
+It should feel like:
+
+> **A premium but affordable online store for high-quality Olympiad practice papers.**
+
+The customer should understand the product within **5–10 seconds** of landing on the website.
+
+---
+
+# 53. Final Homepage Structure
+
+The final homepage should follow approximately:
+
+```text
+┌────────────────────────────────────┐
+│ LOGO   Home Classes Subjects ...   │
+└────────────────────────────────────┘
+
+             HERO
+     Prepare Smarter for Olympiads
+      Classes 6–10 | 6 Subjects
+
+        [ Explore Papers ]
+
+──────────────────────────────────────
+
+          CHOOSE YOUR CLASS
+
+     [6] [7] [8] [9] [10]
+
+──────────────────────────────────────
+
+         FEATURED PAPERS
+
+ [Card] [Card] [Card] [Card]
+
+──────────────────────────────────────
+
+         EXPLORE SUBJECTS
+
+ [Maths] [Science] [English]
+ [CS]    [GK]      [Reasoning]
+
+──────────────────────────────────────
+
+           BEST BUNDLES
+
+      [Class Bundle]
+      [Subject Bundle]
+      [Complete Bundle]
+
+──────────────────────────────────────
+
+       WHY OLYMPIADPDFs?
+
+ Expert | Concept | Affordable | Instant
+
+──────────────────────────────────────
+
+           HOW IT WORKS
+
+      Choose → Pay → Receive → Practice
+
+──────────────────────────────────────
+
+        PRACTICE WITH CONFIDENCE
+
+──────────────────────────────────────
+
+              FAQ
+
+──────────────────────────────────────
+
+             FOOTER
+```
+
+---
+
+# 54. Final Product Vision
+
+**OlympiadPDFs is not simply a website where PDFs are uploaded.**
+
+It should be built as a **complete digital commerce system for academic practice material**.
+
+The first version should establish three things:
+
+### 1. Brand
+
+A trustworthy identity for affordable Olympiad preparation.
+
+### 2. Product
+
+High-quality, expert-designed practice papers.
+
+### 3. Automated Commerce
+
+A customer can purchase and receive the product without human intervention.
+
+The most important V1 success scenario is:
+
+> **A parent sees an Instagram/Facebook advertisement → visits OlympiadPDFs on their phone → selects Class 6 Science → sees a professional product card → applies a social-media coupon → pays ₹99 through Razorpay → receives the correct PDF automatically by email within minutes.**
+
+

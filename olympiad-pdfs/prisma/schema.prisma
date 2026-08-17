@@ -1,0 +1,131 @@
+// This is your Prisma schema file
+// OlympiadPDFs MVP — SQLite for local dev, swap provider + url for production PostgreSQL
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ─── Enums ────────────────────────────────────────────────────────
+
+enum SubjectSlug {
+  mathematics
+  science
+  english
+  computer_science
+  reasoning
+}
+
+// ─── Models ───────────────────────────────────────────────────────
+
+/// A purchasable PDF product — one per class/subject combination
+model Product {
+  id        String  @id @default(uuid())
+  /// Display name, e.g. "Class 6 Science Olympiad Practice Papers"
+  name      String
+  /// URL-safe slug, e.g. "class-6-science"
+  slug      String  @unique
+  /// Class number: 6, 7, 8, 9, or 10
+  class     Int
+  subject   SubjectSlug
+  /// Price in paise (₹99 = 9900)
+  price     Int     @default(9900)
+  /// Direct HTTPS URL to the PDF (S3, Supabase Storage, Google Drive, etc.)
+  pdfUrl    String  @default("")
+  /// Public image URL for the card cover (store in /public/images/products/)
+  imageUrl  String  @default("")
+  /// Only ACTIVE products appear in the store
+  isActive  Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orderItems OrderItem[]
+  downloads  Download[]
+
+  @@index([class, subject])
+  @@index([isActive])
+  @@index([slug])
+}
+
+/// A paying customer — created at checkout, no account needed
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  mobile    String
+  createdAt DateTime @default(now())
+
+  orders    Order[]
+
+  @@index([email])
+}
+
+/// One order = one purchase event (individual OR class bundle)
+model Order {
+  id        String   @id @default(uuid())
+  customerId String
+  /// true when all 5 subjects of a class were purchased together
+  isBundle  Boolean  @default(false)
+  /// Populated for bundle orders (which class this bundle is for)
+  classNumber Int?
+  /// Final amount paid in paise
+  amount    Int
+  /// PENDING | PAID | FAILED | REFUNDED
+  paymentStatus  String @default("PENDING")
+  /// PENDING | SENT | FAILED
+  deliveryStatus String @default("PENDING")
+
+  // Razorpay fields
+  razorpayOrderId   String?  @unique
+  razorpayPaymentId String?  @unique
+  razorpaySignature String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  customer  Customer   @relation(fields: [customerId], references: [id])
+  items     OrderItem[]
+  downloads Download[]
+
+  @@index([customerId])
+  @@index([paymentStatus])
+  @@index([createdAt])
+}
+
+/// Line items within an order (1 for individual, 5 for bundle)
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  productId String
+  /// Price locked at time of purchase (in paise)
+  price     Int
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+}
+
+/// Secure, time-limited download token — one per product per order
+model Download {
+  id            String   @id @default(uuid())
+  orderId       String
+  productId     String
+  /// UUID token sent in the download URL
+  token         String   @unique @default(uuid())
+  expiresAt     DateTime
+  downloadCount Int      @default(0)
+  maxDownloads  Int      @default(5)
+  createdAt     DateTime @default(now())
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([token])
+  @@index([orderId])
+  @@index([expiresAt])
+}
