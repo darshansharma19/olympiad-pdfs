@@ -21,30 +21,38 @@ const SUBJECTS = [
 
 const INDIVIDUAL_PRICE = 9900; // ₹99 in paise
 
+// Custom PDF links (Google Drive, S3, Cloudflare R2, etc.)
+const CUSTOM_PDF_URLS: Record<string, string> = {
+  'class-6-mathematics': 'https://drive.google.com/file/d/1KJROmi1rv6dtZlqH5id_V2FJK5jsvvlp/view?usp=sharing',
+};
+
 async function main() {
   console.log('🌱 Seeding OlympiadPDFs database...\n');
   console.log(`   DB: ${dbUrl}\n`);
 
   let created = 0;
+  let updated = 0;
   let skipped = 0;
 
   for (const cls of CLASSES) {
     for (const subj of SUBJECTS) {
       const slug = `class-${cls}-${subj.slug.replace('_', '-')}`;
       const name = `Class ${cls} ${subj.label} Olympiad Practice Papers`;
+      const targetPdfUrl = CUSTOM_PDF_URLS[slug] || '/pdfs/sample-practice-paper.pdf';
 
       const existing = await prisma.product.findUnique({ where: { slug } });
       if (existing) {
-        if (!existing.pdfUrl) {
+        if (existing.pdfUrl !== targetPdfUrl) {
           await prisma.product.update({
             where: { id: existing.id },
-            data: { pdfUrl: '/pdfs/sample-practice-paper.pdf' },
+            data: { pdfUrl: targetPdfUrl },
           });
-          console.log(`  🔄 Updated PDF URL: ${slug}`);
+          console.log(`  🔄 Updated PDF URL for ${slug}: ${targetPdfUrl}`);
+          updated++;
         } else {
-          console.log(`  ⏭  Skipping: ${slug}`);
+          console.log(`  ⏭  Skipping (up to date): ${slug}`);
+          skipped++;
         }
-        skipped++;
         continue;
       }
 
@@ -55,18 +63,18 @@ async function main() {
           class: cls,
           subject: subj.slug,
           price: INDIVIDUAL_PRICE,
-          pdfUrl: '/pdfs/sample-practice-paper.pdf',
+          pdfUrl: targetPdfUrl,
           imageUrl: `/images/classes/class-${cls}.svg`,
           isActive: true,
         },
       });
 
-      console.log(`  ✅ ${name} — ₹${INDIVIDUAL_PRICE / 100}`);
+      console.log(`  ✅ Created ${name} — ₹${INDIVIDUAL_PRICE / 100}`);
       created++;
     }
   }
 
-  console.log(`\n✨ Done! Created ${created}, skipped ${skipped}.`);
+  console.log(`\n✨ Done! Created: ${created}, Updated: ${updated}, Skipped: ${skipped}.`);
 }
 
 main()
