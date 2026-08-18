@@ -3,6 +3,8 @@ import { prisma } from '@/lib/db';
 import Razorpay from 'razorpay';
 import { z } from 'zod';
 
+export const dynamic = 'force-dynamic';
+
 const SINGLE_PRICE = 9900; // ₹99 in paise
 const PACK_2_PRICE = 14900; // ₹149 in paise
 const BUNDLE_5_PRICE = 29900; // ₹299 in paise
