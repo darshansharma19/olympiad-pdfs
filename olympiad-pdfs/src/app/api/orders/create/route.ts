@@ -17,10 +17,18 @@ const SUBJECT_SHORT_CODES: Record<string, string> = {
   reasoning: 'IRO',
 };
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_TQsFu63En5JTU3',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || process.env.RAZORPAY_KEY_ID || 'rzp_test_TQsFu63En5JTU3',
-});
+function getRazorpayInstance() {
+  const key_id =
+    process.env.RAZORPAY_KEY_ID ||
+    process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ||
+    'rzp_test_TQsFu63En5JTU3';
+  const key_secret =
+    process.env.RAZORPAY_KEY_SECRET ||
+    process.env.RAZORPAY_KEY_ID ||
+    'rzp_test_TQsFu63En5JTU3';
+
+  return new Razorpay({ key_id, key_secret });
+}
 
 const schema = z.discriminatedUnion('type', [
   z.object({
@@ -183,6 +191,7 @@ export async function POST(req: NextRequest) {
     });
 
     // ── Create Razorpay Order ────────────────────────────────────
+    const razorpay = getRazorpayInstance();
     const rzpOrder = await razorpay.orders.create({
       amount, // in paise
       currency: 'INR',

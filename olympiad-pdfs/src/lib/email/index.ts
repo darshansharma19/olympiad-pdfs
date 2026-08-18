@@ -1,6 +1,5 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = process.env.FROM_EMAIL ?? 'OlympiadPDFs <noreply@olympiadpdfs.com>';
 
 interface DownloadLink {
@@ -134,12 +133,15 @@ function buildEmailHtml(params: OrderEmailParams): string {
 }
 
 export async function sendOrderEmail(params: OrderEmailParams): Promise<void> {
-  if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 're_xxxxxxxxxxxx') {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey || apiKey === 're_xxxxxxxxxxxx') {
     console.log('[email] RESEND_API_KEY not configured — skipping email send');
     console.log('[email] Would send to:', params.customerEmail);
     console.log('[email] Downloads:', params.downloads.map((d) => d.url));
     return;
   }
+
+  const resend = new Resend(apiKey);
 
   const { purchaseType, isBundle, classNumber } = params;
   let subject = `Your Olympiad Practice Paper is Ready 🎯 — OlympiadPDFs`;
