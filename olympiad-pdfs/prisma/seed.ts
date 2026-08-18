@@ -11,72 +11,62 @@ const prisma = new PrismaClient({ adapter });
 
 const CLASSES = [6, 7, 8, 9, 10] as const;
 
-const SUBJECTS = [
-  { slug: 'mathematics' as const, label: 'Mathematics' },
-  { slug: 'science' as const, label: 'Science' },
-  { slug: 'english' as const, label: 'English' },
-  { slug: 'computer_science' as const, label: 'Computer Science' },
-  { slug: 'reasoning' as const, label: 'Reasoning' },
-];
+export const OLYMPIAD_SUBJECTS = [
+  { slug: 'mathematics' as const, code: 'IMO', fullName: 'International Mathematics Olympiad (IMO)' },
+  { slug: 'science' as const, code: 'ISO', fullName: 'International Science Olympiad (ISO)' },
+  { slug: 'english' as const, code: 'IEO', fullName: 'International English Olympiad (IEO)' },
+  { slug: 'computer_science' as const, code: 'ICSO', fullName: 'International Computer Science Olympiad (ICSO)' },
+  { slug: 'reasoning' as const, code: 'IRO', fullName: 'International Reasoning Olympiad (IRO)' },
+] as const;
 
 const INDIVIDUAL_PRICE = 9900; // ₹99 in paise
 
-// Custom PDF links (Google Drive, S3, Cloudflare R2, etc.)
-const CUSTOM_PDF_URLS: Record<string, string> = {
-  'class-6-mathematics': 'https://drive.google.com/file/d/1KJROmi1rv6dtZlqH5id_V2FJK5jsvvlp/view?usp=sharing',
-};
-
 async function main() {
-  console.log('🌱 Seeding OlympiadPDFs database...\n');
+  console.log('🌱 Seeding OlympiadPDFs database with Olympiad subject naming...\n');
   console.log(`   DB: ${dbUrl}\n`);
 
-  let created = 0;
   let updated = 0;
-  let skipped = 0;
 
   for (const cls of CLASSES) {
-    for (const subj of SUBJECTS) {
+    for (const subj of OLYMPIAD_SUBJECTS) {
       const slug = `class-${cls}-${subj.slug.replace('_', '-')}`;
-      const name = `Class ${cls} ${subj.label} Olympiad Practice Papers`;
-      const targetPdfUrl = CUSTOM_PDF_URLS[slug] || '/pdfs/sample-practice-paper.pdf';
+      const name = `Class ${cls} ${subj.fullName} Practice Papers`;
 
-      const existing = await prisma.product.findUnique({ where: { slug } });
-      if (existing) {
-        if (existing.pdfUrl !== targetPdfUrl) {
-          await prisma.product.update({
-            where: { id: existing.id },
-            data: { pdfUrl: targetPdfUrl },
-          });
-          console.log(`  🔄 Updated PDF URL for ${slug}: ${targetPdfUrl}`);
-          updated++;
-        } else {
-          console.log(`  ⏭  Skipping (up to date): ${slug}`);
-          skipped++;
-        }
-        continue;
-      }
-
-      await prisma.product.create({
-        data: {
+      await prisma.product.upsert({
+        where: { slug },
+        update: {
+          name,
+          class: cls,
+          subject: subj.slug,
+          price: INDIVIDUAL_PRICE,
+          imageUrl: `/images/classes/class-${cls}.svg`,
+          isActive: true,
+        },
+        create: {
           name,
           slug,
           class: cls,
           subject: subj.slug,
           price: INDIVIDUAL_PRICE,
-          pdfUrl: targetPdfUrl,
+          pdfUrl: '',
           imageUrl: `/images/classes/class-${cls}.svg`,
           isActive: true,
         },
       });
 
-      console.log(`  ✅ Created ${name} — ₹${INDIVIDUAL_PRICE / 100}`);
-      created++;
+      console.log(`  ✅ ${name} — ₹${INDIVIDUAL_PRICE / 100}`);
+      updated++;
     }
   }
 
-  console.log(`\n✨ Done! Created: ${created}, Updated: ${updated}, Skipped: ${skipped}.`);
+  console.log(`\n✨ Done! Synchronized ${updated} products with Olympiad naming.`);
 }
 
 main()
-  .catch((e) => { console.error('❌ Seed failed:', e); process.exit(1); })
-  .finally(async () => { await prisma.$disconnect(); });
+  .catch((e) => {
+    console.error('❌ Seed failed:', e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

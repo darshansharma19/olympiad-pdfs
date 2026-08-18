@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { CheckoutModal } from '../checkout/CheckoutModal';
+import { CheckoutModal, type CheckoutItem } from '../checkout/CheckoutModal';
 
 export interface ClassProduct {
   id: string;
@@ -17,181 +17,258 @@ interface ClassCardProps {
   imageUrl: string;
 }
 
-const SUBJECT_LABELS: Record<string, string> = {
-  mathematics: 'Mathematics',
-  science: 'Science',
-  english: 'English',
-  computer_science: 'Computer Science',
-  reasoning: 'Reasoning',
+const OLYMPIAD_SUBJECT_LABELS: Record<string, { code: string; full: string }> = {
+  mathematics: { code: 'IMO', full: 'International Mathematics Olympiad (IMO)' },
+  science: { code: 'ISO', full: 'International Science Olympiad (ISO)' },
+  english: { code: 'IEO', full: 'International English Olympiad (IEO)' },
+  computer_science: { code: 'ICSO', full: 'International Computer Science Olympiad (ICSO)' },
+  reasoning: { code: 'IRO', full: 'International Reasoning Olympiad (IRO)' },
 };
 
 const BUNDLE_PRICE = 29900; // ₹299
+const PACK_2_PRICE = 14900; // ₹149
+const SINGLE_PRICE = 9900;  // ₹99
 
 export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
-  const [selectedSubject, setSelectedSubject] = useState(products[0]?.subject ?? '');
-  const [checkoutItem, setCheckoutItem] = useState<{
-    type: 'individual' | 'bundle';
-    productId?: string;
-    classNumber?: number;
-    productName: string;
-    amount: number;
-  } | null>(null);
+  // Single selection state
+  const [singleSubject, setSingleSubject] = useState(products[0]?.subject ?? '');
 
-  const selectedProduct = products.find((p) => p.subject === selectedSubject);
+  // Pack of 2 selection state
+  const [packSubject1, setPackSubject1] = useState(products[0]?.subject ?? '');
+  const [packSubject2, setPackSubject2] = useState(products[1]?.subject ?? products[0]?.subject ?? '');
+
+  const [checkoutItem, setCheckoutItem] = useState<CheckoutItem | null>(null);
+
   const hasAllSubjects = products.length === 5;
 
-  function handleBuySubject() {
-    if (!selectedProduct) return;
+  // Selected single product
+  const selectedSingleProduct = products.find((p) => p.subject === singleSubject);
+
+  // Available options for pack 2 dropdown (exclude subject 1)
+  const pack2Options = products.filter((p) => p.subject !== packSubject1);
+
+  // Helper when subject 1 changes
+  function handlePack1Change(newSubj: string) {
+    setPackSubject1(newSubj);
+    if (packSubject2 === newSubj) {
+      const fallback = products.find((p) => p.subject !== newSubj);
+      if (fallback) setPackSubject2(fallback.subject);
+    }
+  }
+
+  // Action handlers
+  function handleBuyBundle() {
     setCheckoutItem({
-      type: 'individual',
-      productId: selectedProduct.id,
-      productName: selectedProduct.name,
-      amount: selectedProduct.price,
+      type: 'bundle_5',
+      classNumber,
+      productName: `Class ${classNumber} Complete Bundle of 5 Olympiad Practice Papers`,
+      amount: BUNDLE_PRICE,
     });
   }
 
-  function handleBuyBundle() {
+  function handleBuyPack2() {
+    const prod1 = products.find((p) => p.subject === packSubject1);
+    const prod2 = products.find((p) => p.subject === packSubject2);
+    if (!prod1 || !prod2 || prod1.id === prod2.id) return;
+
+    const code1 = OLYMPIAD_SUBJECT_LABELS[prod1.subject]?.code || prod1.subject;
+    const code2 = OLYMPIAD_SUBJECT_LABELS[prod2.subject]?.code || prod2.subject;
+
     setCheckoutItem({
-      type: 'bundle',
+      type: 'pack_2',
+      productIds: [prod1.id, prod2.id],
       classNumber,
-      productName: `Class ${classNumber} Complete Bundle — All 5 Subjects`,
-      amount: BUNDLE_PRICE,
+      productName: `Class ${classNumber} Olympiad Pack of 2 (${code1} + ${code2})`,
+      amount: PACK_2_PRICE,
+    });
+  }
+
+  function handleBuySingle() {
+    if (!selectedSingleProduct) return;
+    const code = OLYMPIAD_SUBJECT_LABELS[selectedSingleProduct.subject]?.code || selectedSingleProduct.subject;
+
+    setCheckoutItem({
+      type: 'single',
+      productId: selectedSingleProduct.id,
+      productName: `Class ${classNumber} ${code} Olympiad Practice Paper`,
+      amount: selectedSingleProduct.price || SINGLE_PRICE,
     });
   }
 
   return (
     <>
-      <div className="card" style={{
-        display: 'flex', flexDirection: 'column',
-        overflow: 'hidden', padding: 0,
-      }}>
-        {/* Card Image */}
-        <div style={{ position: 'relative', height: 140, flexShrink: 0, background: 'var(--color-brand-blue-50)' }}>
+      <div
+        className="card"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          padding: 0,
+          border: '1.5px solid var(--color-neutral-200)',
+          borderRadius: '16px',
+          background: '#fff',
+          boxShadow: 'var(--shadow-card)',
+          transition: 'all 0.2s ease',
+        }}
+      >
+        {/* Card Header / Image */}
+        <div style={{ position: 'relative', height: 130, flexShrink: 0, background: 'var(--color-brand-blue-50)' }}>
           <Image
             src={imageUrl || `/images/classes/class-${classNumber}.svg`}
             alt={`Class ${classNumber}`}
             fill
             style={{ objectFit: 'cover' }}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px"
-            unoptimized // SVGs don't need Next.js optimization
+            unoptimized
           />
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(to top, rgba(26,58,143,0.85) 0%, rgba(26,58,143,0) 60%)',
-          }} />
-          <div style={{
-            position: 'absolute', bottom: 12, left: 14, right: 14,
-          }}>
-            <p style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: '1.625rem', color: '#fff', lineHeight: 1 }}>
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to top, rgba(26,58,143,0.88) 0%, rgba(26,58,143,0.15) 70%)',
+            }}
+          />
+          <div style={{ position: 'absolute', bottom: 12, left: 16, right: 16 }}>
+            <p
+              style={{
+                margin: 0,
+                fontFamily: 'var(--font-display)',
+                fontWeight: 900,
+                fontSize: '1.5rem',
+                color: '#fff',
+                lineHeight: 1.1,
+              }}
+            >
               CLASS {classNumber}
             </p>
-            <p style={{ margin: '2px 0 0', fontSize: '0.6875rem', fontWeight: 700, color: 'var(--color-brand-gold)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-              PRACTICE PAPERS
+            <p
+              style={{
+                margin: '2px 0 0',
+                fontSize: '0.6875rem',
+                fontWeight: 700,
+                color: 'var(--color-brand-gold)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+              }}
+            >
+              OLYMPIAD PRACTICE PAPERS
             </p>
           </div>
         </div>
 
-        {/* Card Body */}
-        <div style={{ padding: '18px 16px', display: 'flex', flexDirection: 'column', gap: '14px', flex: 1 }}>
+        {/* Card Body — 3 Clear Purchase Options */}
+        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px', flex: 1 }}>
           {products.length === 0 ? (
-            <p style={{ fontSize: '0.875rem', color: 'var(--color-neutral-500)', textAlign: 'center', margin: 'auto 0', padding: '16px 0' }}>
-              Papers coming soon
+            <p
+              style={{
+                fontSize: '0.875rem',
+                color: 'var(--color-neutral-500)',
+                textAlign: 'center',
+                margin: 'auto 0',
+                padding: '24px 0',
+              }}
+            >
+              Practice papers coming soon
             </p>
           ) : (
             <>
-              {/* Subject Dropdown */}
-              <div>
-                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-neutral-500)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '6px' }}>
-                  Select Subject
-                </label>
-                <select
-                  value={selectedSubject}
-                  onChange={(e) => setSelectedSubject(e.target.value)}
-                  style={{
-                    width: '100%', padding: '10px 12px',
-                    border: '1.5px solid var(--color-brand-blue)',
-                    borderRadius: '8px', fontSize: '0.9375rem',
-                    fontFamily: 'var(--font-body)', fontWeight: 600,
-                    color: 'var(--color-brand-blue)',
-                    background: '#fff', cursor: 'pointer',
-                    outline: 'none', appearance: 'none',
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a3a8f' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'right 10px center',
-                    paddingRight: '36px',
-                  }}
-                >
-                  {products.map((p) => (
-                    <option key={p.subject} value={p.subject}>
-                      {SUBJECT_LABELS[p.subject] ?? p.subject} — ₹{(p.price / 100).toFixed(0)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Selected subject preview */}
-              {selectedProduct && (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--color-brand-blue-50)', borderRadius: '8px', padding: '10px 12px' }}>
-                  <div>
-                    <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--color-neutral-500)', fontWeight: 600 }}>Class {classNumber}</p>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.9375rem', color: 'var(--color-brand-blue)', fontWeight: 700 }}>
-                      {SUBJECT_LABELS[selectedProduct.subject]}
-                    </p>
-                  </div>
-                  <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.25rem', color: 'var(--color-brand-blue)' }}>
-                    ₹{(selectedProduct.price / 100).toFixed(0)}
-                  </span>
-                </div>
-              )}
-
-              {/* BUY SUBJECT button */}
-              <button
-                onClick={handleBuySubject}
-                disabled={!selectedProduct}
+              {/* ─────────────────────────────────────────────────────────────
+                  OPTION 1: BUNDLE OF 5 — ₹299 (PRIMARY / HIGHLIGHTED)
+                 ───────────────────────────────────────────────────────────── */}
+              <div
                 style={{
-                  background: 'var(--color-brand-blue)', color: '#fff',
-                  border: 'none', borderRadius: '10px', padding: '13px',
-                  fontFamily: 'var(--font-display)', fontWeight: 800,
-                  fontSize: '0.9375rem', cursor: 'pointer', width: '100%',
+                  background: hasAllSubjects
+                    ? 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)'
+                    : 'var(--color-neutral-50)',
+                  border: hasAllSubjects ? '2px solid var(--color-brand-gold)' : '1px solid var(--color-neutral-200)',
+                  borderRadius: '12px',
+                  padding: '14px',
+                  position: 'relative',
                 }}
               >
-                BUY NOW →
-              </button>
+                {hasAllSubjects && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '-10px',
+                      right: '12px',
+                      background: 'var(--color-brand-gold)',
+                      color: 'var(--color-brand-blue)',
+                      fontSize: '0.625rem',
+                      fontWeight: 800,
+                      padding: '2px 8px',
+                      borderRadius: '9999px',
+                      letterSpacing: '0.06em',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    ⭐ BEST VALUE
+                  </div>
+                )}
 
-              {/* Divider */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ flex: 1, height: 1, background: 'var(--color-neutral-200)' }} />
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-neutral-400)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>OR</span>
-                <div style={{ flex: 1, height: 1, background: 'var(--color-neutral-200)' }} />
-              </div>
-
-              {/* Bundle section */}
-              <div style={{
-                border: hasAllSubjects ? '1.5px solid var(--color-brand-gold)' : '1.5px solid var(--color-neutral-200)',
-                borderRadius: '10px', padding: '14px',
-                background: hasAllSubjects ? 'var(--color-brand-gold-50)' : 'var(--color-neutral-50)',
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    marginBottom: '6px',
+                  }}
+                >
                   <div>
-                    <p style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '0.9375rem', color: 'var(--color-brand-blue)' }}>
-                      Complete Bundle
-                    </p>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.8125rem', color: 'var(--color-neutral-600)' }}>
-                      All 5 Subjects
+                    <h3
+                      style={{
+                        margin: 0,
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 800,
+                        fontSize: '1rem',
+                        color: 'var(--color-brand-blue)',
+                      }}
+                    >
+                      BUNDLE OF 5
+                    </h3>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: 'var(--color-neutral-600)' }}>
+                      All 5 Olympiad Papers
                     </p>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <p style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.125rem', color: 'var(--color-brand-blue)' }}>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 800,
+                        fontSize: '1.25rem',
+                        color: 'var(--color-brand-blue)',
+                      }}
+                    >
                       ₹299
-                    </p>
-                    <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--color-neutral-400)', textDecoration: 'line-through' }}>₹495</p>
+                    </span>
+                    <span
+                      style={{
+                        marginLeft: '4px',
+                        fontSize: '0.6875rem',
+                        color: 'var(--color-neutral-400)',
+                        textDecoration: 'line-through',
+                      }}
+                    >
+                      ₹495
+                    </span>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '12px' }}>
-                  {['Math', 'Science', 'English', 'CS', 'Reasoning'].map((s) => (
-                    <span key={s} style={{ fontSize: '0.6875rem', fontWeight: 700, color: 'var(--color-brand-blue)', background: 'rgba(26,58,143,0.08)', borderRadius: '4px', padding: '2px 7px' }}>
-                      {s}
+                {/* 5 Badges */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '10px' }}>
+                  {['IMO', 'ISO', 'IEO', 'ICSO', 'IRO'].map((code) => (
+                    <span
+                      key={code}
+                      style={{
+                        fontSize: '0.6875rem',
+                        fontWeight: 700,
+                        color: 'var(--color-brand-blue)',
+                        background: 'rgba(26,58,143,0.1)',
+                        borderRadius: '4px',
+                        padding: '2px 6px',
+                      }}
+                    >
+                      {code}
                     </span>
                   ))}
                 </div>
@@ -199,17 +276,267 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                 <button
                   onClick={handleBuyBundle}
                   disabled={!hasAllSubjects}
-                  title={!hasAllSubjects ? `Bundle unavailable — only ${products.length}/5 subjects available` : ''}
                   style={{
+                    width: '100%',
                     background: hasAllSubjects ? 'var(--color-brand-gold)' : 'var(--color-neutral-300)',
                     color: hasAllSubjects ? 'var(--color-brand-blue)' : 'var(--color-neutral-500)',
-                    border: 'none', borderRadius: '8px', padding: '11px',
-                    fontFamily: 'var(--font-display)', fontWeight: 800,
-                    fontSize: '0.875rem', cursor: hasAllSubjects ? 'pointer' : 'not-allowed',
-                    width: '100%',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '10px',
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 800,
+                    fontSize: '0.875rem',
+                    cursor: hasAllSubjects ? 'pointer' : 'not-allowed',
+                    transition: 'all 0.15s',
                   }}
                 >
-                  {hasAllSubjects ? 'GET BUNDLE — ₹299' : `Coming Soon (${products.length}/5 subjects)`}
+                  {hasAllSubjects ? 'GET BUNDLE — ₹299' : `Coming Soon (${products.length}/5)`}
+                </button>
+              </div>
+
+              {/* Divider */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '-4px 0' }}>
+                <div style={{ flex: 1, height: 1, background: 'var(--color-neutral-200)' }} />
+                <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: 'var(--color-neutral-400)' }}>OR</span>
+                <div style={{ flex: 1, height: 1, background: 'var(--color-neutral-200)' }} />
+              </div>
+
+              {/* ─────────────────────────────────────────────────────────────
+                  OPTION 2: PACK OF 2 — ₹149 (CHOOSE ANY 2)
+                 ───────────────────────────────────────────────────────────── */}
+              <div
+                style={{
+                  background: 'var(--color-neutral-50)',
+                  border: '1px solid var(--color-neutral-200)',
+                  borderRadius: '12px',
+                  padding: '12px',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    marginBottom: '8px',
+                  }}
+                >
+                  <div>
+                    <h4
+                      style={{
+                        margin: 0,
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 800,
+                        fontSize: '0.9375rem',
+                        color: 'var(--color-brand-blue)',
+                      }}
+                    >
+                      📚 PACK OF 2
+                    </h4>
+                    <p style={{ margin: '1px 0 0', fontSize: '0.6875rem', color: 'var(--color-neutral-500)' }}>
+                      Choose Any 2 Papers
+                    </p>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 800,
+                        fontSize: '1.125rem',
+                        color: 'var(--color-brand-blue)',
+                      }}
+                    >
+                      ₹149
+                    </span>
+                    <span
+                      style={{
+                        marginLeft: '4px',
+                        fontSize: '0.6875rem',
+                        color: 'var(--color-neutral-400)',
+                        textDecoration: 'line-through',
+                      }}
+                    >
+                      ₹198
+                    </span>
+                  </div>
+                </div>
+
+                {/* Dropdowns for Paper 1 and Paper 2 */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '10px' }}>
+                  <select
+                    value={packSubject1}
+                    onChange={(e) => handlePack1Change(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '7px 10px',
+                      border: '1.5px solid var(--color-neutral-300)',
+                      borderRadius: '6px',
+                      fontSize: '0.8125rem',
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 600,
+                      color: 'var(--color-neutral-800)',
+                      background: '#fff',
+                      cursor: 'pointer',
+                      outline: 'none',
+                    }}
+                  >
+                    {products.map((p) => {
+                      const info = OLYMPIAD_SUBJECT_LABELS[p.subject];
+                      return (
+                        <option key={p.subject} value={p.subject}>
+                          Paper 1: {info?.code || p.subject.toUpperCase()} — {info?.full || p.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+
+                  <select
+                    value={packSubject2}
+                    onChange={(e) => setPackSubject2(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '7px 10px',
+                      border: '1.5px solid var(--color-neutral-300)',
+                      borderRadius: '6px',
+                      fontSize: '0.8125rem',
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 600,
+                      color: 'var(--color-neutral-800)',
+                      background: '#fff',
+                      cursor: 'pointer',
+                      outline: 'none',
+                    }}
+                  >
+                    {pack2Options.map((p) => {
+                      const info = OLYMPIAD_SUBJECT_LABELS[p.subject];
+                      return (
+                        <option key={p.subject} value={p.subject}>
+                          Paper 2: {info?.code || p.subject.toUpperCase()} — {info?.full || p.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+                <button
+                  onClick={handleBuyPack2}
+                  disabled={!packSubject1 || !packSubject2 || packSubject1 === packSubject2}
+                  style={{
+                    width: '100%',
+                    background: 'var(--color-brand-blue)',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '9px',
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 700,
+                    fontSize: '0.8125rem',
+                    cursor: 'pointer',
+                  }}
+                >
+                  CHOOSE 2 — ₹149
+                </button>
+              </div>
+
+              {/* Divider */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '-4px 0' }}>
+                <div style={{ flex: 1, height: 1, background: 'var(--color-neutral-200)' }} />
+                <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: 'var(--color-neutral-400)' }}>OR</span>
+                <div style={{ flex: 1, height: 1, background: 'var(--color-neutral-200)' }} />
+              </div>
+
+              {/* ─────────────────────────────────────────────────────────────
+                  OPTION 3: SINGLE PAPER — ₹99
+                 ───────────────────────────────────────────────────────────── */}
+              <div
+                style={{
+                  background: '#fff',
+                  border: '1px solid var(--color-neutral-200)',
+                  borderRadius: '12px',
+                  padding: '12px',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    marginBottom: '8px',
+                  }}
+                >
+                  <div>
+                    <h4
+                      style={{
+                        margin: 0,
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 700,
+                        fontSize: '0.875rem',
+                        color: 'var(--color-brand-blue)',
+                      }}
+                    >
+                      SINGLE PAPER
+                    </h4>
+                    <p style={{ margin: '1px 0 0', fontSize: '0.6875rem', color: 'var(--color-neutral-500)' }}>
+                      Choose 1 Subject
+                    </p>
+                  </div>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontWeight: 800,
+                      fontSize: '1.125rem',
+                      color: 'var(--color-brand-blue)',
+                    }}
+                  >
+                    ₹99
+                  </span>
+                </div>
+
+                <div style={{ marginBottom: '8px' }}>
+                  <select
+                    value={singleSubject}
+                    onChange={(e) => setSingleSubject(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '7px 10px',
+                      border: '1.5px solid var(--color-neutral-300)',
+                      borderRadius: '6px',
+                      fontSize: '0.8125rem',
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 600,
+                      color: 'var(--color-neutral-800)',
+                      background: '#fff',
+                      cursor: 'pointer',
+                      outline: 'none',
+                    }}
+                  >
+                    {products.map((p) => {
+                      const info = OLYMPIAD_SUBJECT_LABELS[p.subject];
+                      return (
+                        <option key={p.subject} value={p.subject}>
+                          {info?.code || p.subject.toUpperCase()} — {info?.full || p.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+                <button
+                  onClick={handleBuySingle}
+                  disabled={!selectedSingleProduct}
+                  style={{
+                    width: '100%',
+                    background: '#fff',
+                    color: 'var(--color-brand-blue)',
+                    border: '1.5px solid var(--color-brand-blue)',
+                    borderRadius: '8px',
+                    padding: '8px',
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 700,
+                    fontSize: '0.8125rem',
+                    cursor: 'pointer',
+                  }}
+                >
+                  BUY SINGLE — ₹99
                 </button>
               </div>
             </>
@@ -219,10 +546,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
 
       {/* Checkout Modal */}
       {checkoutItem && (
-        <CheckoutModal
-          item={checkoutItem}
-          onClose={() => setCheckoutItem(null)}
-        />
+        <CheckoutModal item={checkoutItem} onClose={() => setCheckoutItem(null)} />
       )}
     </>
   );

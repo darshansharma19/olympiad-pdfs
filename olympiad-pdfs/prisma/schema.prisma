@@ -25,9 +25,9 @@ enum SubjectSlug {
 /// A purchasable PDF product — one per class/subject combination
 model Product {
   id        String  @id @default(uuid())
-  /// Display name, e.g. "Class 6 Science Olympiad Practice Papers"
+  /// Display name, e.g. "Class 6 International Mathematics Olympiad (IMO) Practice Papers"
   name      String
-  /// URL-safe slug, e.g. "class-6-science"
+  /// URL-safe slug, e.g. "class-6-mathematics"
   slug      String  @unique
   /// Class number: 6, 7, 8, 9, or 10
   class     Int
@@ -64,13 +64,15 @@ model Customer {
   @@index([email])
 }
 
-/// One order = one purchase event (individual OR class bundle)
+/// One order = one purchase event (single, pack_2, or bundle_5)
 model Order {
   id        String   @id @default(uuid())
   customerId String
-  /// true when all 5 subjects of a class were purchased together
+  /// "single" | "pack_2" | "bundle_5"
+  purchaseType String  @default("single")
+  /// true when all 5 subjects of a class were purchased together (legacy/compat)
   isBundle  Boolean  @default(false)
-  /// Populated for bundle orders (which class this bundle is for)
+  /// Populated for bundle or pack orders (which class this is for)
   classNumber Int?
   /// Final amount paid in paise
   amount    Int
@@ -96,7 +98,7 @@ model Order {
   @@index([createdAt])
 }
 
-/// Line items within an order (1 for individual, 5 for bundle)
+/// Line items within an order (1 for single, 2 for pack_2, 5 for bundle_5)
 model OrderItem {
   id        String  @id @default(uuid())
   orderId   String

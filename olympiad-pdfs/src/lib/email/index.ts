@@ -12,7 +12,8 @@ interface OrderEmailParams {
   customerName: string;
   customerEmail: string;
   orderId: string;
-  isBundle: boolean;
+  purchaseType?: string;
+  isBundle?: boolean;
   classNumber?: number;
   amount: number; // in paise
   downloads: DownloadLink[];
@@ -23,11 +24,20 @@ function formatAmount(paise: number): string {
 }
 
 function buildEmailHtml(params: OrderEmailParams): string {
-  const { customerName, orderId, isBundle, classNumber, amount, downloads } = params;
+  const { customerName, orderId, purchaseType, isBundle, classNumber, amount, downloads } = params;
 
-  const productTitle = isBundle && classNumber
-    ? `Class ${classNumber} Complete Bundle — All 5 Subjects`
-    : downloads[0]?.productName ?? 'Olympiad Practice Papers';
+  let productTitle = 'Olympiad Practice Papers';
+  if (purchaseType === 'bundle_5' || isBundle) {
+    productTitle = classNumber
+      ? `Class ${classNumber} Complete Bundle of 5 Olympiad Papers (IMO, ISO, IEO, ICSO, IRO)`
+      : `Complete Bundle of 5 Olympiad Papers`;
+  } else if (purchaseType === 'pack_2') {
+    productTitle = classNumber
+      ? `Class ${classNumber} Olympiad Pack of 2 Papers`
+      : `Olympiad Pack of 2 Papers`;
+  } else if (downloads.length === 1) {
+    productTitle = downloads[0].productName;
+  }
 
   const downloadButtons = downloads
     .map(
@@ -36,9 +46,9 @@ function buildEmailHtml(params: OrderEmailParams): string {
       <td style="padding:6px 0;">
         <a href="${d.url}"
            style="display:inline-block;background:#1a3a8f;color:#fff;
-                  font-weight:700;font-size:15px;padding:12px 28px;
+                  font-weight:700;font-size:14px;padding:12px 24px;
                   border-radius:8px;text-decoration:none;">
-          ${isBundle ? `⬇ ${d.productName.replace(/Class \d+ | Olympiad Practice Papers/g, '').trim()}` : '⬇ Download Your Practice Paper'}
+          ⬇ Download: ${d.productName.replace(/Practice Papers/g, '').trim()}
         </a>
       </td>
     </tr>`
@@ -65,11 +75,11 @@ function buildEmailHtml(params: OrderEmailParams): string {
         <tr>
           <td style="padding:36px 32px;">
             <h2 style="margin:0 0 8px;font-size:20px;color:#1a3a8f;font-weight:800;">
-              🎯 Your Practice Paper${isBundle ? 's are' : ' is'} Ready!
+              🎯 Your Olympiad Practice Paper${downloads.length > 1 ? 's are' : ' is'} Ready!
             </h2>
             <p style="margin:0 0 24px;font-size:15px;color:#4a5568;line-height:1.6;">
               Hi ${customerName},<br><br>
-              Thank you for purchasing from <strong>OlympiadPDFs</strong>. Your order has been confirmed and your practice paper${isBundle ? 's are' : ' is'} ready to download.
+              Thank you for purchasing from <strong>OlympiadPDFs</strong>. Your order has been confirmed and your practice paper${downloads.length > 1 ? 's are' : ' is'} ready to download.
             </p>
             <!-- Order Summary -->
             <table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f3f9;border-radius:8px;padding:20px;margin-bottom:28px;">
@@ -111,7 +121,7 @@ function buildEmailHtml(params: OrderEmailParams): string {
         <tr>
           <td style="background:#f8f9fc;padding:20px 32px;text-align:center;border-top:1px solid #e2e6f0;">
             <p style="margin:0;font-size:12px;color:#9aa5c4;">
-              OlympiadPDFs · Expert Olympiad Preparation<br>
+              OlympiadPDFs · Expert Olympiad Practice Papers<br>
               © ${new Date().getFullYear()} OlympiadPDFs. All rights reserved.
             </p>
           </td>
@@ -131,10 +141,13 @@ export async function sendOrderEmail(params: OrderEmailParams): Promise<void> {
     return;
   }
 
-  const isBundle = params.isBundle && params.classNumber;
-  const subject = isBundle
-    ? `Your Class ${params.classNumber} Complete Bundle is Ready 🎯 — OlympiadPDFs`
-    : `Your Practice Paper is Ready 🎯 — OlympiadPDFs`;
+  const { purchaseType, isBundle, classNumber } = params;
+  let subject = `Your Olympiad Practice Paper is Ready 🎯 — OlympiadPDFs`;
+  if (purchaseType === 'bundle_5' || isBundle) {
+    subject = `Your Class ${classNumber || ''} Complete Bundle of 5 Olympiad Papers is Ready 🎯 — OlympiadPDFs`;
+  } else if (purchaseType === 'pack_2') {
+    subject = `Your Class ${classNumber || ''} Olympiad Pack of 2 Papers is Ready 🎯 — OlympiadPDFs`;
+  }
 
   await resend.emails.send({
     from: FROM,
