@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 
 interface SuccessData {
   orderId: string;
@@ -15,126 +15,394 @@ interface SuccessModalProps {
   onClose: () => void;
 }
 
+function cleanOlympiadName(name: string): string {
+  let clean = name.trim();
+  // Strip "Class X" prefix
+  clean = clean.replace(/^Class\s+\d+\s+/i, '');
+  // Strip "Practice Papers" suffix
+  clean = clean.replace(/\s*Practice\s*Papers.*$/i, '');
+  // Strip "International " prefix to keep button labels concise
+  clean = clean.replace(/^International\s+/i, '');
+  return clean || name;
+}
+
 export function SuccessModal({ data, onClose }: SuccessModalProps) {
   const { orderId, productName, amount, customerEmail, downloads } = data;
   const shortId = orderId.slice(0, 8).toUpperCase();
 
+  // Lock page scrolling while modal is open
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+  // Title for download section based on count
+  const downloadSectionTitle =
+    downloads.length === 5
+      ? '📚 Your 5 Practice Papers'
+      : downloads.length === 2
+      ? '📚 Your 2 Practice Papers'
+      : '📄 Your Practice Paper';
+
   return (
     <div
       style={{
-        position: 'fixed', inset: 0, zIndex: 1000,
-        background: 'rgba(15,23,42,0.65)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '16px',
+        position: 'fixed',
+        inset: 0,
+        zIndex: 1000,
+        background: 'rgba(15, 23, 42, 0.7)',
+        backdropFilter: 'blur(3px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '12px',
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div style={{
-        background: '#fff',
-        borderRadius: '16px',
-        padding: '36px 28px',
-        maxWidth: 480, width: '100%',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
-        textAlign: 'center',
-        animation: 'slideUp 0.3s ease',
-      }}>
-        <div style={{ fontSize: '3.5rem', marginBottom: '12px' }}>🎉</div>
-        <h2 style={{
-          fontFamily: 'var(--font-display)', fontWeight: 800,
-          fontSize: '1.5rem', color: 'var(--color-brand-blue)',
-          margin: '0 0 8px',
-        }}>
-          Payment Successful!
-        </h2>
-        <p style={{ fontSize: '0.9375rem', color: 'var(--color-neutral-600)', margin: '0 0 24px' }}>
-          Thank you for purchasing from OlympiadPDFs.
-        </p>
+      <div
+        style={{
+          background: '#fff',
+          borderRadius: '16px',
+          maxWidth: '540px',
+          width: '100%',
+          maxHeight: '85vh',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          animation: 'scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
+      >
+        {/* ── 1. FIXED HEADER ────────────────────────────────────── */}
+        <div
+          style={{
+            padding: '20px 24px 16px',
+            borderBottom: '1px solid var(--color-neutral-100)',
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            gap: '12px',
+            flexShrink: 0,
+          }}
+        >
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '1.5rem', lineHeight: 1 }}>🎉</span>
+              <h2
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 800,
+                  fontSize: '1.25rem',
+                  color: 'var(--color-brand-blue)',
+                  margin: 0,
+                }}
+              >
+                Payment Successful!
+              </h2>
+            </div>
+            <p style={{ margin: '4px 0 0', fontSize: '0.8125rem', color: 'var(--color-neutral-500)' }}>
+              Thank you for purchasing from OlympiadPDFs.
+            </p>
+          </div>
 
-        {/* Order Summary */}
-        <div style={{
-          background: 'var(--color-neutral-50)',
-          borderRadius: '12px',
-          padding: '20px',
-          textAlign: 'left',
-          marginBottom: '24px',
-          border: '1px solid var(--color-neutral-200)',
-        }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.8125rem', color: 'var(--color-neutral-500)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Order ID</span>
-              <span style={{ fontSize: '0.875rem', color: 'var(--color-brand-blue)', fontWeight: 700 }}>{shortId}</span>
+          <button
+            onClick={onClose}
+            aria-label="Close modal"
+            style={{
+              background: 'var(--color-neutral-100)',
+              border: 'none',
+              borderRadius: '50%',
+              width: '32px',
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '1.125rem',
+              color: 'var(--color-neutral-600)',
+              cursor: 'pointer',
+              flexShrink: 0,
+              transition: 'background 0.15s',
+            }}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* ── 2. SCROLLABLE CONTENT ──────────────────────────────── */}
+        <div
+          style={{
+            padding: '20px 24px',
+            overflowY: 'auto',
+            flex: 1,
+            minHeight: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
+          {/* Order Details Card */}
+          <div
+            style={{
+              background: 'var(--color-neutral-50)',
+              borderRadius: '12px',
+              padding: '14px 16px',
+              border: '1px solid var(--color-neutral-200)',
+            }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span
+                  style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--color-neutral-500)',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                  }}
+                >
+                  Order ID
+                </span>
+                <span
+                  style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--color-brand-blue)',
+                    fontWeight: 700,
+                    fontFamily: 'monospace',
+                  }}
+                >
+                  {shortId}
+                </span>
+              </div>
+
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  gap: '12px',
+                  borderTop: '1px solid var(--color-neutral-200)',
+                  paddingTop: '6px',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--color-neutral-500)',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    flexShrink: 0,
+                  }}
+                >
+                  Product
+                </span>
+                <span
+                  style={{
+                    fontSize: '0.8125rem',
+                    color: 'var(--color-neutral-800)',
+                    fontWeight: 600,
+                    textAlign: 'right',
+                  }}
+                >
+                  {productName}
+                </span>
+              </div>
+
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  borderTop: '1px solid var(--color-neutral-200)',
+                  paddingTop: '6px',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--color-neutral-500)',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                  }}
+                >
+                  Amount Paid
+                </span>
+                <span
+                  style={{
+                    fontSize: '0.9375rem',
+                    color: 'var(--color-brand-blue)',
+                    fontWeight: 800,
+                  }}
+                >
+                  ₹{(amount / 100).toFixed(0)}
+                </span>
+              </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
-              <span style={{ fontSize: '0.8125rem', color: 'var(--color-neutral-500)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', flexShrink: 0 }}>Product</span>
-              <span style={{ fontSize: '0.875rem', color: 'var(--color-neutral-800)', fontWeight: 600, textAlign: 'right' }}>{productName}</span>
+          </div>
+
+          {/* Compact Email Notification */}
+          <div
+            style={{
+              background: '#f0fdf4',
+              border: '1px solid #bbf7d0',
+              borderRadius: '10px',
+              padding: '10px 14px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              fontSize: '0.8125rem',
+              color: '#166534',
+            }}
+          >
+            <span style={{ fontSize: '1rem', flexShrink: 0 }}>📧</span>
+            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              PDFs sent to: <strong style={{ wordBreak: 'break-all' }}>{customerEmail}</strong>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.8125rem', color: 'var(--color-neutral-500)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Amount</span>
-              <span style={{ fontSize: '1rem', color: 'var(--color-brand-blue)', fontWeight: 800 }}>₹{(amount / 100).toFixed(0)}</span>
+          </div>
+
+          {/* PDF Download Section */}
+          <div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '10px',
+              }}
+            >
+              <h3
+                style={{
+                  margin: 0,
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 700,
+                  fontSize: '0.9375rem',
+                  color: 'var(--color-brand-blue)',
+                }}
+              >
+                {downloadSectionTitle}
+              </h3>
+              <span style={{ fontSize: '0.6875rem', color: 'var(--color-neutral-400)' }}>
+                Valid for 72 hours
+              </span>
+            </div>
+
+            {/* List of Compact Download Rows */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {downloads.map((d, i) => {
+                const label = cleanOlympiadName(d.productName);
+                return (
+                  <a
+                    key={i}
+                    href={d.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="pdf-download-row"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      background: '#fff',
+                      border: '1.5px solid var(--color-neutral-200)',
+                      borderRadius: '10px',
+                      padding: '10px 14px',
+                      textDecoration: 'none',
+                      color: 'var(--color-neutral-800)',
+                      minHeight: '48px',
+                      transition: 'all 0.15s ease',
+                      gap: '12px',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                      <span style={{ fontSize: '1.125rem', flexShrink: 0 }}>📄</span>
+                      <span
+                        style={{
+                          fontSize: '0.8125rem',
+                          fontWeight: 600,
+                          color: 'var(--color-brand-blue)',
+                          lineHeight: 1.3,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {label}
+                      </span>
+                    </div>
+
+                    <div
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        background: 'var(--color-brand-blue)',
+                        color: '#fff',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        padding: '6px 12px',
+                        borderRadius: '6px',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <span>↓</span>
+                      <span>Download</span>
+                    </div>
+                  </a>
+                );
+              })}
             </div>
           </div>
         </div>
 
-        <div style={{
-          background: '#ecfdf5',
-          border: '1px solid #a7f3d0',
-          borderRadius: '10px',
-          padding: '12px 16px',
-          marginBottom: '20px',
-          fontSize: '0.875rem',
-          color: '#065f46',
-          lineHeight: 1.6,
-        }}>
-          📧 Your PDF{downloads.length > 1 ? 's have' : ' has'} been sent to <strong>{customerEmail}</strong>
-        </div>
-
-        {/* Download Buttons */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
-          {downloads.map((d, i) => (
-            <a
-              key={i}
-              href={d.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'block',
-                background: 'var(--color-brand-blue)',
-                color: '#fff',
-                padding: '12px 20px',
-                borderRadius: '10px',
-                textDecoration: 'none',
-                fontWeight: 700,
-                fontSize: '0.9375rem',
-              }}
-            >
-              ⬇ {downloads.length > 1
-                ? d.productName.replace(/Class \d+ | Olympiad Practice Papers/g, '').trim() || 'Download PDF'
-                : 'Download Your PDF'}
-            </a>
-          ))}
-        </div>
-
-        <p style={{ fontSize: '0.8125rem', color: 'var(--color-neutral-500)', margin: '0 0 20px', lineHeight: 1.6 }}>
-          Links are valid for 72 hours. If you face any issues, email us at support@olympiadpdfs.com
-        </p>
-
-        <button
-          onClick={onClose}
+        {/* ── 3. FIXED FOOTER ────────────────────────────────────── */}
+        <div
           style={{
-            background: 'none',
-            border: '1.5px solid var(--color-neutral-300)',
-            borderRadius: '8px',
-            padding: '10px 24px',
-            fontSize: '0.875rem',
-            color: 'var(--color-neutral-600)',
-            cursor: 'pointer',
-            fontWeight: 600,
+            padding: '14px 24px',
+            borderTop: '1px solid var(--color-neutral-100)',
+            background: 'var(--color-neutral-50)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
           }}
         >
-          Close
-        </button>
+          <button
+            onClick={onClose}
+            style={{
+              width: '100%',
+              background: 'var(--color-brand-blue)',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '10px',
+              padding: '12px 20px',
+              fontSize: '0.9375rem',
+              fontWeight: 700,
+              fontFamily: 'var(--font-display)',
+              cursor: 'pointer',
+              transition: 'opacity 0.15s',
+            }}
+          >
+            Continue Shopping →
+          </button>
+        </div>
       </div>
 
-      <style>{`@keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }`}</style>
+      <style>{`
+        @keyframes scaleIn {
+          from { opacity: 0; transform: scale(0.96); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .pdf-download-row:hover {
+          border-color: var(--color-brand-blue) !important;
+          background: var(--color-brand-blue-50) !important;
+          transform: translateY(-1px);
+        }
+      `}</style>
     </div>
   );
 }
