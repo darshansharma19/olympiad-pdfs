@@ -17,7 +17,7 @@ function createPrismaClient(): PrismaClient {
     const filePart = rawUrl.slice(5).replace(/^\.\//, '');
     const dbPath = path.isAbsolute(filePart)
       ? filePart
-      : path.resolve(process.cwd(), filePart);
+      : path.join(process.cwd(), filePart);
     const url = `file:${dbPath.replace(/\\/g, '/')}`;
     const adapter = new PrismaBetterSqlite3({ url });
     return new PrismaClient({
