@@ -4,6 +4,45 @@ import { isAuthenticatedAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
+const CLASSES = [6, 7, 8, 9, 10];
+const SUBJECTS = [
+  { slug: 'mathematics', name: 'International Mathematics Olympiad (IMO)' },
+  { slug: 'science', name: 'International Science Olympiad (ISO)' },
+  { slug: 'english', name: 'International English Olympiad (IEO)' },
+  { slug: 'computer_science', name: 'International Computer Science Olympiad (ICSO)' },
+  { slug: 'reasoning', name: 'International Reasoning Olympiad (IRO)' },
+];
+
+async function ensureDefaultProducts() {
+  try {
+    const count = await prisma.product.count();
+    if (count < 25) {
+      for (const cls of CLASSES) {
+        for (const subj of SUBJECTS) {
+          const slug = `class-${cls}-${subj.slug.replace('_', '-')}`;
+          const existing = await prisma.product.findUnique({ where: { slug } });
+          if (!existing) {
+            await prisma.product.create({
+              data: {
+                name: `Class ${cls} ${subj.name} Practice Papers`,
+                slug,
+                class: cls,
+                subject: subj.slug,
+                price: 9900,
+                pdfUrl: '',
+                imageUrl: `/images/classes/class-${cls}.svg`,
+                isActive: true,
+              },
+            });
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('[admin/products] Auto-seed warning:', e);
+  }
+}
+
 // GET all products for PDF management
 export async function GET() {
   try {
@@ -11,6 +50,9 @@ export async function GET() {
     if (!isAuth) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    // Ensure all 25 classes & subjects are initialized
+    await ensureDefaultProducts();
 
     const products = await prisma.product.findMany({
       orderBy: [{ class: 'asc' }, { subject: 'asc' }],
