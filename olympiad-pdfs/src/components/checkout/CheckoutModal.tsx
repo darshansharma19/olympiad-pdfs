@@ -50,6 +50,12 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
 
   useEffect(() => {
     nameRef.current?.focus();
+    // Lock body scroll when modal is open
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -100,7 +106,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
         return;
       }
 
-      // Step 3: Open Razorpay Checkout
+      // Step 3: Open Razorpay Checkout with full UPI & Card support
       const rzpOptions = {
         key: createData.razorpayKeyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_TQsFu63En5JTU3',
         amount: createData.amount,
@@ -111,11 +117,40 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
         prefill: {
           name: name.trim(),
           email: email.trim(),
-          contact: mobile.trim(),
+          contact: `+91${mobile.trim()}`,
         },
-        theme: { color: '#1a3a8f' },
+        theme: {
+          color: '#1a3a8f',
+          backdrop_color: 'rgba(15, 23, 42, 0.7)',
+        },
+        config: {
+          display: {
+            blocks: {
+              upi: {
+                name: 'Pay via UPI / QR (Google Pay, PhonePe, Paytm)',
+                instruments: [{ method: 'upi' }],
+              },
+              cards: {
+                name: 'Debit / Credit Card',
+                instruments: [{ method: 'card' }],
+              },
+              netbanking: {
+                name: 'Net Banking & Wallets',
+                instruments: [{ method: 'netbanking' }, { method: 'wallet' }],
+              },
+            },
+            sequence: ['block.upi', 'block.cards', 'block.netbanking'],
+            preferences: {
+              show_default_blocks: true,
+            },
+          },
+        },
         modal: {
           ondismiss: () => setLoading(false),
+          backdropclose: false,
+          escape: true,
+          handleback: true,
+          confirm_close: true,
         },
         handler: async (response: {
           razorpay_order_id: string;
@@ -162,6 +197,10 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
       };
 
       const rzp = new window.Razorpay(rzpOptions);
+      rzp.on('payment.failed', function (resp: any) {
+        setError(resp.error?.description || 'Payment was unsuccessful. Please try again.');
+        setLoading(false);
+      });
       rzp.open();
     } catch {
       setError('Something went wrong. Please try again.');
@@ -180,6 +219,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
         inset: 0,
         zIndex: 1000,
         background: 'rgba(15,23,42,0.65)',
+        backdropFilter: 'blur(4px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -193,15 +233,16 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
         style={{
           background: '#fff',
           borderRadius: '16px',
-          padding: '32px 28px',
+          padding: '28px 24px',
           maxWidth: 440,
           width: '100%',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
           animation: 'slideUp 0.25s ease',
+          border: '1px solid #e2e8f0',
         }}
       >
         {/* Header */}
-        <div style={{ marginBottom: '24px' }}>
+        <div style={{ marginBottom: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
             <h2
               style={{
@@ -231,26 +272,30 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
 
           <div
             style={{
-              background: 'var(--color-neutral-50)',
-              borderRadius: '8px',
+              background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+              borderRadius: '10px',
               padding: '12px 14px',
-              border: '1px solid var(--color-neutral-200)',
+              border: '1px solid #e2e8f0',
             }}
           >
-            <p style={{ margin: '0 0 2px', fontSize: '0.8125rem', color: 'var(--color-neutral-500)', fontWeight: 600 }}>
+            <p style={{ margin: '0 0 4px', fontSize: '0.8125rem', color: 'var(--color-neutral-600)', fontWeight: 600 }}>
               {item.productName}
             </p>
-            <p
-              style={{
-                margin: 0,
-                fontFamily: 'var(--font-display)',
-                fontWeight: 800,
-                fontSize: '1.375rem',
-                color: 'var(--color-brand-blue)',
-              }}
-            >
-              ₹{(item.amount / 100).toFixed(0)}
-            </p>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+              <span
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 800,
+                  fontSize: '1.375rem',
+                  color: 'var(--color-brand-blue)',
+                }}
+              >
+                ₹{(item.amount / 100).toFixed(0)}
+              </span>
+              <span style={{ fontSize: '0.6875rem', color: 'var(--color-neutral-500)', fontWeight: 600 }}>
+                (Includes all papers in this pack)
+              </span>
+            </div>
           </div>
         </div>
 
@@ -279,7 +324,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
               style={{
                 width: '100%',
                 padding: '11px 14px',
-                border: '1.5px solid var(--color-neutral-300)',
+                border: '1.5px solid #cbd5e1',
                 borderRadius: '8px',
                 fontSize: '0.9375rem',
                 outline: 'none',
@@ -313,7 +358,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
               style={{
                 width: '100%',
                 padding: '11px 14px',
-                border: '1.5px solid var(--color-neutral-300)',
+                border: '1.5px solid #cbd5e1',
                 borderRadius: '8px',
                 fontSize: '0.9375rem',
                 outline: 'none',
@@ -339,12 +384,12 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
               <span
                 style={{
                   padding: '11px 12px',
-                  background: 'var(--color-neutral-100)',
-                  border: '1.5px solid var(--color-neutral-300)',
+                  background: '#f1f5f9',
+                  border: '1.5px solid #cbd5e1',
                   borderRadius: '8px',
                   fontSize: '0.875rem',
                   fontWeight: 600,
-                  color: 'var(--color-neutral-700)',
+                  color: '#334155',
                   whiteSpace: 'nowrap',
                 }}
               >
@@ -360,7 +405,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
                 style={{
                   flex: 1,
                   padding: '11px 14px',
-                  border: '1.5px solid var(--color-neutral-300)',
+                  border: '1.5px solid #cbd5e1',
                   borderRadius: '8px',
                   fontSize: '0.9375rem',
                   outline: 'none',
@@ -377,13 +422,13 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
                 background: '#fef2f2',
                 border: '1px solid #fca5a5',
                 borderRadius: '8px',
-                padding: '12px 14px',
+                padding: '10px 12px',
                 fontSize: '0.875rem',
                 color: '#991b1b',
                 lineHeight: 1.5,
               }}
             >
-              {error}
+              ⚠️ {error}
             </div>
           )}
 
@@ -391,7 +436,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
             type="submit"
             disabled={loading}
             style={{
-              background: loading ? 'var(--color-neutral-400)' : 'var(--color-brand-blue)',
+              background: loading ? '#94a3b8' : 'var(--color-brand-blue)',
               color: '#fff',
               border: 'none',
               borderRadius: '10px',
@@ -401,23 +446,26 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
               cursor: loading ? 'not-allowed' : 'pointer',
               fontFamily: 'var(--font-display)',
               marginTop: '4px',
-              transition: 'opacity 0.15s',
+              boxShadow: '0 4px 12px rgba(26, 58, 143, 0.25)',
+              transition: 'all 0.15s',
             }}
           >
-            {loading ? '⏳ Processing...' : `🔒 Pay ₹${(item.amount / 100).toFixed(0)} Securely`}
+            {loading ? '⏳ Preparing Gateway...' : `🔒 Pay ₹${(item.amount / 100).toFixed(0)} with UPI / Cards`}
           </button>
 
-          <p
+          <div
             style={{
-              margin: '4px 0 0',
-              fontSize: '0.75rem',
-              color: 'var(--color-neutral-500)',
-              textAlign: 'center',
-              lineHeight: 1.5,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px',
+              marginTop: '6px',
             }}
           >
-            Secured by Razorpay · UPI, Cards, Net Banking · Instant PDF delivery
-          </p>
+            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-neutral-600)' }}>
+              ⚡ Instant UPI (GPay, PhonePe, Paytm) · Cards · Net Banking
+            </span>
+          </div>
         </form>
       </div>
       <style>{`@keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }`}</style>

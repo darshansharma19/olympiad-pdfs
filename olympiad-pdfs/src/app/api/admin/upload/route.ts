@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
+import { isAuthenticatedAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
+    const isAuth = await isAuthenticatedAdmin();
+    if (!isAuth) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const formData = await req.formData();
     const file = formData.get('file') as File | null;
     const slug = formData.get('slug') as string | null;
@@ -25,7 +31,7 @@ export async function POST(req: NextRequest) {
     const pdfDir = path.join(process.cwd(), 'public', 'pdfs');
     await mkdir(pdfDir, { recursive: true });
 
-    // Clean filename: e.g. class-6-mathematics.pdf or sanitize file name
+    // Clean filename: e.g. class-6-mathematics.pdf or sanitized file name
     const sanitizedFileName = slug
       ? `${slug}.pdf`
       : `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;

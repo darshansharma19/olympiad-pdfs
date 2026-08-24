@@ -122,7 +122,7 @@ export function buildProductSEODescription(
 ): string {
   const classLabel = product.class ? `Class ${product.class} ` : '';
   const subjectLabel = getSubjectLabel(product.subject as SubjectSlug);
-  return `Download expert-designed ${classLabel}${subjectLabel} Olympiad practice papers. ${product.paperCount} papers, ${product.questionCount} questions, and answer keys included. Instant digital delivery.`;
+  return `Download expert-designed ${classLabel}${subjectLabel} Olympiad practice papers. ${product.paperCount} papers, ${product.questionCount} questions. Instant digital delivery.`;
 }
 
 // ─── Coupon Calculation ───────────────────────────────────────────

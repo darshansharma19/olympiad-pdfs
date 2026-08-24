@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { isAuthenticatedAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
 // GET all products for PDF management
 export async function GET() {
   try {
+    const isAuth = await isAuthenticatedAdmin();
+    if (!isAuth) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const products = await prisma.product.findMany({
       orderBy: [{ class: 'asc' }, { subject: 'asc' }],
     });
@@ -20,6 +26,11 @@ export async function GET() {
 // UPDATE product pdfUrl, price, isActive, etc.
 export async function POST(req: NextRequest) {
   try {
+    const isAuth = await isAuthenticatedAdmin();
+    if (!isAuth) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
     const { id, pdfUrl, price, isActive, name } = body;
 

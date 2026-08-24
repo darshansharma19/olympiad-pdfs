@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 interface Product {
@@ -26,18 +27,43 @@ const SUBJECT_LABELS: Record<string, { code: string; name: string }> = {
 export default function AdminPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [authChecked, setAuthChecked] = useState(false);
   const [selectedClass, setSelectedClass] = useState<number | 'all'>('all');
   const [savingId, setSavingId] = useState<string | null>(null);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeUploadProductId, setActiveUploadProductId] = useState<string | null>(null);
+  const router = useRouter();
+
+  // Check auth on mount
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const res = await fetch('/api/admin/auth/check');
+        const data = await res.json();
+        if (!data.authenticated) {
+          router.replace('/admin/login');
+        } else {
+          setAuthChecked(true);
+          fetchProducts();
+        }
+      } catch {
+        router.replace('/admin/login');
+      }
+    }
+    checkAuth();
+  }, [router]);
 
   // Fetch all products
   async function fetchProducts() {
     try {
       setLoading(true);
       const res = await fetch('/api/admin/products');
+      if (res.status === 401) {
+        router.replace('/admin/login');
+        return;
+      }
       const data = await res.json();
       if (data.products) {
         setProducts(data.products);
@@ -48,10 +74,6 @@ export default function AdminPage() {
       setLoading(false);
     }
   }
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
   function showToast(msg: string) {
     setToastMessage(msg);
@@ -80,6 +102,11 @@ export default function AdminPage() {
           name: product.name,
         }),
       });
+
+      if (res.status === 401) {
+        router.replace('/admin/login');
+        return;
+      }
 
       const data = await res.json();
       if (data.success) {
@@ -119,6 +146,11 @@ export default function AdminPage() {
         body: formData,
       });
 
+      if (uploadRes.status === 401) {
+        router.replace('/admin/login');
+        return;
+      }
+
       const uploadData = await uploadRes.json();
       if (!uploadRes.ok || !uploadData.success) {
         alert(uploadData.error || 'File upload failed');
@@ -151,6 +183,20 @@ export default function AdminPage() {
     }
   }
 
+  // Log out
+  async function handleLogout() {
+    await fetch('/api/admin/auth/logout', { method: 'POST' });
+    router.replace('/admin/login');
+  }
+
+  if (!authChecked) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8fafc' }}>
+        <p style={{ color: 'var(--color-neutral-500)', fontWeight: 600 }}>Verifying administrator session...</p>
+      </div>
+    );
+  }
+
   const filteredProducts =
     selectedClass === 'all'
       ? products
@@ -172,10 +218,10 @@ export default function AdminPage() {
       {/* Top Header */}
       <header
         style={{
-          background: 'var(--color-brand-blue)',
+          background: 'linear-gradient(135deg, #0f2b6e 0%, #1a3a8f 100%)',
           color: '#fff',
           padding: '16px 24px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          boxShadow: '0 4px 12px rgba(15, 43, 110, 0.15)',
         }}
       >
         <div
@@ -193,7 +239,7 @@ export default function AdminPage() {
             <span style={{ fontSize: '1.75rem' }}>📚</span>
             <div>
               <h1 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, fontFamily: 'var(--font-display)' }}>
-                OlympiadPDFs — Database PDF Manager
+                OlympiadPDFs — PDF Database Manager
               </h1>
               <p style={{ margin: '2px 0 0', fontSize: '0.8125rem', color: 'rgba(255,255,255,0.8)' }}>
                 Upload & manage PDF practice papers for Classes 6–10
@@ -204,7 +250,8 @@ export default function AdminPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div
               style={{
-                background: 'rgba(255,255,255,0.15)',
+                background: 'rgba(255,255,255,0.12)',
+                border: '1px solid rgba(255,255,255,0.2)',
                 padding: '6px 14px',
                 borderRadius: '8px',
                 fontSize: '0.8125rem',
@@ -229,6 +276,22 @@ export default function AdminPage() {
             >
               View Live Store ↗
             </Link>
+
+            <button
+              onClick={handleLogout}
+              style={{
+                background: 'rgba(239, 68, 68, 0.2)',
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                color: '#fca5a5',
+                padding: '8px 14px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: 700,
+                fontSize: '0.8125rem',
+              }}
+            >
+              🔒 Log Out
+            </button>
           </div>
         </div>
       </header>
@@ -243,6 +306,7 @@ export default function AdminPage() {
             padding: '16px 20px',
             marginBottom: '20px',
             boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            border: '1px solid #e2e8f0',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -259,7 +323,7 @@ export default function AdminPage() {
                 key={cls}
                 onClick={() => setSelectedClass(cls)}
                 style={{
-                  background: selectedClass === cls ? 'var(--color-brand-blue)' : 'var(--color-neutral-100)',
+                  background: selectedClass === cls ? 'var(--color-brand-blue)' : '#f1f5f9',
                   color: selectedClass === cls ? '#fff' : 'var(--color-neutral-700)',
                   border: 'none',
                   borderRadius: '6px',
@@ -301,8 +365,8 @@ export default function AdminPage() {
                     background: '#fff',
                     borderRadius: '12px',
                     padding: '16px 20px',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-                    border: hasPdf ? '1px solid var(--color-neutral-200)' : '1.5px solid #fed7aa',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
+                    border: hasPdf ? '1.5px solid #e2e8f0' : '1.5px solid #fed7aa',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '12px',
@@ -333,8 +397,8 @@ export default function AdminPage() {
                       </span>
                       <span
                         style={{
-                          background: 'rgba(245,197,24,0.2)',
-                          color: '#b45309',
+                          background: 'rgba(245,197,24,0.15)',
+                          color: '#92400e',
                           fontWeight: 800,
                           fontSize: '0.75rem',
                           padding: '4px 8px',
@@ -404,7 +468,7 @@ export default function AdminPage() {
                         style={{
                           width: '100%',
                           padding: '8px 12px',
-                          border: '1px solid var(--color-neutral-300)',
+                          border: '1.5px solid #cbd5e1',
                           borderRadius: '6px',
                           fontSize: '0.8125rem',
                           outline: 'none',
@@ -418,9 +482,9 @@ export default function AdminPage() {
                       onClick={() => triggerUpload(p.id)}
                       disabled={isUploading}
                       style={{
-                        background: '#f1f5f9',
+                        background: '#f8fafc',
                         color: 'var(--color-neutral-700)',
-                        border: '1px solid var(--color-neutral-300)',
+                        border: '1.5px solid #cbd5e1',
                         borderRadius: '6px',
                         padding: '8px 12px',
                         fontSize: '0.75rem',
