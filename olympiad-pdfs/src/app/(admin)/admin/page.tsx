@@ -193,7 +193,7 @@ export default function AdminPage() {
 
   if (!authChecked) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f172a', color: '#fff' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0b1329', color: '#fff' }}>
         <p style={{ fontWeight: 700 }}>🔒 Verifying administrator credentials...</p>
       </div>
     );
@@ -215,7 +215,7 @@ export default function AdminPage() {
   const missingCount = products.length - configuredCount;
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0b1329', color: '#e2e8f0', fontFamily: 'var(--font-body)' }}>
+    <div style={{ minHeight: '100vh', background: '#0b1329', color: '#e2e8f0', fontFamily: 'var(--font-body)', paddingBottom: '40px' }}>
       {/* Hidden File Input for PDF Upload */}
       <input
         ref={fileInputRef}
@@ -228,10 +228,10 @@ export default function AdminPage() {
       {/* ── 1. TOP NAV / HEADER ───────────────────────────────────── */}
       <header
         style={{
-          background: 'rgba(15, 23, 42, 0.85)',
+          background: 'rgba(15, 23, 42, 0.9)',
           backdropFilter: 'blur(12px)',
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          padding: '16px 24px',
+          padding: 'clamp(12px, 3vw, 16px) clamp(16px, 4vw, 24px)',
           position: 'sticky',
           top: 0,
           zIndex: 100,
@@ -245,28 +245,28 @@ export default function AdminPage() {
             alignItems: 'center',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
-            gap: '16px',
+            gap: '12px',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div
               style={{
-                width: '42px',
-                height: '42px',
-                borderRadius: '10px',
+                width: '38px',
+                height: '38px',
+                borderRadius: '8px',
                 background: 'linear-gradient(135deg, #1e4fd8 0%, #0f2b6e 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '1.5rem',
-                boxShadow: '0 4px 12px rgba(30, 79, 216, 0.3)',
+                fontSize: '1.25rem',
+                flexShrink: 0,
               }}
             >
               📚
             </div>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <h1 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, fontFamily: 'var(--font-display)', color: '#fff' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                <h1 style={{ margin: 0, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', fontWeight: 900, fontFamily: 'var(--font-display)', color: '#fff' }}>
                   OlympiadPDFs Manager
                 </h1>
                 <span
@@ -274,22 +274,19 @@ export default function AdminPage() {
                     background: 'rgba(34, 197, 94, 0.15)',
                     border: '1px solid rgba(34, 197, 94, 0.4)',
                     color: '#4ade80',
-                    fontSize: '0.6875rem',
+                    fontSize: '0.625rem',
                     fontWeight: 800,
-                    padding: '2px 8px',
+                    padding: '2px 6px',
                     borderRadius: '9999px',
                   }}
                 >
-                  ● Active Database
+                  ● Active
                 </span>
               </div>
-              <p style={{ margin: '2px 0 0', fontSize: '0.8125rem', color: '#94a3b8' }}>
-                Manage practice paper links and direct PDF uploads
-              </p>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Link
               href="/"
               target="_blank"
@@ -297,17 +294,17 @@ export default function AdminPage() {
                 background: 'rgba(255, 255, 255, 0.08)',
                 color: '#f8fafc',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
-                padding: '8px 16px',
+                padding: '7px 12px',
                 borderRadius: '8px',
                 textDecoration: 'none',
                 fontWeight: 700,
-                fontSize: '0.8125rem',
+                fontSize: '0.75rem',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '4px',
               }}
             >
-              <span>View Storefront</span>
+              <span>Storefront</span>
               <span>↗</span>
             </Link>
 
@@ -317,11 +314,11 @@ export default function AdminPage() {
                 background: 'rgba(239, 68, 68, 0.15)',
                 border: '1px solid rgba(239, 68, 68, 0.3)',
                 color: '#f87171',
-                padding: '8px 14px',
+                padding: '7px 12px',
                 borderRadius: '8px',
                 cursor: 'pointer',
                 fontWeight: 700,
-                fontSize: '0.8125rem',
+                fontSize: '0.75rem',
               }}
             >
               🔒 Log Out
@@ -331,92 +328,52 @@ export default function AdminPage() {
       </header>
 
       {/* ── 2. METRICS DASHBOARD ─────────────────────────────────── */}
-      <main style={{ maxWidth: '1280px', margin: '28px auto', padding: '0 20px' }}>
+      <main style={{ maxWidth: '1280px', margin: 'clamp(16px, 3vw, 24px) auto', padding: '0 clamp(12px, 3vw, 20px)' }}>
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '16px',
-            marginBottom: '24px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 150px), 1fr))',
+            gap: '12px',
+            marginBottom: '20px',
           }}
         >
-          {/* Card 1: Total */}
-          <div
-            style={{
-              background: 'rgba(30, 41, 59, 0.7)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '14px',
-              padding: '18px 20px',
-            }}
-          >
-            <p style={{ margin: 0, fontSize: '0.8125rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
+          {/* Card 1 */}
+          <div style={{ background: 'rgba(30, 41, 59, 0.7)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '12px', padding: '14px 16px' }}>
+            <p style={{ margin: 0, fontSize: '0.6875rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
               Total Products
             </p>
-            <p style={{ margin: '6px 0 0', fontSize: '1.75rem', fontWeight: 900, color: '#fff', fontFamily: 'var(--font-display)' }}>
+            <p style={{ margin: '4px 0 0', fontSize: '1.5rem', fontWeight: 900, color: '#fff', fontFamily: 'var(--font-display)' }}>
               {products.length}
             </p>
-            <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#64748b' }}>
-              5 Classes × 5 Olympiads
-            </p>
           </div>
 
-          {/* Card 2: Configured */}
-          <div
-            style={{
-              background: 'rgba(6, 78, 59, 0.3)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              borderRadius: '14px',
-              padding: '18px 20px',
-            }}
-          >
-            <p style={{ margin: 0, fontSize: '0.8125rem', fontWeight: 700, color: '#6ee7b7', textTransform: 'uppercase' }}>
+          {/* Card 2 */}
+          <div style={{ background: 'rgba(6, 78, 59, 0.3)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', padding: '14px 16px' }}>
+            <p style={{ margin: 0, fontSize: '0.6875rem', fontWeight: 700, color: '#6ee7b7', textTransform: 'uppercase' }}>
               PDFs Configured
             </p>
-            <p style={{ margin: '6px 0 0', fontSize: '1.75rem', fontWeight: 900, color: '#34d399', fontFamily: 'var(--font-display)' }}>
+            <p style={{ margin: '4px 0 0', fontSize: '1.5rem', fontWeight: 900, color: '#34d399', fontFamily: 'var(--font-display)' }}>
               {configuredCount} / {products.length}
             </p>
-            <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#a7f3d0' }}>
-              {Math.round((configuredCount / (products.length || 1)) * 100)}% Inventory Ready
-            </p>
           </div>
 
-          {/* Card 3: Pending */}
-          <div
-            style={{
-              background: 'rgba(124, 45, 18, 0.25)',
-              border: '1px solid rgba(249, 115, 22, 0.3)',
-              borderRadius: '14px',
-              padding: '18px 20px',
-            }}
-          >
-            <p style={{ margin: 0, fontSize: '0.8125rem', fontWeight: 700, color: '#fdba74', textTransform: 'uppercase' }}>
+          {/* Card 3 */}
+          <div style={{ background: 'rgba(124, 45, 18, 0.25)', border: '1px solid rgba(249, 115, 22, 0.3)', borderRadius: '12px', padding: '14px 16px' }}>
+            <p style={{ margin: 0, fontSize: '0.6875rem', fontWeight: 700, color: '#fdba74', textTransform: 'uppercase' }}>
               Pending Uploads
             </p>
-            <p style={{ margin: '6px 0 0', fontSize: '1.75rem', fontWeight: 900, color: '#fb923c', fontFamily: 'var(--font-display)' }}>
+            <p style={{ margin: '4px 0 0', fontSize: '1.5rem', fontWeight: 900, color: '#fb923c', fontFamily: 'var(--font-display)' }}>
               {missingCount}
-            </p>
-            <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#fed7aa' }}>
-              Upload or link PDFs below
             </p>
           </div>
 
-          {/* Card 4: Classes */}
-          <div
-            style={{
-              background: 'rgba(30, 41, 59, 0.7)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '14px',
-              padding: '18px 20px',
-            }}
-          >
-            <p style={{ margin: 0, fontSize: '0.8125rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
-              Olympiad Grades
+          {/* Card 4 */}
+          <div style={{ background: 'rgba(30, 41, 59, 0.7)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '12px', padding: '14px 16px' }}>
+            <p style={{ margin: 0, fontSize: '0.6875rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
+              Grades
             </p>
-            <p style={{ margin: '6px 0 0', fontSize: '1.75rem', fontWeight: 900, color: 'var(--color-brand-gold)', fontFamily: 'var(--font-display)' }}>
-              Classes 6–10
-            </p>
-            <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#64748b' }}>
-              IMO, ISO, IEO, ICSO, IRO
+            <p style={{ margin: '4px 0 0', fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-brand-gold)', fontFamily: 'var(--font-display)' }}>
+              6–10
             </p>
           </div>
         </div>
@@ -426,60 +383,55 @@ export default function AdminPage() {
           style={{
             background: 'rgba(30, 41, 59, 0.8)',
             border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '16px',
-            padding: '20px',
-            marginBottom: '24px',
+            borderRadius: '14px',
+            padding: '14px',
+            marginBottom: '20px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '16px',
+            gap: '12px',
           }}
         >
-          {/* Search bar & count */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-            <div style={{ position: 'relative', flex: '1 1 300px' }}>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="🔍 Search by class, subject, or title..."
+          {/* Search bar */}
+          <div style={{ position: 'relative', width: '100%' }}>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="🔍 Search by class, subject, or title..."
+              style={{
+                width: '100%',
+                background: '#0f172a',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '8px',
+                padding: '9px 12px',
+                color: '#fff',
+                fontSize: '0.8125rem',
+                outline: 'none',
+                boxSizing: 'border-box',
+              }}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
                 style={{
-                  width: '100%',
-                  background: '#0f172a',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  borderRadius: '10px',
-                  padding: '10px 16px',
-                  color: '#fff',
-                  fontSize: '0.875rem',
-                  outline: 'none',
+                  position: 'absolute',
+                  right: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'none',
+                  border: 'none',
+                  color: '#94a3b8',
+                  cursor: 'pointer',
                 }}
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  style={{
-                    position: 'absolute',
-                    right: '12px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'none',
-                    border: 'none',
-                    color: '#94a3b8',
-                    cursor: 'pointer',
-                  }}
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-
-            <span style={{ fontSize: '0.8125rem', color: '#94a3b8', fontWeight: 600 }}>
-              Showing <strong style={{ color: '#fff' }}>{filteredProducts.length}</strong> of {products.length} products
-            </span>
+              >
+                ✕
+              </button>
+            )}
           </div>
 
           {/* Class Filters */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginRight: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase' }}>
               Class:
             </span>
             {(['all', 6, 7, 8, 9, 10] as const).map((cls) => (
@@ -490,22 +442,21 @@ export default function AdminPage() {
                   background: selectedClass === cls ? '#1e4fd8' : 'rgba(255, 255, 255, 0.06)',
                   color: selectedClass === cls ? '#ffffff' : '#cbd5e1',
                   border: selectedClass === cls ? '1px solid #3b82f6' : '1px solid rgba(255, 255, 255, 0.1)',
-                  borderRadius: '8px',
-                  padding: '6px 14px',
+                  borderRadius: '6px',
+                  padding: '4px 10px',
                   fontWeight: 700,
-                  fontSize: '0.8125rem',
+                  fontSize: '0.75rem',
                   cursor: 'pointer',
-                  transition: 'all 0.15s',
                 }}
               >
-                {cls === 'all' ? 'All Classes' : `Class ${cls}`}
+                {cls === 'all' ? 'All' : `Cls ${cls}`}
               </button>
             ))}
           </div>
 
           {/* Subject Filters */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginRight: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase' }}>
               Subject:
             </span>
             <button
@@ -514,14 +465,14 @@ export default function AdminPage() {
                 background: selectedSubject === 'all' ? 'var(--color-brand-gold)' : 'rgba(255, 255, 255, 0.06)',
                 color: selectedSubject === 'all' ? '#0f172a' : '#cbd5e1',
                 border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '8px',
-                padding: '6px 14px',
+                borderRadius: '6px',
+                padding: '4px 10px',
                 fontWeight: 800,
-                fontSize: '0.8125rem',
+                fontSize: '0.75rem',
                 cursor: 'pointer',
               }}
             >
-              All Subjects
+              All
             </button>
             {Object.entries(SUBJECT_METADATA).map(([slug, meta]) => (
               <button
@@ -531,14 +482,14 @@ export default function AdminPage() {
                   background: selectedSubject === slug ? meta.color : 'rgba(255, 255, 255, 0.06)',
                   color: '#ffffff',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
-                  borderRadius: '8px',
-                  padding: '6px 14px',
+                  borderRadius: '6px',
+                  padding: '4px 8px',
                   fontWeight: 700,
-                  fontSize: '0.8125rem',
+                  fontSize: '0.75rem',
                   cursor: 'pointer',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '6px',
+                  gap: '4px',
                 }}
               >
                 <span>{meta.icon}</span>
@@ -550,11 +501,11 @@ export default function AdminPage() {
 
         {/* ── 4. PRODUCT LISTING CARDS ────────────────────────────── */}
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '60px 0', color: '#94a3b8' }}>
-            <p style={{ fontSize: '1.125rem', fontWeight: 600 }}>Loading database inventory...</p>
+          <div style={{ textAlign: 'center', padding: '40px 0', color: '#94a3b8' }}>
+            <p style={{ fontSize: '1rem', fontWeight: 600 }}>Loading database inventory...</p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {filteredProducts.map((p) => {
               const subjInfo = SUBJECT_METADATA[p.subject] || { code: p.subject.toUpperCase(), name: p.subject, icon: '📄', color: '#3b82f6' };
               const hasPdf = !!p.pdfUrl.trim();
@@ -567,99 +518,55 @@ export default function AdminPage() {
                   style={{
                     background: 'rgba(30, 41, 59, 0.7)',
                     border: hasPdf ? '1px solid rgba(255, 255, 255, 0.12)' : '1.5px solid rgba(249, 115, 22, 0.4)',
-                    borderRadius: '16px',
-                    padding: '20px 24px',
+                    borderRadius: '14px',
+                    padding: '14px 16px',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '14px',
-                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)',
+                    gap: '12px',
                   }}
                 >
                   {/* Top Product Header */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                      <span
-                        style={{
-                          background: '#1e4fd8',
-                          color: '#fff',
-                          fontWeight: 900,
-                          fontSize: '0.75rem',
-                          padding: '4px 10px',
-                          borderRadius: '6px',
-                        }}
-                      >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      <span style={{ background: '#1e4fd8', color: '#fff', fontWeight: 900, fontSize: '0.6875rem', padding: '3px 8px', borderRadius: '5px' }}>
                         CLASS {p.class}
                       </span>
-
-                      <span
-                        style={{
-                          background: subjInfo.color,
-                          color: '#fff',
-                          fontWeight: 800,
-                          fontSize: '0.75rem',
-                          padding: '4px 10px',
-                          borderRadius: '6px',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                        }}
-                      >
+                      <span style={{ background: subjInfo.color, color: '#fff', fontWeight: 800, fontSize: '0.6875rem', padding: '3px 8px', borderRadius: '5px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
                         <span>{subjInfo.icon}</span>
                         <span>{subjInfo.code}</span>
                       </span>
-
-                      <span style={{ fontWeight: 800, fontSize: '1rem', color: '#fff' }}>
+                      <span style={{ fontWeight: 800, fontSize: '0.875rem', color: '#fff' }}>
                         {p.name}
                       </span>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>Price:</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ fontSize: '0.6875rem', color: '#94a3b8', fontWeight: 600 }}>₹</span>
                         <input
                           type="number"
                           value={p.price / 100}
                           onChange={(e) => handleFieldChange(p.id, 'price', Math.round(Number(e.target.value) * 100))}
                           style={{
-                            width: '70px',
+                            width: '56px',
                             background: '#0f172a',
                             border: '1px solid rgba(255, 255, 255, 0.2)',
                             borderRadius: '6px',
-                            padding: '4px 8px',
+                            padding: '3px 6px',
                             color: '#fff',
                             fontWeight: 800,
-                            fontSize: '0.875rem',
+                            fontSize: '0.8125rem',
                             textAlign: 'center',
                           }}
                         />
                       </div>
 
                       {hasPdf ? (
-                        <span
-                          style={{
-                            background: 'rgba(34, 197, 94, 0.2)',
-                            border: '1px solid rgba(34, 197, 94, 0.4)',
-                            color: '#4ade80',
-                            fontSize: '0.75rem',
-                            fontWeight: 800,
-                            padding: '4px 10px',
-                            borderRadius: '6px',
-                          }}
-                        >
+                        <span style={{ background: 'rgba(34, 197, 94, 0.2)', border: '1px solid rgba(34, 197, 94, 0.4)', color: '#4ade80', fontSize: '0.6875rem', fontWeight: 800, padding: '3px 8px', borderRadius: '5px' }}>
                           ✅ Ready
                         </span>
                       ) : (
-                        <span
-                          style={{
-                            background: 'rgba(249, 115, 22, 0.2)',
-                            border: '1px solid rgba(249, 115, 22, 0.4)',
-                            color: '#fb923c',
-                            fontSize: '0.75rem',
-                            fontWeight: 800,
-                            padding: '4px 10px',
-                            borderRadius: '6px',
-                          }}
-                        >
+                        <span style={{ background: 'rgba(249, 115, 22, 0.2)', border: '1px solid rgba(249, 115, 22, 0.4)', color: '#fb923c', fontSize: '0.6875rem', fontWeight: 800, padding: '3px 8px', borderRadius: '5px' }}>
                           ⚠️ Missing PDF
                         </span>
                       )}
@@ -667,94 +574,99 @@ export default function AdminPage() {
                   </div>
 
                   {/* Input & Action Row */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                    <div style={{ flex: '1 1 320px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', whiteSpace: 'nowrap' }}>
-                        PDF Link:
-                      </span>
-                      <input
-                        type="text"
-                        value={p.pdfUrl}
-                        onChange={(e) => handleFieldChange(p.id, 'pdfUrl', e.target.value)}
-                        placeholder="Paste Google Drive URL, AWS S3 link, or upload PDF file →"
-                        style={{
-                          width: '100%',
-                          background: '#0f172a',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
-                          borderRadius: '8px',
-                          padding: '9px 14px',
-                          color: '#e2e8f0',
-                          fontSize: '0.8125rem',
-                          fontFamily: 'monospace',
-                          outline: 'none',
-                        }}
-                      />
-                    </div>
-
-                    {/* Upload File Button */}
-                    <button
-                      onClick={() => triggerUpload(p.id)}
-                      disabled={isUploading}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <input
+                      type="text"
+                      value={p.pdfUrl}
+                      onChange={(e) => handleFieldChange(p.id, 'pdfUrl', e.target.value)}
+                      placeholder="Paste PDF URL (Google Drive, AWS, Cloudflare) or upload →"
                       style={{
-                        background: '#1e293b',
-                        color: '#f8fafc',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        width: '100%',
+                        background: '#0f172a',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
                         borderRadius: '8px',
-                        padding: '9px 14px',
-                        fontSize: '0.8125rem',
-                        fontWeight: 700,
-                        cursor: isUploading ? 'not-allowed' : 'pointer',
-                        whiteSpace: 'nowrap',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '6px',
+                        padding: '8px 12px',
+                        color: '#e2e8f0',
+                        fontSize: '0.75rem',
+                        fontFamily: 'monospace',
+                        outline: 'none',
+                        boxSizing: 'border-box',
                       }}
-                    >
-                      <span>📁</span>
-                      <span>{isUploading ? 'Uploading...' : 'Upload PDF'}</span>
-                    </button>
+                    />
 
-                    {/* Preview Button */}
-                    {hasPdf && (
-                      <a
-                        href={p.pdfUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    {/* Action buttons row */}
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      <button
+                        onClick={() => triggerUpload(p.id)}
+                        disabled={isUploading}
                         style={{
-                          background: 'rgba(59, 130, 246, 0.2)',
-                          border: '1px solid rgba(59, 130, 246, 0.4)',
-                          color: '#93c5fd',
-                          padding: '9px 14px',
+                          flex: '1 1 120px',
+                          background: '#1e293b',
+                          color: '#f8fafc',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
                           borderRadius: '8px',
-                          fontSize: '0.8125rem',
+                          padding: '8px 12px',
+                          fontSize: '0.75rem',
                           fontWeight: 700,
-                          textDecoration: 'none',
-                          whiteSpace: 'nowrap',
+                          cursor: isUploading ? 'not-allowed' : 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '4px',
+                          minHeight: '38px',
                         }}
                       >
-                        👁️ Preview
-                      </a>
-                    )}
+                        <span>📁</span>
+                        <span>{isUploading ? 'Uploading...' : 'Upload PDF'}</span>
+                      </button>
 
-                    {/* Save Button */}
-                    <button
-                      onClick={() => handleSave(p)}
-                      disabled={isSaving}
-                      style={{
-                        background: 'linear-gradient(135deg, #1e4fd8 0%, #0f2b6e 100%)',
-                        color: '#fff',
-                        border: '1px solid #3b82f6',
-                        borderRadius: '8px',
-                        padding: '9px 18px',
-                        fontSize: '0.8125rem',
-                        fontWeight: 800,
-                        cursor: isSaving ? 'not-allowed' : 'pointer',
-                        whiteSpace: 'nowrap',
-                        boxShadow: '0 2px 8px rgba(30, 79, 216, 0.3)',
-                      }}
-                    >
-                      {isSaving ? '⏳ Saving...' : '💾 Save to DB'}
-                    </button>
+                      {hasPdf && (
+                        <a
+                          href={p.pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            flex: '0 0 auto',
+                            background: 'rgba(59, 130, 246, 0.2)',
+                            border: '1px solid rgba(59, 130, 246, 0.4)',
+                            color: '#93c5fd',
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            fontSize: '0.75rem',
+                            fontWeight: 700,
+                            textDecoration: 'none',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            minHeight: '38px',
+                          }}
+                        >
+                          👁️ Preview
+                        </a>
+                      )}
+
+                      <button
+                        onClick={() => handleSave(p)}
+                        disabled={isSaving}
+                        style={{
+                          flex: '1 1 120px',
+                          background: 'linear-gradient(135deg, #1e4fd8 0%, #0f2b6e 100%)',
+                          color: '#fff',
+                          border: '1px solid #3b82f6',
+                          borderRadius: '8px',
+                          padding: '8px 14px',
+                          fontSize: '0.75rem',
+                          fontWeight: 800,
+                          cursor: isSaving ? 'not-allowed' : 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          minHeight: '38px',
+                        }}
+                      >
+                        {isSaving ? '⏳ Saving...' : '💾 Save to DB'}
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -768,15 +680,19 @@ export default function AdminPage() {
         <div
           style={{
             position: 'fixed',
-            bottom: '24px',
-            right: '24px',
+            bottom: '20px',
+            right: '20px',
+            left: '20px',
+            maxWidth: '380px',
+            margin: '0 auto',
             background: '#1e4fd8',
             color: '#fff',
-            padding: '14px 22px',
-            borderRadius: '12px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.4)',
-            fontSize: '0.875rem',
+            padding: '12px 18px',
+            borderRadius: '10px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
+            fontSize: '0.8125rem',
             fontWeight: 800,
+            textAlign: 'center',
             zIndex: 9999,
           }}
         >

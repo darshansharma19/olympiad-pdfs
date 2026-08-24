@@ -119,10 +119,10 @@ export function OlympiadShowcase() {
   }
 
   return (
-    <section className="section" style={{ background: '#ffffff', padding: '4.5rem 0' }}>
+    <section className="section" style={{ background: '#ffffff', padding: 'clamp(3rem, 6vw, 4.5rem) 0' }}>
       <div className="container-site">
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <div
             style={{
               display: 'inline-flex',
@@ -130,19 +130,19 @@ export function OlympiadShowcase() {
               gap: '6px',
               background: 'rgba(26, 58, 143, 0.08)',
               color: 'var(--color-brand-blue)',
-              padding: '6px 16px',
+              padding: '5px 14px',
               borderRadius: '9999px',
               fontSize: '0.75rem',
               fontWeight: 800,
               textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              marginBottom: '12px',
+              letterSpacing: '0.06em',
+              marginBottom: '10px',
             }}
           >
             🏆 Olympiad Subjects & Competition Focus
           </div>
           <h2 className="section-title" style={{ margin: '0 0 10px' }}>
-            Built for National & International Olympiad Excellence
+            Built for Olympiad Excellence
           </h2>
           <p className="section-subtitle" style={{ margin: '0 auto' }}>
             Explore the 5 core Olympiad subjects. Test your skills on sample competition-style questions!
@@ -154,9 +154,9 @@ export function OlympiadShowcase() {
           style={{
             display: 'flex',
             justifyContent: 'center',
-            gap: '8px',
+            gap: '6px',
             flexWrap: 'wrap',
-            marginBottom: '2rem',
+            marginBottom: '1.75rem',
           }}
         >
           {OLYMPIADS.map((item) => {
@@ -168,21 +168,20 @@ export function OlympiadShowcase() {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  gap: '6px',
                   background: isActive ? 'var(--color-brand-blue)' : '#f1f5f9',
                   color: isActive ? '#ffffff' : '#334155',
                   border: isActive ? '2px solid var(--color-brand-blue)' : '2px solid transparent',
-                  padding: '10px 18px',
-                  borderRadius: '12px',
+                  padding: '8px 14px',
+                  borderRadius: '10px',
                   fontWeight: 800,
-                  fontSize: '0.875rem',
+                  fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
                   cursor: 'pointer',
-                  transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                  boxShadow: isActive ? '0 4px 14px rgba(15, 43, 110, 0.25)' : 'none',
-                  transform: isActive ? 'translateY(-2px)' : 'none',
+                  transition: 'all 0.15s ease',
+                  boxShadow: isActive ? '0 4px 12px rgba(15, 43, 110, 0.2)' : 'none',
                 }}
               >
-                <span style={{ fontSize: '1.25rem' }}>{item.icon}</span>
+                <span style={{ fontSize: '1.125rem' }}>{item.icon}</span>
                 <span>{item.code}</span>
               </button>
             );
@@ -193,58 +192,58 @@ export function OlympiadShowcase() {
         <div
           style={{
             background: activeOlympiad.bgGradient,
-            borderRadius: '20px',
+            borderRadius: '18px',
             border: '1.5px solid rgba(15, 43, 110, 0.1)',
-            padding: 'clamp(20px, 4vw, 36px)',
+            padding: 'clamp(16px, 3.5vw, 32px)',
             boxShadow: 'var(--shadow-card)',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '28px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 290px), 1fr))',
+            gap: '20px',
             alignItems: 'center',
           }}
         >
           {/* Left Column: Details & Syllabus */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-              <span style={{ fontSize: '2rem' }}>{activeOlympiad.icon}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+              <span style={{ fontSize: '1.75rem' }}>{activeOlympiad.icon}</span>
               <div>
                 <h3
                   style={{
                     margin: 0,
                     fontFamily: 'var(--font-display)',
                     fontWeight: 900,
-                    fontSize: '1.375rem',
+                    fontSize: 'clamp(1.125rem, 3vw, 1.375rem)',
                     color: 'var(--color-brand-blue)',
                   }}
                 >
                   {activeOlympiad.name} ({activeOlympiad.code})
                 </h3>
-                <p style={{ margin: '2px 0 0', fontSize: '0.875rem', color: '#475569', fontWeight: 600 }}>
+                <p style={{ margin: '2px 0 0', fontSize: '0.8125rem', color: '#475569', fontWeight: 600 }}>
                   {activeOlympiad.tagline}
                 </p>
               </div>
             </div>
 
-            <div style={{ marginTop: '20px' }}>
-              <h4 style={{ margin: '0 0 10px', fontSize: '0.8125rem', fontWeight: 800, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <div style={{ marginTop: '16px' }}>
+              <h4 style={{ margin: '0 0 8px', fontSize: '0.75rem', fontWeight: 800, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 Key Focus & HOTS Topics Covered:
               </h4>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 160px), 1fr))', gap: '6px' }}>
                 {activeOlympiad.focusAreas.map((area, idx) => (
                   <div
                     key={idx}
                     style={{
-                      background: 'rgba(255, 255, 255, 0.85)',
+                      background: 'rgba(255, 255, 255, 0.9)',
                       backdropFilter: 'blur(4px)',
                       borderRadius: '8px',
-                      padding: '8px 12px',
-                      fontSize: '0.8125rem',
+                      padding: '7px 10px',
+                      fontSize: '0.75rem',
                       fontWeight: 600,
                       color: '#1e293b',
                       border: '1px solid rgba(0,0,0,0.05)',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '6px',
+                      gap: '5px',
                     }}
                   >
                     <span style={{ color: activeOlympiad.color, fontWeight: 900 }}>•</span> {area}
@@ -253,22 +252,25 @@ export function OlympiadShowcase() {
               </div>
             </div>
 
-            <div style={{ marginTop: '24px' }}>
+            <div style={{ marginTop: '20px' }}>
               <a
                 href="#choose-class"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  justifyContent: 'center',
+                  gap: '6px',
                   background: 'var(--color-brand-blue)',
                   color: '#fff',
-                  padding: '10px 22px',
+                  padding: '10px 20px',
                   borderRadius: '10px',
                   textDecoration: 'none',
                   fontFamily: 'var(--font-display)',
                   fontWeight: 800,
-                  fontSize: '0.875rem',
+                  fontSize: '0.8125rem',
                   boxShadow: '0 4px 12px rgba(15, 43, 110, 0.25)',
+                  width: 'min(100%, 280px)',
+                  textAlign: 'center',
                 }}
               >
                 Get {activeOlympiad.code} Practice Papers →
@@ -280,56 +282,56 @@ export function OlympiadShowcase() {
           <div
             style={{
               background: '#ffffff',
-              borderRadius: '16px',
-              padding: '24px',
+              borderRadius: '14px',
+              padding: 'clamp(16px, 3vw, 22px)',
               border: '1.5px solid #cbd5e1',
-              boxShadow: '0 10px 25px -5px rgba(0,0,0,0.06)',
+              boxShadow: '0 8px 20px -5px rgba(0,0,0,0.05)',
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
               <span
                 style={{
                   background: 'rgba(245, 197, 24, 0.2)',
                   color: '#92400e',
                   fontSize: '0.6875rem',
                   fontWeight: 800,
-                  padding: '3px 8px',
+                  padding: '2px 8px',
                   borderRadius: '6px',
                   textTransform: 'uppercase',
                 }}
               >
                 ⚡ Interactive Challenge
               </span>
-              <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>
+              <span style={{ fontSize: '0.6875rem', color: '#64748b', fontWeight: 600 }}>
                 {activeOlympiad.code} Sample
               </span>
             </div>
 
             <h4
               style={{
-                margin: '0 0 8px',
+                margin: '0 0 6px',
                 fontFamily: 'var(--font-display)',
                 fontWeight: 800,
-                fontSize: '0.9375rem',
+                fontSize: 'clamp(0.875rem, 2.5vw, 0.9375rem)',
                 color: 'var(--color-brand-blue)',
               }}
             >
               {activeOlympiad.sampleQuestion.title}
             </h4>
 
-            <p style={{ margin: '0 0 14px', fontSize: '0.875rem', color: '#334155', lineHeight: 1.5, fontWeight: 500 }}>
+            <p style={{ margin: '0 0 12px', fontSize: '0.8125rem', color: '#334155', lineHeight: 1.5, fontWeight: 500 }}>
               {activeOlympiad.sampleQuestion.question}
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))', gap: '6px', marginBottom: '12px' }}>
               {activeOlympiad.sampleQuestion.options.map((opt, i) => (
                 <div
                   key={i}
                   style={{
                     background: '#f8fafc',
-                    padding: '6px 10px',
+                    padding: '6px 8px',
                     borderRadius: '6px',
-                    fontSize: '0.8125rem',
+                    fontSize: '0.75rem',
                     fontWeight: 600,
                     color: '#475569',
                     border: '1px solid #e2e8f0',
@@ -348,8 +350,8 @@ export function OlympiadShowcase() {
                 color: isHintRevealed ? '#334155' : '#92400e',
                 border: '1px solid rgba(245, 197, 24, 0.4)',
                 borderRadius: '8px',
-                padding: '8px 12px',
-                fontSize: '0.8125rem',
+                padding: '8px 10px',
+                fontSize: '0.75rem',
                 fontWeight: 700,
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
@@ -361,19 +363,19 @@ export function OlympiadShowcase() {
             {isHintRevealed && (
               <div
                 style={{
-                  marginTop: '12px',
+                  marginTop: '10px',
                   background: '#f0fdf4',
                   border: '1px solid #86efac',
                   borderRadius: '8px',
-                  padding: '12px',
-                  fontSize: '0.8125rem',
+                  padding: '10px 12px',
+                  fontSize: '0.75rem',
                   color: '#166534',
                   lineHeight: 1.5,
                   animation: 'fadeIn 0.2s ease',
                 }}
               >
-                <p style={{ margin: '0 0 6px', fontWeight: 700 }}>{activeOlympiad.sampleQuestion.answer}</p>
-                <p style={{ margin: 0, fontSize: '0.75rem', color: '#15803d' }}>
+                <p style={{ margin: '0 0 4px', fontWeight: 700 }}>{activeOlympiad.sampleQuestion.answer}</p>
+                <p style={{ margin: 0, fontSize: '0.6875rem', color: '#15803d' }}>
                   <strong>Approach:</strong> {activeOlympiad.sampleQuestion.hint}
                 </p>
               </div>

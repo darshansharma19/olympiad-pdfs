@@ -50,7 +50,6 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
 
   useEffect(() => {
     nameRef.current?.focus();
-    // Lock body scroll when modal is open
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
@@ -218,12 +217,13 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
         position: 'fixed',
         inset: 0,
         zIndex: 1000,
-        background: 'rgba(15,23,42,0.65)',
-        backdropFilter: 'blur(4px)',
+        background: 'rgba(15,23,42,0.7)',
+        backdropFilter: 'blur(5px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '16px',
+        padding: '12px',
+        overflowY: 'auto',
       }}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -233,22 +233,25 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
         style={{
           background: '#fff',
           borderRadius: '16px',
-          padding: '28px 24px',
-          maxWidth: 440,
+          padding: 'clamp(20px, 5vw, 28px)',
+          maxWidth: '440px',
           width: '100%',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
+          maxHeight: '92vh',
+          overflowY: 'auto',
+          boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
           animation: 'slideUp 0.25s ease',
           border: '1px solid #e2e8f0',
+          boxSizing: 'border-box',
         }}
       >
         {/* Header */}
-        <div style={{ marginBottom: '20px' }}>
+        <div style={{ marginBottom: '18px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
             <h2
               style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 800,
-                fontSize: '1.25rem',
+                fontSize: 'clamp(1.125rem, 3vw, 1.25rem)',
                 color: 'var(--color-brand-blue)',
                 margin: 0,
               }}
@@ -263,7 +266,8 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
                 fontSize: '1.25rem',
                 cursor: 'pointer',
                 color: 'var(--color-neutral-400)',
-                padding: '4px',
+                padding: '6px',
+                lineHeight: 1,
               }}
             >
               ✕
@@ -274,18 +278,18 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
             style={{
               background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
               borderRadius: '10px',
-              padding: '12px 14px',
+              padding: '10px 12px',
               border: '1px solid #e2e8f0',
             }}
           >
-            <p style={{ margin: '0 0 4px', fontSize: '0.8125rem', color: 'var(--color-neutral-600)', fontWeight: 600 }}>
+            <p style={{ margin: '0 0 2px', fontSize: '0.8125rem', color: 'var(--color-neutral-600)', fontWeight: 600 }}>
               {item.productName}
             </p>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
               <span
                 style={{
                   fontFamily: 'var(--font-display)',
-                  fontWeight: 800,
+                  fontWeight: 900,
                   fontSize: '1.375rem',
                   color: 'var(--color-brand-blue)',
                 }}
@@ -293,14 +297,14 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
                 ₹{(item.amount / 100).toFixed(0)}
               </span>
               <span style={{ fontSize: '0.6875rem', color: 'var(--color-neutral-500)', fontWeight: 600 }}>
-                (Includes all papers in this pack)
+                (Instant delivery)
               </span>
             </div>
           </div>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <div>
             <label
               style={{
@@ -308,7 +312,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
                 fontWeight: 700,
                 color: 'var(--color-neutral-700)',
                 display: 'block',
-                marginBottom: '6px',
+                marginBottom: '4px',
               }}
             >
               Full Name *
@@ -323,7 +327,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
               placeholder="e.g. Priya Sharma"
               style={{
                 width: '100%',
-                padding: '11px 14px',
+                padding: '10px 12px',
                 border: '1.5px solid #cbd5e1',
                 borderRadius: '8px',
                 fontSize: '0.9375rem',
@@ -341,12 +345,12 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
                 fontWeight: 700,
                 color: 'var(--color-neutral-700)',
                 display: 'block',
-                marginBottom: '6px',
+                marginBottom: '4px',
               }}
             >
               Email Address *{' '}
               <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--color-neutral-500)' }}>
-                (PDFs will be sent here)
+                (PDFs sent here)
               </span>
             </label>
             <input
@@ -357,7 +361,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
               placeholder="e.g. priya@example.com"
               style={{
                 width: '100%',
-                padding: '11px 14px',
+                padding: '10px 12px',
                 border: '1.5px solid #cbd5e1',
                 borderRadius: '8px',
                 fontSize: '0.9375rem',
@@ -375,20 +379,20 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
                 fontWeight: 700,
                 color: 'var(--color-neutral-700)',
                 display: 'block',
-                marginBottom: '6px',
+                marginBottom: '4px',
               }}
             >
               Mobile Number *
             </label>
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
               <span
                 style={{
-                  padding: '11px 12px',
+                  padding: '10px 10px',
                   background: '#f1f5f9',
                   border: '1.5px solid #cbd5e1',
                   borderRadius: '8px',
                   fontSize: '0.875rem',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   color: '#334155',
                   whiteSpace: 'nowrap',
                 }}
@@ -404,7 +408,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
                 maxLength={10}
                 style={{
                   flex: 1,
-                  padding: '11px 14px',
+                  padding: '10px 12px',
                   border: '1.5px solid #cbd5e1',
                   borderRadius: '8px',
                   fontSize: '0.9375rem',
@@ -422,10 +426,10 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
                 background: '#fef2f2',
                 border: '1px solid #fca5a5',
                 borderRadius: '8px',
-                padding: '10px 12px',
-                fontSize: '0.875rem',
+                padding: '8px 12px',
+                fontSize: '0.8125rem',
                 color: '#991b1b',
-                lineHeight: 1.5,
+                lineHeight: 1.4,
               }}
             >
               ⚠️ {error}
@@ -440,35 +444,34 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
               color: '#fff',
               border: 'none',
               borderRadius: '10px',
-              padding: '14px',
-              fontSize: '1rem',
+              padding: '13px',
+              fontSize: '0.9375rem',
               fontWeight: 800,
               cursor: loading ? 'not-allowed' : 'pointer',
               fontFamily: 'var(--font-display)',
               marginTop: '4px',
               boxShadow: '0 4px 12px rgba(26, 58, 143, 0.25)',
               transition: 'all 0.15s',
+              minHeight: '46px',
             }}
           >
             {loading ? '⏳ Preparing Gateway...' : `🔒 Pay ₹${(item.amount / 100).toFixed(0)} with UPI / Cards`}
           </button>
 
-          <div
+          <p
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px',
-              marginTop: '6px',
+              margin: '2px 0 0',
+              fontSize: '0.6875rem',
+              color: 'var(--color-neutral-500)',
+              textAlign: 'center',
+              lineHeight: 1.4,
             }}
           >
-            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-neutral-600)' }}>
-              ⚡ Instant UPI (GPay, PhonePe, Paytm) · Cards · Net Banking
-            </span>
-          </div>
+            ⚡ UPI (GPay, PhonePe, Paytm, QR) · Cards · Net Banking
+          </p>
         </form>
       </div>
-      <style>{`@keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }`}</style>
+      <style>{`@keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }`}</style>
     </div>
   );
 }
