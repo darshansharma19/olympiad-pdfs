@@ -22,7 +22,7 @@ export const OLYMPIAD_SUBJECTS = [
 const INDIVIDUAL_PRICE = 9900; // ₹99 in paise
 
 async function main() {
-  console.log('🌱 Seeding OlympiadPDFs database with Olympiad subject naming...\n');
+  console.log('🌱 Syncing OlympiadPDFs database with Olympiad products...\n');
   console.log(`   DB: ${dbUrl}\n`);
 
   let updated = 0;
@@ -31,6 +31,8 @@ async function main() {
     for (const subj of OLYMPIAD_SUBJECTS) {
       const slug = `class-${cls}-${subj.slug.replace('_', '-')}`;
       const name = `Class ${cls} ${subj.fullName} Practice Papers`;
+
+      const existing = await prisma.product.findUnique({ where: { slug } });
 
       await prisma.product.upsert({
         where: { slug },
@@ -41,6 +43,8 @@ async function main() {
           price: INDIVIDUAL_PRICE,
           imageUrl: `/images/classes/class-${cls}.svg`,
           isActive: true,
+          // Preserve existing pdfUrl if set, otherwise default to sample PDF for local testing
+          pdfUrl: existing?.pdfUrl ? existing.pdfUrl : '/pdfs/sample-practice-paper.pdf',
         },
         create: {
           name,
@@ -48,7 +52,7 @@ async function main() {
           class: cls,
           subject: subj.slug,
           price: INDIVIDUAL_PRICE,
-          pdfUrl: '',
+          pdfUrl: '/pdfs/sample-practice-paper.pdf',
           imageUrl: `/images/classes/class-${cls}.svg`,
           isActive: true,
         },
@@ -59,7 +63,7 @@ async function main() {
     }
   }
 
-  console.log(`\n✨ Done! Synchronized ${updated} products with Olympiad naming.`);
+  console.log(`\n✨ Done! Synchronized ${updated} products in database.`);
 }
 
 main()

@@ -26,35 +26,15 @@ const OLYMPIAD_SUBJECT_LABELS: Record<string, { code: string; full: string }> = 
 };
 
 const BUNDLE_PRICE = 29900; // ₹299
-const PACK_2_PRICE = 14900; // ₹149
 const SINGLE_PRICE = 9900;  // ₹99
 
 export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
   // Single selection state
   const [singleSubject, setSingleSubject] = useState(products[0]?.subject ?? '');
-
-  // Pack of 2 selection state
-  const [packSubject1, setPackSubject1] = useState(products[0]?.subject ?? '');
-  const [packSubject2, setPackSubject2] = useState(products[1]?.subject ?? products[0]?.subject ?? '');
-
   const [checkoutItem, setCheckoutItem] = useState<CheckoutItem | null>(null);
 
   const hasAllSubjects = products.length === 5;
-
-  // Selected single product
   const selectedSingleProduct = products.find((p) => p.subject === singleSubject);
-
-  // Available options for pack 2 dropdown (exclude subject 1)
-  const pack2Options = products.filter((p) => p.subject !== packSubject1);
-
-  // Helper when subject 1 changes
-  function handlePack1Change(newSubj: string) {
-    setPackSubject1(newSubj);
-    if (packSubject2 === newSubj) {
-      const fallback = products.find((p) => p.subject !== newSubj);
-      if (fallback) setPackSubject2(fallback.subject);
-    }
-  }
 
   // Action handlers
   function handleBuyBundle() {
@@ -63,23 +43,6 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
       classNumber,
       productName: `Class ${classNumber} Complete Bundle of 5 Olympiad Practice Papers`,
       amount: BUNDLE_PRICE,
-    });
-  }
-
-  function handleBuyPack2() {
-    const prod1 = products.find((p) => p.subject === packSubject1);
-    const prod2 = products.find((p) => p.subject === packSubject2);
-    if (!prod1 || !prod2 || prod1.id === prod2.id) return;
-
-    const code1 = OLYMPIAD_SUBJECT_LABELS[prod1.subject]?.code || prod1.subject;
-    const code2 = OLYMPIAD_SUBJECT_LABELS[prod2.subject]?.code || prod2.subject;
-
-    setCheckoutItem({
-      type: 'pack_2',
-      productIds: [prod1.id, prod2.id],
-      classNumber,
-      productName: `Class ${classNumber} Olympiad Pack of 2 (${code1} + ${code2})`,
-      amount: PACK_2_PRICE,
     });
   }
 
@@ -156,7 +119,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
           </div>
         </div>
 
-        {/* Card Body — 3 Clear Purchase Options */}
+        {/* Card Body — 2 Clear Purchase Options: Bundle of 5 & Single Paper */}
         <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px', flex: 1 }}>
           {products.length === 0 ? (
             <p
@@ -295,157 +258,14 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
               </div>
 
               {/* Divider */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '-4px 0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '-2px 0' }}>
                 <div style={{ flex: 1, height: 1, background: 'var(--color-neutral-200)' }} />
                 <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: 'var(--color-neutral-400)' }}>OR</span>
                 <div style={{ flex: 1, height: 1, background: 'var(--color-neutral-200)' }} />
               </div>
 
               {/* ─────────────────────────────────────────────────────────────
-                  OPTION 2: PACK OF 2 — ₹149 (CHOOSE ANY 2)
-                 ───────────────────────────────────────────────────────────── */}
-              <div
-                style={{
-                  background: 'var(--color-neutral-50)',
-                  border: '1px solid var(--color-neutral-200)',
-                  borderRadius: '12px',
-                  padding: '12px',
-                }}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    marginBottom: '8px',
-                  }}
-                >
-                  <div>
-                    <h4
-                      style={{
-                        margin: 0,
-                        fontFamily: 'var(--font-display)',
-                        fontWeight: 800,
-                        fontSize: '0.9375rem',
-                        color: 'var(--color-brand-blue)',
-                      }}
-                    >
-                      📚 PACK OF 2
-                    </h4>
-                    <p style={{ margin: '1px 0 0', fontSize: '0.6875rem', color: 'var(--color-neutral-500)' }}>
-                      Choose Any 2 Papers
-                    </p>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontWeight: 800,
-                        fontSize: '1.125rem',
-                        color: 'var(--color-brand-blue)',
-                      }}
-                    >
-                      ₹149
-                    </span>
-                    <span
-                      style={{
-                        marginLeft: '4px',
-                        fontSize: '0.6875rem',
-                        color: 'var(--color-neutral-400)',
-                        textDecoration: 'line-through',
-                      }}
-                    >
-                      ₹198
-                    </span>
-                  </div>
-                </div>
-
-                {/* Dropdowns for Paper 1 and Paper 2 */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '10px' }}>
-                  <select
-                    value={packSubject1}
-                    onChange={(e) => handlePack1Change(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '7px 10px',
-                      border: '1.5px solid var(--color-neutral-300)',
-                      borderRadius: '6px',
-                      fontSize: '0.8125rem',
-                      fontFamily: 'var(--font-body)',
-                      fontWeight: 600,
-                      color: 'var(--color-neutral-800)',
-                      background: '#fff',
-                      cursor: 'pointer',
-                      outline: 'none',
-                    }}
-                  >
-                    {products.map((p) => {
-                      const info = OLYMPIAD_SUBJECT_LABELS[p.subject];
-                      return (
-                        <option key={p.subject} value={p.subject}>
-                          Paper 1: {info?.code || p.subject.toUpperCase()} — {info?.full || p.name}
-                        </option>
-                      );
-                    })}
-                  </select>
-
-                  <select
-                    value={packSubject2}
-                    onChange={(e) => setPackSubject2(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '7px 10px',
-                      border: '1.5px solid var(--color-neutral-300)',
-                      borderRadius: '6px',
-                      fontSize: '0.8125rem',
-                      fontFamily: 'var(--font-body)',
-                      fontWeight: 600,
-                      color: 'var(--color-neutral-800)',
-                      background: '#fff',
-                      cursor: 'pointer',
-                      outline: 'none',
-                    }}
-                  >
-                    {pack2Options.map((p) => {
-                      const info = OLYMPIAD_SUBJECT_LABELS[p.subject];
-                      return (
-                        <option key={p.subject} value={p.subject}>
-                          Paper 2: {info?.code || p.subject.toUpperCase()} — {info?.full || p.name}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-
-                <button
-                  onClick={handleBuyPack2}
-                  disabled={!packSubject1 || !packSubject2 || packSubject1 === packSubject2}
-                  style={{
-                    width: '100%',
-                    background: 'var(--color-brand-blue)',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '8px',
-                    padding: '9px',
-                    fontFamily: 'var(--font-display)',
-                    fontWeight: 700,
-                    fontSize: '0.8125rem',
-                    cursor: 'pointer',
-                  }}
-                >
-                  CHOOSE 2 — ₹149
-                </button>
-              </div>
-
-              {/* Divider */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '-4px 0' }}>
-                <div style={{ flex: 1, height: 1, background: 'var(--color-neutral-200)' }} />
-                <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: 'var(--color-neutral-400)' }}>OR</span>
-                <div style={{ flex: 1, height: 1, background: 'var(--color-neutral-200)' }} />
-              </div>
-
-              {/* ─────────────────────────────────────────────────────────────
-                  OPTION 3: SINGLE PAPER — ₹99
+                  OPTION 2: SINGLE PAPER — ₹99
                  ───────────────────────────────────────────────────────────── */}
               <div
                 style={{
@@ -497,7 +317,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                     onChange={(e) => setSingleSubject(e.target.value)}
                     style={{
                       width: '100%',
-                      padding: '7px 10px',
+                      padding: '8px 10px',
                       border: '1.5px solid var(--color-neutral-300)',
                       borderRadius: '6px',
                       fontSize: '0.8125rem',

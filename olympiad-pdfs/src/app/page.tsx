@@ -41,15 +41,11 @@ const FAQS = [
   },
   {
     q: 'What are the pricing options available?',
-    a: 'We offer three simple, affordable options: Bundle of 5 (All 5 Olympiads) for ₹299, Pack of 2 (Any 2 Olympiads) for ₹149, or a Single Olympiad Paper for ₹99.',
+    a: 'We offer two simple, affordable options: Bundle of 5 (All 5 Olympiads) for ₹299, or a Single Olympiad Paper for ₹99.',
   },
   {
     q: 'How will I receive my purchased PDFs?',
     a: 'Immediately after successful payment via Razorpay, your PDFs are available for download on the confirmation screen and are also sent directly to your registered email address.',
-  },
-  {
-    q: 'Can I choose any two subjects for the Pack of 2?',
-    a: 'Yes! You can choose any two different Olympiad subjects (e.g. IMO + ISO, or IMO + IRO) for your class at ₹149.',
   },
   {
     q: 'Do I need to create an account?',
@@ -147,7 +143,7 @@ export default async function HomePage() {
                 lineHeight: 1.6,
               }}
             >
-              Expert-designed Olympiad practice papers for Classes 6–10. Bundle of 5 at ₹299, Pack of 2 at ₹149, or Single Paper at ₹99.
+              Expert-designed Olympiad practice papers for Classes 6–10. ₹99 per subject or ₹299 for the Complete 5-Subject Bundle.
             </p>
             <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
               {['Expert Designed', 'Answer Key Included', 'Instant Delivery', 'No Account Needed'].map((t) => (
@@ -175,7 +171,7 @@ export default async function HomePage() {
             <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
               <h2 className="section-title">Choose Your Class</h2>
               <p className="section-subtitle" style={{ margin: '10px auto 0' }}>
-                Select a Bundle of 5 (₹299), Pack of 2 (₹149), or Single Paper (₹99).
+                Select a subject for ₹99, or get all 5 subjects in a bundle for ₹299.
               </p>
             </div>
 
@@ -213,9 +209,9 @@ export default async function HomePage() {
               }}
             >
               {[
-                { num: '01', title: 'Choose Option', desc: 'Pick Bundle of 5 (₹299), Pack of 2 (₹149), or Single (₹99).' },
+                { num: '01', title: 'Choose Option', desc: 'Pick Bundle of 5 (₹299) or Single Subject (₹99).' },
                 { num: '02', title: 'Enter Details', desc: 'Provide your name, email, and mobile number.' },
-                { num: '03', title: 'Pay Securely', desc: 'Complete test/live payment via Razorpay.' },
+                { num: '03', title: 'Pay Securely', desc: 'Complete payment via Razorpay.' },
                 { num: '04', title: 'Download PDFs', desc: 'Instant download link + email delivery.' },
               ].map((s) => (
                 <div key={s.num} style={{ textAlign: 'center', padding: '0 8px' }}>
@@ -257,7 +253,7 @@ export default async function HomePage() {
                 { icon: '🎯', title: 'Expert Designed', desc: 'Olympiad-standard difficulty covering core curriculum concepts.' },
                 { icon: '💡', title: 'Concept Focused', desc: 'Emphasis on analytical thinking and logical problem-solving.' },
                 { icon: '⚡', title: 'Instant Delivery', desc: 'Immediate PDF download links sent right to your email.' },
-                { icon: '💰', title: 'Affordable Pricing', desc: '₹99 Single · ₹149 Pack of 2 · ₹299 Complete Bundle of 5.' },
+                { icon: '💰', title: 'Affordable Pricing', desc: '₹99 Single Paper · ₹299 Complete Bundle of 5.' },
                 { icon: '📱', title: 'Study Anywhere', desc: 'Printable PDFs accessible on phone, tablet, or desktop.' },
               ].map((f) => (
                 <div
@@ -341,7 +337,7 @@ export default async function HomePage() {
               Start Practicing Today
             </h2>
             <p style={{ fontSize: '1rem', color: 'rgba(26,58,143,0.75)', margin: '0 0 24px' }}>
-              ₹299 Bundle of 5 · ₹149 Pack of 2 · ₹99 Single · Instant PDF delivery
+              ₹299 Bundle of 5 · ₹99 Single Paper · Instant PDF delivery
             </p>
             <a
               href="#choose-class"
