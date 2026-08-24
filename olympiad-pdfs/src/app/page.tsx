@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ClassCard, type ClassProduct } from '@/components/product/ClassCard';
+import { OlympiadShowcase } from '@/components/home/OlympiadShowcase';
 import { prisma } from '@/lib/db';
 
 export const metadata: Metadata = {
@@ -41,7 +42,7 @@ const FAQS = [
   },
   {
     q: 'What are the pricing options available?',
-    a: 'We offer two simple, affordable options: Bundle of 5 (All 5 Olympiads) for ₹299, or a Single Olympiad Paper for ₹99.',
+    a: 'We offer two simple, affordable options: Complete Bundle of 5 (All 5 Olympiads) for ₹299, or a Single Olympiad Paper for ₹99.',
   },
   {
     q: 'How will I receive my purchased PDFs?',
@@ -103,107 +104,151 @@ export default async function HomePage() {
         <section
           style={{
             background:
-              'linear-gradient(155deg, #091a42 0%, #0f2b6e 45%, #1a3a8f 80%, #2563eb 100%)',
-            padding: 'clamp(3.5rem,8vw,5.25rem) 0 clamp(3rem,6vw,4.25rem)',
+              'radial-gradient(ellipse at 50% -20%, #1e4fd8 0%, #0f2b6e 45%, #08173d 100%)',
+            padding: 'clamp(3.5rem,8vw,5.5rem) 0 clamp(3rem,6vw,4.5rem)',
             position: 'relative',
             overflow: 'hidden',
           }}
         >
-          {/* Subtle Ambient Glows */}
+          {/* Floating Student / Olympiad Icons */}
           <div
+            className="animate-float"
             style={{
               position: 'absolute',
-              top: '-120px',
-              right: '-100px',
-              width: '550px',
-              height: '550px',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(245,197,24,0.12) 0%, rgba(245,197,24,0) 70%)',
+              top: '12%',
+              left: '6%',
+              fontSize: '2rem',
+              opacity: 0.25,
+              userSelect: 'none',
               pointerEvents: 'none',
             }}
-          />
+          >
+            📐
+          </div>
           <div
+            className="animate-float-reverse"
             style={{
               position: 'absolute',
-              bottom: '-100px',
-              left: '-80px',
-              width: '450px',
-              height: '450px',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(37,99,235,0.25) 0%, rgba(37,99,235,0) 70%)',
+              top: '20%',
+              right: '8%',
+              fontSize: '2.25rem',
+              opacity: 0.3,
+              userSelect: 'none',
               pointerEvents: 'none',
             }}
-          />
+          >
+            🏆
+          </div>
+          <div
+            className="animate-float"
+            style={{
+              position: 'absolute',
+              bottom: '15%',
+              left: '10%',
+              fontSize: '1.75rem',
+              opacity: 0.25,
+              userSelect: 'none',
+              pointerEvents: 'none',
+            }}
+          >
+            🔬
+          </div>
+          <div
+            className="animate-float-reverse"
+            style={{
+              position: 'absolute',
+              bottom: '22%',
+              right: '12%',
+              fontSize: '2rem',
+              opacity: 0.25,
+              userSelect: 'none',
+              pointerEvents: 'none',
+            }}
+          >
+            🧩
+          </div>
 
           <div className="container-site" style={{ position: 'relative', textAlign: 'center' }}>
-            {/* Top Pill */}
+            {/* Top Live Prep Alert Pill */}
             <div
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '8px',
-                background: 'rgba(245, 197, 24, 0.12)',
+                gap: '10px',
+                background: 'rgba(255, 255, 255, 0.08)',
                 border: '1px solid rgba(245, 197, 24, 0.35)',
-                backdropFilter: 'blur(8px)',
+                backdropFilter: 'blur(12px)',
                 borderRadius: '9999px',
-                padding: '7px 20px',
-                marginBottom: '22px',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
+                padding: '8px 22px',
+                marginBottom: '24px',
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',
               }}
             >
-              <span style={{ fontSize: '0.8125rem', color: '#fbbf24', fontWeight: 700, letterSpacing: '0.02em' }}>
-                ⭐ Classes 6–10 · IMO · ISO · IEO · ICSO · IRO · Instant Download
+              <span className="live-indicator" />
+              <span style={{ fontSize: '0.8125rem', color: '#fbdf6e', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                2026 Olympiad Exam Season Preparation
               </span>
             </div>
 
-            {/* Headline */}
+            {/* Main Punchy Headline */}
             <h1
               style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 900,
-                fontSize: 'clamp(2.15rem,6.5vw,3.5rem)',
+                fontSize: 'clamp(2.25rem, 6.5vw, 3.75rem)',
                 color: '#ffffff',
-                lineHeight: 1.15,
-                letterSpacing: '-1.2px',
-                margin: '0 auto 18px',
-                maxWidth: '780px',
-                textShadow: '0 2px 12px rgba(0,0,0,0.2)',
+                lineHeight: 1.12,
+                letterSpacing: '-1.5px',
+                margin: '0 auto 20px',
+                maxWidth: '820px',
+                textShadow: '0 4px 20px rgba(0,0,0,0.3)',
               }}
             >
-              Prepare Smarter<br />
-              <span style={{ color: 'var(--color-brand-gold)' }}>for School Olympiads.</span>
+              Master School Olympiads.<br />
+              <span style={{ color: 'var(--color-brand-gold)' }}>Aim for the Top 1% Rank.</span>
             </h1>
 
-            {/* Subheading */}
+            {/* Subtitle */}
             <p
               style={{
-                fontSize: 'clamp(1rem,2.5vw,1.1875rem)',
-                color: 'rgba(255, 255, 255, 0.9)',
-                maxWidth: '600px',
-                margin: '0 auto 30px',
+                fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
+                color: 'rgba(255, 255, 255, 0.92)',
+                maxWidth: '640px',
+                margin: '0 auto 34px',
                 lineHeight: 1.65,
                 fontWeight: 400,
               }}
             >
-              Expert-designed practice papers for Classes 6–10. ₹99 per subject or ₹299 for the Complete 5-Subject Bundle.
+              High-yield, competition-style practice papers for Classes 6–10 in <strong>IMO, ISO, IEO, ICSO, and IRO</strong>. Instant PDF download.
             </p>
 
-            {/* Trust Badges — Notice 'Answer Key Included' is removed */}
-            <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              {['Expert Designed', 'Olympiad Standard', 'Instant PDF Delivery', 'No Account Needed'].map((t) => (
+            {/* Action Buttons */}
+            <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '36px' }}>
+              <a href="#choose-class" className="btn-primary" style={{ fontSize: '1rem', padding: '14px 32px' }}>
+                🚀 Choose Your Class — From ₹99
+              </a>
+              <a href="#olympiad-subjects" className="btn-secondary" style={{ fontSize: '1rem', padding: '14px 28px' }}>
+                💡 Explore Subjects & Quizzes
+              </a>
+            </div>
+
+            {/* Trust Pills */}
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              {['Expert Olympiad Standard', 'HOTS & Logic Focus', 'Instant PDF Delivery', 'Print Ready'].map((t) => (
                 <span
                   key={t}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
-                    fontSize: '0.875rem',
-                    fontWeight: 600,
-                    color: 'rgba(255,255,255,0.95)',
-                    background: 'rgba(255,255,255,0.08)',
+                    fontSize: '0.8125rem',
+                    fontWeight: 700,
+                    color: 'rgba(255, 255, 255, 0.95)',
+                    background: 'rgba(255, 255, 255, 0.08)',
                     padding: '6px 14px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(255,255,255,0.12)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    backdropFilter: 'blur(4px)',
                   }}
                 >
                   <span style={{ color: 'var(--color-brand-gold)', fontWeight: 900 }}>✓</span> {t}
@@ -213,37 +258,42 @@ export default async function HomePage() {
           </div>
         </section>
 
+        {/* ── INTERACTIVE OLYMPIAD SHOWCASE ─────────────────────── */}
+        <div id="olympiad-subjects">
+          <OlympiadShowcase />
+        </div>
+
         {/* ── CLASS CARDS ────────────────────────────────────────── */}
-        <section id="choose-class" className="section" style={{ background: '#f8fafc', padding: '4rem 0' }}>
+        <section id="choose-class" className="section" style={{ background: '#f8fafc', padding: '4.5rem 0' }}>
           <div className="container-site">
-            <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <div
                 style={{
                   display: 'inline-block',
-                  background: 'rgba(26,58,143,0.08)',
+                  background: 'rgba(15, 43, 110, 0.08)',
                   color: 'var(--color-brand-blue)',
                   fontSize: '0.75rem',
                   fontWeight: 800,
                   textTransform: 'uppercase',
                   letterSpacing: '0.08em',
-                  padding: '4px 12px',
+                  padding: '4px 14px',
                   borderRadius: '9999px',
                   marginBottom: '10px',
                 }}
               >
-                Available Classes
+                Select Your Grade
               </div>
-              <h2 className="section-title" style={{ margin: 0 }}>Choose Your Class</h2>
+              <h2 className="section-title" style={{ margin: 0 }}>Choose Your Class & Get Practicing</h2>
               <p className="section-subtitle" style={{ margin: '10px auto 0' }}>
-                Select a single subject for ₹99, or get all 5 subjects in a complete bundle for ₹299.
+                Get all 5 subjects in a complete bundle for ₹299, or select an individual subject paper for ₹99.
               </p>
             </div>
 
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                gap: '22px',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(285px, 1fr))',
+                gap: '24px',
               }}
             >
               {CLASSES.map((cls) => (
@@ -259,41 +309,42 @@ export default async function HomePage() {
         </section>
 
         {/* ── HOW IT WORKS ───────────────────────────────────────── */}
-        <section className="section" style={{ background: '#ffffff', padding: '4rem 0' }}>
+        <section className="section" style={{ background: '#ffffff', padding: '4.5rem 0' }}>
           <div className="container-site">
-            <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2 className="section-title">How It Works</h2>
-              <p className="section-subtitle" style={{ margin: '10px auto 0' }}>Four simple steps to start practicing immediately.</p>
+              <p className="section-subtitle" style={{ margin: '10px auto 0' }}>Four simple steps to start practicing in under 60 seconds.</p>
             </div>
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
                 gap: '24px',
               }}
             >
               {[
-                { num: '01', title: 'Choose Option', desc: 'Pick Complete Bundle of 5 (₹299) or Single Subject (₹99).' },
-                { num: '02', title: 'Enter Details', desc: 'Provide your name, email address, and mobile number.' },
-                { num: '03', title: 'Pay with UPI / Cards', desc: 'Complete checkout securely via Razorpay.' },
-                { num: '04', title: 'Download PDFs', desc: 'Instant download link on screen and sent to your email.' },
+                { num: '01', title: 'Pick Your Class', desc: 'Choose Complete Bundle of 5 (₹299) or Single Paper (₹99).' },
+                { num: '02', title: 'Enter Basic Info', desc: 'Provide student/parent name, email, and mobile number.' },
+                { num: '03', title: 'Instant UPI Checkout', desc: 'Pay securely via Google Pay, PhonePe, Paytm, or Cards.' },
+                { num: '04', title: 'Download & Print', desc: 'Instant access on screen and PDF copy delivered to your email.' },
               ].map((s) => (
                 <div
                   key={s.num}
                   style={{
                     textAlign: 'center',
-                    padding: '24px 16px',
+                    padding: '28px 20px',
                     background: '#f8fafc',
                     borderRadius: '16px',
-                    border: '1px solid #e2e8f0',
+                    border: '1.5px solid #e2e8f0',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
                   }}
                 >
                   <div
                     className="step-number"
                     style={{
                       margin: '0 auto 16px',
-                      background: 'linear-gradient(135deg, var(--color-brand-blue) 0%, #2563eb 100%)',
-                      boxShadow: '0 4px 10px rgba(26, 58, 143, 0.2)',
+                      background: 'linear-gradient(135deg, var(--color-brand-blue) 0%, #1e4fd8 100%)',
+                      boxShadow: '0 4px 12px rgba(15, 43, 110, 0.25)',
                     }}
                   >
                     {s.num}
@@ -318,46 +369,61 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── WHY ────────────────────────────────────────────────── */}
-        <section className="section" style={{ background: '#f8fafc', padding: '4rem 0' }}>
+        {/* ── WHY STUDENTS LOVE US ───────────────────────────────── */}
+        <section className="section" style={{ background: '#f8fafc', padding: '4.5rem 0' }}>
           <div className="container-site">
-            <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
-              <h2 className="section-title">Why OlympiadPDFs?</h2>
+            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+              <div
+                style={{
+                  display: 'inline-block',
+                  background: 'rgba(245, 197, 24, 0.15)',
+                  color: '#92400e',
+                  fontSize: '0.75rem',
+                  fontWeight: 800,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  padding: '4px 14px',
+                  borderRadius: '9999px',
+                  marginBottom: '10px',
+                }}
+              >
+                Why OlympiadPDFs?
+              </div>
+              <h2 className="section-title" style={{ margin: 0 }}>Designed for Competition Success</h2>
               <p className="section-subtitle" style={{ margin: '10px auto 0' }}>
-                Built to help ambitious school students build conceptual clarity and exam confidence.
+                Bridge the gap between regular school textbooks and national Olympiad test patterns.
               </p>
             </div>
             <div
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: '18px',
+                gap: '20px',
               }}
             >
               {[
-                { icon: '🎯', title: 'Expert Designed', desc: 'Olympiad-standard difficulty covering core curriculum concepts.' },
-                { icon: '💡', title: 'Concept Focused', desc: 'Emphasis on analytical thinking and logical problem-solving.' },
-                { icon: '⚡', title: 'Instant Delivery', desc: 'Immediate PDF download links sent right to your email.' },
-                { icon: '💰', title: 'Affordable Pricing', desc: '₹99 Single Paper · ₹299 Complete Bundle of 5.' },
-                { icon: '📱', title: 'Study Anywhere', desc: 'Printable PDFs accessible on phone, tablet, or desktop.' },
+                { icon: '🎯', title: 'Olympiad Standard', desc: 'Questions calibrated to exact competition depth with HOTS emphasis.' },
+                { icon: '💡', title: 'Concept Focused', desc: 'Trains students in non-routine problem solving and lateral deduction.' },
+                { icon: '⚡', title: 'Instant Delivery', desc: 'Immediate download links on checkout + emailed straight to inbox.' },
+                { icon: '💰', title: 'Super Affordable', desc: '₹99 Single Paper · ₹299 for all 5 subjects complete bundle.' },
+                { icon: '📱', title: 'Printable Anywhere', desc: 'Clean, printer-friendly PDF layout for offline mock test practice.' },
               ].map((f) => (
                 <div
                   key={f.title}
                   style={{
                     background: '#fff',
-                    borderRadius: '1rem',
+                    borderRadius: '16px',
                     padding: '24px 20px',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-                    border: '1px solid #e2e8f0',
-                    transition: 'transform 0.15s ease',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                    border: '1.5px solid #e2e8f0',
                   }}
                 >
-                  <div style={{ fontSize: '1.75rem', marginBottom: '12px' }}>{f.icon}</div>
+                  <div style={{ fontSize: '2rem', marginBottom: '12px' }}>{f.icon}</div>
                   <h3
                     style={{
                       fontFamily: 'var(--font-display)',
                       fontWeight: 800,
-                      fontSize: '0.9375rem',
+                      fontSize: '1rem',
                       color: 'var(--color-brand-blue)',
                       margin: '0 0 6px',
                     }}
@@ -374,12 +440,12 @@ export default async function HomePage() {
         </section>
 
         {/* ── FAQ ────────────────────────────────────────────────── */}
-        <section className="section" style={{ background: '#ffffff', padding: '4rem 0' }}>
-          <div className="container-site" style={{ maxWidth: '720px', margin: '0 auto' }}>
+        <section className="section" style={{ background: '#ffffff', padding: '4.5rem 0' }}>
+          <div className="container-site" style={{ maxWidth: '740px', margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
               <h2 className="section-title">Frequently Asked Questions</h2>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {FAQS.map((faq, i) => (
                 <details
                   key={i}
@@ -387,8 +453,8 @@ export default async function HomePage() {
                   style={{
                     background: '#f8fafc',
                     borderRadius: '12px',
-                    padding: '0 18px',
-                    border: '1px solid #e2e8f0',
+                    padding: '0 20px',
+                    border: '1.5px solid #e2e8f0',
                   }}
                 >
                   <summary
@@ -397,7 +463,7 @@ export default async function HomePage() {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      padding: '16px 0',
+                      padding: '18px 0',
                       gap: '12px',
                       cursor: 'pointer',
                     }}
@@ -409,7 +475,7 @@ export default async function HomePage() {
                       +
                     </span>
                   </summary>
-                  <div style={{ paddingBottom: '16px', fontSize: '0.9375rem', color: 'var(--color-neutral-600)', lineHeight: 1.7 }}>
+                  <div style={{ paddingBottom: '18px', fontSize: '0.9375rem', color: 'var(--color-neutral-600)', lineHeight: 1.7 }}>
                     {faq.a}
                   </div>
                 </details>
@@ -419,22 +485,22 @@ export default async function HomePage() {
         </section>
 
         {/* ── GOLD CTA ───────────────────────────────────────────── */}
-        <section style={{ background: 'linear-gradient(135deg, #f5c518 0%, #eab308 100%)', padding: '3.5rem 0' }}>
+        <section style={{ background: 'linear-gradient(135deg, #f5c518 0%, #eab308 100%)', padding: '4rem 0' }}>
           <div className="container-site" style={{ textAlign: 'center' }}>
             <h2
               style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 900,
-                fontSize: 'clamp(1.5rem,4vw,2.25rem)',
+                fontSize: 'clamp(1.625rem,4.5vw,2.5rem)',
                 color: 'var(--color-brand-blue)',
-                margin: '0 0 10px',
+                margin: '0 0 12px',
                 letterSpacing: '-0.5px',
               }}
             >
-              Start Practicing Today
+              Start Practicing for 2026 Olympiads Today
             </h2>
-            <p style={{ fontSize: '1.0625rem', color: 'rgba(26,58,143,0.85)', margin: '0 0 24px', fontWeight: 600 }}>
-              ₹299 Bundle of 5 · ₹99 Single Paper · Instant PDF delivery
+            <p style={{ fontSize: '1.0625rem', color: 'rgba(15, 43, 110, 0.9)', margin: '0 0 26px', fontWeight: 700 }}>
+              ₹299 Complete Bundle of 5 · ₹99 Single Paper · Instant PDF download
             </p>
             <a
               href="#choose-class"
@@ -442,13 +508,13 @@ export default async function HomePage() {
                 display: 'inline-block',
                 background: 'var(--color-brand-blue)',
                 color: '#fff',
-                padding: '14px 36px',
+                padding: '15px 40px',
                 borderRadius: '12px',
                 textDecoration: 'none',
                 fontFamily: 'var(--font-display)',
-                fontWeight: 800,
-                fontSize: '1rem',
-                boxShadow: '0 4px 14px rgba(26,58,143,0.3)',
+                fontWeight: 900,
+                fontSize: '1.0625rem',
+                boxShadow: '0 6px 20px rgba(15,43,110,0.35)',
                 transition: 'transform 0.15s ease',
               }}
             >

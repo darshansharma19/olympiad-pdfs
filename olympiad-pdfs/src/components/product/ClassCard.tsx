@@ -17,12 +17,12 @@ interface ClassCardProps {
   imageUrl: string;
 }
 
-const OLYMPIAD_SUBJECT_LABELS: Record<string, { code: string; full: string }> = {
-  mathematics: { code: 'IMO', full: 'International Mathematics Olympiad (IMO)' },
-  science: { code: 'ISO', full: 'International Science Olympiad (ISO)' },
-  english: { code: 'IEO', full: 'International English Olympiad (IEO)' },
-  computer_science: { code: 'ICSO', full: 'International Computer Science Olympiad (ICSO)' },
-  reasoning: { code: 'IRO', full: 'International Reasoning Olympiad (IRO)' },
+const OLYMPIAD_SUBJECT_LABELS: Record<string, { code: string; icon: string; full: string }> = {
+  mathematics: { code: 'IMO', icon: '📐', full: 'International Mathematics Olympiad (IMO)' },
+  science: { code: 'ISO', icon: '🔬', full: 'International Science Olympiad (ISO)' },
+  english: { code: 'IEO', icon: '📖', full: 'International English Olympiad (IEO)' },
+  computer_science: { code: 'ICSO', icon: '💻', full: 'International Computer Science Olympiad (ICSO)' },
+  reasoning: { code: 'IRO', icon: '🧩', full: 'International Reasoning Olympiad (IRO)' },
 };
 
 const BUNDLE_PRICE = 29900; // ₹299
@@ -41,7 +41,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
     setCheckoutItem({
       type: 'bundle_5',
       classNumber,
-      productName: `Class ${classNumber} Complete Bundle of 5 Olympiad Practice Papers`,
+      productName: `Class ${classNumber} Complete Bundle — All 5 Olympiads`,
       amount: BUNDLE_PRICE,
     });
   }
@@ -67,60 +67,77 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
           flexDirection: 'column',
           overflow: 'hidden',
           padding: 0,
-          border: '1.5px solid var(--color-neutral-200)',
-          borderRadius: '16px',
+          border: '1.5px solid #e2e8f0',
+          borderRadius: '18px',
           background: '#fff',
-          boxShadow: 'var(--shadow-card)',
-          transition: 'all 0.2s ease',
+          boxShadow: '0 4px 18px rgba(15, 23, 42, 0.06)',
+          transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
-        {/* Card Header / Image */}
-        <div style={{ position: 'relative', height: 130, flexShrink: 0, background: 'var(--color-brand-blue-50)' }}>
+        {/* Card Header / Banner */}
+        <div style={{ position: 'relative', height: 136, flexShrink: 0, background: 'linear-gradient(135deg, #0f2b6e 0%, #1e4fd8 100%)' }}>
           <Image
             src={imageUrl || `/images/classes/class-${classNumber}.svg`}
             alt={`Class ${classNumber}`}
             fill
             style={{ objectFit: 'cover' }}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
             unoptimized
           />
           <div
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(to top, rgba(26,58,143,0.88) 0%, rgba(26,58,143,0.15) 70%)',
+              background: 'linear-gradient(to top, rgba(15,43,110,0.92) 0%, rgba(15,43,110,0.2) 70%)',
             }}
           />
           <div style={{ position: 'absolute', bottom: 12, left: 16, right: 16 }}>
-            <p
-              style={{
-                margin: 0,
-                fontFamily: 'var(--font-display)',
-                fontWeight: 900,
-                fontSize: '1.5rem',
-                color: '#fff',
-                lineHeight: 1.1,
-              }}
-            >
-              CLASS {classNumber}
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 900,
+                  fontSize: '1.5rem',
+                  color: '#fff',
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.5px',
+                }}
+              >
+                CLASS {classNumber}
+              </p>
+              <span
+                style={{
+                  background: 'rgba(245, 197, 24, 0.25)',
+                  border: '1px solid rgba(245, 197, 24, 0.6)',
+                  color: '#fef08a',
+                  fontSize: '0.6875rem',
+                  fontWeight: 800,
+                  padding: '2px 8px',
+                  borderRadius: '6px',
+                  textTransform: 'uppercase',
+                }}
+              >
+                Grade {classNumber}
+              </span>
+            </div>
             <p
               style={{
                 margin: '2px 0 0',
                 fontSize: '0.6875rem',
-                fontWeight: 700,
+                fontWeight: 800,
                 color: 'var(--color-brand-gold)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
               }}
             >
-              OLYMPIAD PRACTICE PAPERS
+              5 OLYMPIADS INCLUDED
             </p>
           </div>
         </div>
 
-        {/* Card Body — 2 Clear Purchase Options: Bundle of 5 & Single Paper */}
-        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px', flex: 1 }}>
+        {/* Card Body */}
+        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
           {products.length === 0 ? (
             <p
               style={{
@@ -136,17 +153,18 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
           ) : (
             <>
               {/* ─────────────────────────────────────────────────────────────
-                  OPTION 1: BUNDLE OF 5 — ₹299 (PRIMARY / HIGHLIGHTED)
+                  OPTION 1: BUNDLE OF 5 — ₹299 (GOLD HIGHLIGHTED)
                  ───────────────────────────────────────────────────────────── */}
               <div
                 style={{
                   background: hasAllSubjects
-                    ? 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)'
+                    ? 'linear-gradient(145deg, #fffdf2 0%, #fef8db 100%)'
                     : 'var(--color-neutral-50)',
-                  border: hasAllSubjects ? '2px solid var(--color-brand-gold)' : '1px solid var(--color-neutral-200)',
-                  borderRadius: '12px',
+                  border: hasAllSubjects ? '2px solid #f5c518' : '1px solid var(--color-neutral-200)',
+                  borderRadius: '14px',
                   padding: '14px',
                   position: 'relative',
+                  boxShadow: hasAllSubjects ? '0 4px 14px rgba(245, 197, 24, 0.15)' : 'none',
                 }}
               >
                 {hasAllSubjects && (
@@ -155,17 +173,18 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                       position: 'absolute',
                       top: '-10px',
                       right: '12px',
-                      background: 'var(--color-brand-gold)',
+                      background: 'linear-gradient(135deg, #f5c518 0%, #eab308 100%)',
                       color: 'var(--color-brand-blue)',
                       fontSize: '0.625rem',
-                      fontWeight: 800,
-                      padding: '2px 8px',
+                      fontWeight: 900,
+                      padding: '3px 10px',
                       borderRadius: '9999px',
-                      letterSpacing: '0.06em',
+                      letterSpacing: '0.08em',
                       textTransform: 'uppercase',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
                     }}
                   >
-                    ⭐ BEST VALUE
+                    ⭐ BEST VALUE (60% OFF)
                   </div>
                 )}
 
@@ -174,7 +193,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
-                    marginBottom: '6px',
+                    marginBottom: '8px',
                   }}
                 >
                   <div>
@@ -182,14 +201,14 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                       style={{
                         margin: 0,
                         fontFamily: 'var(--font-display)',
-                        fontWeight: 800,
-                        fontSize: '1rem',
+                        fontWeight: 900,
+                        fontSize: '1.0625rem',
                         color: 'var(--color-brand-blue)',
                       }}
                     >
                       BUNDLE OF 5
                     </h3>
-                    <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: 'var(--color-neutral-600)' }}>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#475569', fontWeight: 600 }}>
                       All 5 Olympiad Papers
                     </p>
                   </div>
@@ -197,8 +216,8 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                     <span
                       style={{
                         fontFamily: 'var(--font-display)',
-                        fontWeight: 800,
-                        fontSize: '1.25rem',
+                        fontWeight: 900,
+                        fontSize: '1.375rem',
                         color: 'var(--color-brand-blue)',
                       }}
                     >
@@ -207,8 +226,8 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                     <span
                       style={{
                         marginLeft: '4px',
-                        fontSize: '0.6875rem',
-                        color: 'var(--color-neutral-400)',
+                        fontSize: '0.75rem',
+                        color: '#94a3b8',
                         textDecoration: 'line-through',
                       }}
                     >
@@ -217,21 +236,31 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                   </div>
                 </div>
 
-                {/* 5 Badges */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '10px' }}>
-                  {['IMO', 'ISO', 'IEO', 'ICSO', 'IRO'].map((code) => (
+                {/* 5 Badges with Icons */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '12px' }}>
+                  {[
+                    { code: 'IMO', icon: '📐' },
+                    { code: 'ISO', icon: '🔬' },
+                    { code: 'IEO', icon: '📖' },
+                    { code: 'ICSO', icon: '💻' },
+                    { code: 'IRO', icon: '🧩' },
+                  ].map((b) => (
                     <span
-                      key={code}
+                      key={b.code}
                       style={{
                         fontSize: '0.6875rem',
-                        fontWeight: 700,
+                        fontWeight: 800,
                         color: 'var(--color-brand-blue)',
-                        background: 'rgba(26,58,143,0.1)',
-                        borderRadius: '4px',
+                        background: 'rgba(15, 43, 110, 0.08)',
+                        borderRadius: '6px',
                         padding: '2px 6px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '3px',
                       }}
                     >
-                      {code}
+                      <span>{b.icon}</span>
+                      <span>{b.code}</span>
                     </span>
                   ))}
                 </div>
@@ -241,16 +270,19 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                   disabled={!hasAllSubjects}
                   style={{
                     width: '100%',
-                    background: hasAllSubjects ? 'var(--color-brand-gold)' : 'var(--color-neutral-300)',
-                    color: hasAllSubjects ? 'var(--color-brand-blue)' : 'var(--color-neutral-500)',
+                    background: hasAllSubjects
+                      ? 'linear-gradient(135deg, #f5c518 0%, #eab308 100%)'
+                      : '#cbd5e1',
+                    color: hasAllSubjects ? 'var(--color-brand-blue)' : '#64748b',
                     border: 'none',
-                    borderRadius: '8px',
-                    padding: '10px',
+                    borderRadius: '10px',
+                    padding: '11px',
                     fontFamily: 'var(--font-display)',
-                    fontWeight: 800,
+                    fontWeight: 900,
                     fontSize: '0.875rem',
                     cursor: hasAllSubjects ? 'pointer' : 'not-allowed',
-                    transition: 'all 0.15s',
+                    transition: 'all 0.15s ease',
+                    boxShadow: hasAllSubjects ? '0 2px 8px rgba(245, 197, 24, 0.3)' : 'none',
                   }}
                 >
                   {hasAllSubjects ? 'GET BUNDLE — ₹299' : `Coming Soon (${products.length}/5)`}
@@ -259,9 +291,9 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
 
               {/* Divider */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '-2px 0' }}>
-                <div style={{ flex: 1, height: 1, background: 'var(--color-neutral-200)' }} />
-                <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: 'var(--color-neutral-400)' }}>OR</span>
-                <div style={{ flex: 1, height: 1, background: 'var(--color-neutral-200)' }} />
+                <div style={{ flex: 1, height: 1, background: '#e2e8f0' }} />
+                <span style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94a3b8' }}>OR</span>
+                <div style={{ flex: 1, height: 1, background: '#e2e8f0' }} />
               </div>
 
               {/* ─────────────────────────────────────────────────────────────
@@ -270,7 +302,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
               <div
                 style={{
                   background: '#fff',
-                  border: '1px solid var(--color-neutral-200)',
+                  border: '1px solid #e2e8f0',
                   borderRadius: '12px',
                   padding: '12px',
                 }}
@@ -288,21 +320,21 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                       style={{
                         margin: 0,
                         fontFamily: 'var(--font-display)',
-                        fontWeight: 700,
+                        fontWeight: 800,
                         fontSize: '0.875rem',
                         color: 'var(--color-brand-blue)',
                       }}
                     >
                       SINGLE PAPER
                     </h4>
-                    <p style={{ margin: '1px 0 0', fontSize: '0.6875rem', color: 'var(--color-neutral-500)' }}>
-                      Choose 1 Subject
+                    <p style={{ margin: '1px 0 0', fontSize: '0.6875rem', color: '#64748b' }}>
+                      Choose 1 Olympiad
                     </p>
                   </div>
                   <span
                     style={{
                       fontFamily: 'var(--font-display)',
-                      fontWeight: 800,
+                      fontWeight: 900,
                       fontSize: '1.125rem',
                       color: 'var(--color-brand-blue)',
                     }}
@@ -318,12 +350,12 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                     style={{
                       width: '100%',
                       padding: '8px 10px',
-                      border: '1.5px solid var(--color-neutral-300)',
-                      borderRadius: '6px',
+                      border: '1.5px solid #cbd5e1',
+                      borderRadius: '8px',
                       fontSize: '0.8125rem',
                       fontFamily: 'var(--font-body)',
                       fontWeight: 600,
-                      color: 'var(--color-neutral-800)',
+                      color: '#1e293b',
                       background: '#fff',
                       cursor: 'pointer',
                       outline: 'none',
@@ -333,7 +365,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                       const info = OLYMPIAD_SUBJECT_LABELS[p.subject];
                       return (
                         <option key={p.subject} value={p.subject}>
-                          {info?.code || p.subject.toUpperCase()} — {info?.full || p.name}
+                          {info?.icon || '📄'} {info?.code || p.subject.toUpperCase()} — {info?.full || p.name}
                         </option>
                       );
                     })}
@@ -349,11 +381,12 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                     color: 'var(--color-brand-blue)',
                     border: '1.5px solid var(--color-brand-blue)',
                     borderRadius: '8px',
-                    padding: '8px',
+                    padding: '9px',
                     fontFamily: 'var(--font-display)',
-                    fontWeight: 700,
+                    fontWeight: 800,
                     fontSize: '0.8125rem',
                     cursor: 'pointer',
+                    transition: 'all 0.15s ease',
                   }}
                 >
                   BUY SINGLE — ₹99

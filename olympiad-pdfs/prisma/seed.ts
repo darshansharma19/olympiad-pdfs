@@ -43,8 +43,8 @@ async function main() {
           price: INDIVIDUAL_PRICE,
           imageUrl: `/images/classes/class-${cls}.svg`,
           isActive: true,
-          // Preserve existing pdfUrl if set, otherwise default to sample PDF for local testing
-          pdfUrl: existing?.pdfUrl ? existing.pdfUrl : '/pdfs/sample-practice-paper.pdf',
+          // Preserve whatever pdfUrl is in DB (starts clean empty)
+          pdfUrl: existing?.pdfUrl ? existing.pdfUrl : '',
         },
         create: {
           name,
@@ -52,7 +52,7 @@ async function main() {
           class: cls,
           subject: subj.slug,
           price: INDIVIDUAL_PRICE,
-          pdfUrl: '/pdfs/sample-practice-paper.pdf',
+          pdfUrl: '',
           imageUrl: `/images/classes/class-${cls}.svg`,
           isActive: true,
         },
