@@ -13,7 +13,8 @@ interface OlympiadInfo {
   sampleQuestion: {
     title: string;
     question: string;
-    options: string[];
+    options: { key: string; text: string }[];
+    correctKey: string;
     hint: string;
     answer: string;
   };
@@ -31,9 +32,15 @@ const OLYMPIADS: OlympiadInfo[] = [
     sampleQuestion: {
       title: 'Sample HOTS Challenge (Class 7 IMO Level)',
       question: 'A train 180m long crosses a platform twice its length in 36 seconds. What is the speed of the train in km/h?',
-      options: ['A) 45 km/h', 'B) 54 km/h', 'C) 60 km/h', 'D) 72 km/h'],
-      hint: 'Total distance = Train length + Platform length = 180m + 360m = 540m. Speed in m/s = 540 / 36 = 15 m/s. Multiply by 18/5 to get km/h.',
-      answer: 'Correct: B) 54 km/h (15 × 18/5 = 54 km/h)',
+      options: [
+        { key: 'A', text: 'A) 45 km/h' },
+        { key: 'B', text: 'B) 54 km/h' },
+        { key: 'C', text: 'C) 60 km/h' },
+        { key: 'D', text: 'D) 72 km/h' },
+      ],
+      correctKey: 'B',
+      hint: 'Total distance = Train length + Platform length = 180m + 360m = 540m. Speed in m/s = 540 / 36 = 15 m/s. Multiply by 18/5 to get km/h (15 × 18/5 = 54 km/h).',
+      answer: 'Correct: B) 54 km/h',
     },
   },
   {
@@ -47,7 +54,13 @@ const OLYMPIADS: OlympiadInfo[] = [
     sampleQuestion: {
       title: 'Sample Concept Challenge (Class 8 ISO Level)',
       question: 'Which of the following changes will increase the frequency of an oscillating simple pendulum?',
-      options: ['A) Increasing bob mass', 'B) Decreasing pendulum length', 'C) Increasing amplitude', 'D) Moving to higher altitude'],
+      options: [
+        { key: 'A', text: 'A) Increasing bob mass' },
+        { key: 'B', text: 'B) Decreasing pendulum length' },
+        { key: 'C', text: 'C) Increasing amplitude' },
+        { key: 'D', text: 'D) Moving to higher altitude' },
+      ],
+      correctKey: 'B',
       hint: 'Time period T = 2π√(L/g). Frequency f = 1/T. Decreasing string length (L) decreases T, which increases frequency f.',
       answer: 'Correct: B) Decreasing pendulum length',
     },
@@ -64,13 +77,14 @@ const OLYMPIADS: OlympiadInfo[] = [
       title: 'Sample Verbal Challenge (Class 9 IEO Level)',
       question: 'Identify the grammatically correct sentence with proper subjunctive mood usage:',
       options: [
-        'A) If he was the captain, he will choose differently.',
-        'B) It is imperative that she attend the orientation on time.',
-        'C) I wish I was able to attend the seminar.',
-        'D) He acts as though he knows everything.',
+        { key: 'A', text: 'A) If he was the captain, he will choose differently.' },
+        { key: 'B', text: 'B) It is imperative that she attend the orientation.' },
+        { key: 'C', text: 'C) I wish I was able to attend the seminar.' },
+        { key: 'D', text: 'D) He acts as though he knows everything.' },
       ],
-      hint: 'Subjunctive mood expresses a demand, wish, or hypothetical condition. "It is imperative that [subject] [base verb]" uses the base form "attend", not "attends".',
-      answer: 'Correct: B) It is imperative that she attend the orientation on time.',
+      correctKey: 'B',
+      hint: 'Subjunctive mood expresses a demand, wish, or requirement. "It is imperative that [subject] [base verb]" uses the base form "attend", not "attends".',
+      answer: 'Correct: B) It is imperative that she attend the orientation.',
     },
   },
   {
@@ -84,8 +98,14 @@ const OLYMPIADS: OlympiadInfo[] = [
     sampleQuestion: {
       title: 'Sample Algorithmic Challenge (Class 8 ICSO Level)',
       question: 'What is the binary 8-bit equivalent of the decimal number 149?',
-      options: ['A) 10010101', 'B) 10011001', 'C) 10100101', 'D) 10010111'],
-      hint: '149 = 128 + 16 + 4 + 1 = 2^7 + 2^4 + 2^2 + 2^0 -> bits at positions 7, 4, 2, 0 are 1.',
+      options: [
+        { key: 'A', text: 'A) 10010101' },
+        { key: 'B', text: 'B) 10011001' },
+        { key: 'C', text: 'C) 10100101' },
+        { key: 'D', text: 'D) 10010111' },
+      ],
+      correctKey: 'A',
+      hint: '149 = 128 + 16 + 4 + 1 = 2^7 + 2^4 + 2^2 + 2^0 -> binary is 10010101.',
       answer: 'Correct: A) 10010101',
     },
   },
@@ -100,8 +120,14 @@ const OLYMPIADS: OlympiadInfo[] = [
     sampleQuestion: {
       title: 'Sample Logic Challenge (Class 6 IRO Level)',
       question: 'In a certain code, OLYMPIAD is written as PMYNQKCE. How is PRACTICE written in that code?',
-      options: ['A) QSBDUJDF', 'B) QSBDUJEG', 'C) QSBDVJDF', 'D) QRBCUJEG'],
-      hint: 'Inspect alternating shift: +1, +1, +1 for vowel/consonant pattern. O->P (+1), L->M (+1), Y->Y (0), M->N (+1), P->Q (+1), I->K (+2), A->C (+2), D->E (+1).',
+      options: [
+        { key: 'A', text: 'A) QSBDUJDF' },
+        { key: 'B', text: 'B) QSBDUJEG' },
+        { key: 'C', text: 'C) QSBDVJDF' },
+        { key: 'D', text: 'D) QRBCUJEG' },
+      ],
+      correctKey: 'B',
+      hint: 'Inspect alternating shift rule: +1, +1, 0, +1, +1, +2, +2, +1 applied sequentially to PRACTICE gives QSBDUJEG.',
       answer: 'Correct: B) QSBDUJEG',
     },
   },
@@ -109,14 +135,33 @@ const OLYMPIADS: OlympiadInfo[] = [
 
 export function OlympiadShowcase() {
   const [activeCode, setActiveCode] = useState('IMO');
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
   const [revealedHint, setRevealedHint] = useState<Record<string, boolean>>({});
 
   const activeOlympiad = OLYMPIADS.find((o) => o.code === activeCode) || OLYMPIADS[0];
-  const isHintRevealed = revealedHint[activeOlympiad.code];
+  const currentSelectedKey = selectedAnswers[activeOlympiad.code];
+  const isHintRevealed = revealedHint[activeOlympiad.code] || !!currentSelectedKey;
 
-  function toggleHint(code: string) {
-    setRevealedHint((prev) => ({ ...prev, [code]: !prev[code] }));
+  function handleOptionClick(key: string) {
+    setSelectedAnswers((prev) => ({ ...prev, [activeOlympiad.code]: key }));
+    setRevealedHint((prev) => ({ ...prev, [activeOlympiad.code]: true }));
   }
+
+  function handleResetQuestion() {
+    setSelectedAnswers((prev) => {
+      const next = { ...prev };
+      delete next[activeOlympiad.code];
+      return next;
+    });
+    setRevealedHint((prev) => ({ ...prev, [activeOlympiad.code]: false }));
+  }
+
+  function toggleHint() {
+    setRevealedHint((prev) => ({ ...prev, [activeOlympiad.code]: !prev[activeOlympiad.code] }));
+  }
+
+  const isCorrect = currentSelectedKey === activeOlympiad.sampleQuestion.correctKey;
+  const isAnswered = !!currentSelectedKey;
 
   return (
     <section className="section" style={{ background: '#ffffff', padding: 'clamp(3rem, 6vw, 4.5rem) 0' }}>
@@ -139,13 +184,13 @@ export function OlympiadShowcase() {
               marginBottom: '10px',
             }}
           >
-            🏆 Olympiad Subjects & Competition Focus
+            🏆 Olympiad Subjects & Interactive Challenge
           </div>
           <h2 className="section-title" style={{ margin: '0 0 10px' }}>
             Built for Olympiad Excellence
           </h2>
           <p className="section-subtitle" style={{ margin: '0 auto' }}>
-            Explore the 5 core Olympiad subjects. Test your skills on sample competition-style questions!
+            Explore the 5 core Olympiad subjects. <strong>Click an option below to test your skills!</strong>
           </p>
         </div>
 
@@ -161,6 +206,9 @@ export function OlympiadShowcase() {
         >
           {OLYMPIADS.map((item) => {
             const isActive = item.code === activeCode;
+            const hasAnsweredThis = !!selectedAnswers[item.code];
+            const isThisCorrect = selectedAnswers[item.code] === item.sampleQuestion.correctKey;
+
             return (
               <button
                 key={item.code}
@@ -183,6 +231,11 @@ export function OlympiadShowcase() {
               >
                 <span style={{ fontSize: '1.125rem' }}>{item.icon}</span>
                 <span>{item.code}</span>
+                {hasAnsweredThis && (
+                  <span style={{ fontSize: '0.75rem' }}>
+                    {isThisCorrect ? '✅' : '❌'}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -278,16 +331,22 @@ export function OlympiadShowcase() {
             </div>
           </div>
 
-          {/* Right Column: Interactive Sample Challenge Teaser */}
+          {/* Right Column: Interactive Quiz Challenge Card */}
           <div
             style={{
               background: '#ffffff',
               borderRadius: '14px',
               padding: 'clamp(16px, 3vw, 22px)',
-              border: '1.5px solid #cbd5e1',
+              border: isAnswered
+                ? isCorrect
+                  ? '2px solid #22c55e'
+                  : '2px solid #ef4444'
+                : '1.5px solid #cbd5e1',
               boxShadow: '0 8px 20px -5px rgba(0,0,0,0.05)',
+              transition: 'border 0.2s ease',
             }}
           >
+            {/* Badge Row */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
               <span
                 style={{
@@ -300,13 +359,30 @@ export function OlympiadShowcase() {
                   textTransform: 'uppercase',
                 }}
               >
-                ⚡ Interactive Challenge
+                ⚡ Interactive Quiz
               </span>
-              <span style={{ fontSize: '0.6875rem', color: '#64748b', fontWeight: 600 }}>
-                {activeOlympiad.code} Sample
-              </span>
+
+              {isAnswered ? (
+                <span
+                  style={{
+                    background: isCorrect ? '#dcfce7' : '#fee2e2',
+                    color: isCorrect ? '#15803d' : '#b91c1c',
+                    fontSize: '0.6875rem',
+                    fontWeight: 800,
+                    padding: '2px 8px',
+                    borderRadius: '6px',
+                  }}
+                >
+                  {isCorrect ? '🎉 Correct Answer!' : '❌ Incorrect Attempt'}
+                </span>
+              ) : (
+                <span style={{ fontSize: '0.6875rem', color: '#64748b', fontWeight: 600 }}>
+                  Click an option to answer 👇
+                </span>
+              )}
             </div>
 
+            {/* Question Title */}
             <h4
               style={{
                 margin: '0 0 6px',
@@ -319,63 +395,125 @@ export function OlympiadShowcase() {
               {activeOlympiad.sampleQuestion.title}
             </h4>
 
-            <p style={{ margin: '0 0 12px', fontSize: '0.8125rem', color: '#334155', lineHeight: 1.5, fontWeight: 500 }}>
+            {/* Question Text */}
+            <p style={{ margin: '0 0 14px', fontSize: '0.8125rem', color: '#334155', lineHeight: 1.5, fontWeight: 500 }}>
               {activeOlympiad.sampleQuestion.question}
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))', gap: '6px', marginBottom: '12px' }}>
-              {activeOlympiad.sampleQuestion.options.map((opt, i) => (
-                <div
-                  key={i}
-                  style={{
-                    background: '#f8fafc',
-                    padding: '6px 8px',
-                    borderRadius: '6px',
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    color: '#475569',
-                    border: '1px solid #e2e8f0',
-                  }}
-                >
-                  {opt}
-                </div>
-              ))}
+            {/* Interactive Clickable Option Buttons */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))', gap: '8px', marginBottom: '12px' }}>
+              {activeOlympiad.sampleQuestion.options.map((opt) => {
+                const isThisSelected = currentSelectedKey === opt.key;
+                const isThisCorrectOption = opt.key === activeOlympiad.sampleQuestion.correctKey;
+
+                let btnBg = '#f8fafc';
+                let btnBorder = '1.5px solid #e2e8f0';
+                let btnColor = '#334155';
+
+                if (isAnswered) {
+                  if (isThisSelected) {
+                    if (isCorrect) {
+                      btnBg = '#dcfce7';
+                      btnBorder = '2px solid #22c55e';
+                      btnColor = '#15803d';
+                    } else {
+                      btnBg = '#fee2e2';
+                      btnBorder = '2px solid #ef4444';
+                      btnColor = '#b91c1c';
+                    }
+                  } else if (isThisCorrectOption) {
+                    // Highlight correct option when wrong selected
+                    btnBg = '#f0fdf4';
+                    btnBorder = '2px dashed #22c55e';
+                    btnColor = '#15803d';
+                  }
+                }
+
+                return (
+                  <button
+                    key={opt.key}
+                    onClick={() => handleOptionClick(opt.key)}
+                    style={{
+                      background: btnBg,
+                      border: btnBorder,
+                      color: btnColor,
+                      padding: '8px 10px',
+                      borderRadius: '8px',
+                      fontSize: '0.75rem',
+                      fontWeight: isThisSelected ? 800 : 600,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'all 0.15s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <span>{opt.text}</span>
+                    {isAnswered && isThisSelected && (
+                      <span style={{ fontSize: '0.8125rem' }}>{isCorrect ? '✅' : '❌'}</span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
 
-            <button
-              onClick={() => toggleHint(activeOlympiad.code)}
-              style={{
-                width: '100%',
-                background: isHintRevealed ? '#f1f5f9' : 'rgba(245, 197, 24, 0.15)',
-                color: isHintRevealed ? '#334155' : '#92400e',
-                border: '1px solid rgba(245, 197, 24, 0.4)',
-                borderRadius: '8px',
-                padding: '8px 10px',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-              }}
-            >
-              {isHintRevealed ? '▲ Hide Hint & Solution' : '💡 Reveal Hint & Solution'}
-            </button>
+            {/* Action Bar (Reset / Solution Toggle) */}
+            <div style={{ display: 'flex', gap: '6px', marginTop: '6px' }}>
+              <button
+                onClick={toggleHint}
+                style={{
+                  flex: 1,
+                  background: isHintRevealed ? '#f1f5f9' : 'rgba(245, 197, 24, 0.15)',
+                  color: isHintRevealed ? '#334155' : '#92400e',
+                  border: '1px solid rgba(245, 197, 24, 0.4)',
+                  borderRadius: '8px',
+                  padding: '7px 10px',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                {isHintRevealed ? '▲ Hide Solution' : '💡 Reveal Solution'}
+              </button>
 
+              {isAnswered && (
+                <button
+                  onClick={handleResetQuestion}
+                  style={{
+                    background: '#f8fafc',
+                    color: '#64748b',
+                    border: '1px solid #cbd5e1',
+                    borderRadius: '8px',
+                    padding: '7px 10px',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  🔄 Retry
+                </button>
+              )}
+            </div>
+
+            {/* Hint & Solution Box */}
             {isHintRevealed && (
               <div
                 style={{
                   marginTop: '10px',
-                  background: '#f0fdf4',
-                  border: '1px solid #86efac',
+                  background: isAnswered && isCorrect ? '#f0fdf4' : '#eff6ff',
+                  border: isAnswered && isCorrect ? '1px solid #86efac' : '1px solid #bfdbfe',
                   borderRadius: '8px',
                   padding: '10px 12px',
                   fontSize: '0.75rem',
-                  color: '#166534',
+                  color: isAnswered && isCorrect ? '#166534' : '#1e40af',
                   lineHeight: 1.5,
                   animation: 'fadeIn 0.2s ease',
                 }}
               >
-                <p style={{ margin: '0 0 4px', fontWeight: 700 }}>{activeOlympiad.sampleQuestion.answer}</p>
-                <p style={{ margin: 0, fontSize: '0.6875rem', color: '#15803d' }}>
+                <p style={{ margin: '0 0 4px', fontWeight: 800 }}>{activeOlympiad.sampleQuestion.answer}</p>
+                <p style={{ margin: 0, fontSize: '0.6875rem', color: '#334155' }}>
                   <strong>Approach:</strong> {activeOlympiad.sampleQuestion.hint}
                 </p>
               </div>
