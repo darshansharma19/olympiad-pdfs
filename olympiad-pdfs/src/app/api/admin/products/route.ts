@@ -54,3 +54,32 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err.message || 'Failed to update product' }, { status: 500 });
   }
 }
+
+// DELETE / CLEAR PDF for a product
+export async function DELETE(req: NextRequest) {
+  try {
+    const isAuth = await isAuthenticatedAdmin();
+    if (!isAuth) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await req.json();
+    const { id } = body;
+
+    if (!id) {
+      return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
+    }
+
+    const updated = await prisma.product.update({
+      where: { id },
+      data: {
+        pdfUrl: '',
+      },
+    });
+
+    return NextResponse.json({ success: true, message: 'PDF cleared successfully', product: updated });
+  } catch (err: any) {
+    console.error('[admin/products] DELETE Error:', err);
+    return NextResponse.json({ error: err.message || 'Failed to clear PDF' }, { status: 500 });
+  }
+}

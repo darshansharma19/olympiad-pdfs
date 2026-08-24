@@ -33,6 +33,7 @@ export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [savingId, setSavingId] = useState<string | null>(null);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeUploadProductId, setActiveUploadProductId] = useState<string | null>(null);
@@ -120,6 +121,40 @@ export default function AdminPage() {
       alert('Error saving product: ' + err.message);
     } finally {
       setSavingId(null);
+    }
+  }
+
+  // Delete / Clear PDF from DB
+  async function handleDeletePdf(product: Product) {
+    const confirmed = window.confirm(
+      `Are you sure you want to remove the PDF for Class ${product.class} ${product.name}?\n\nThis will reset the status to Missing PDF.`
+    );
+    if (!confirmed) return;
+
+    setDeletingId(product.id);
+    try {
+      const res = await fetch('/api/admin/products', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: product.id }),
+      });
+
+      if (res.status === 401) {
+        router.replace('/admin/login');
+        return;
+      }
+
+      const data = await res.json();
+      if (data.success) {
+        handleFieldChange(product.id, 'pdfUrl', '');
+        showToast(`🗑️ Removed PDF for Class ${product.class} ${product.name}`);
+      } else {
+        alert(data.error || 'Failed to delete PDF');
+      }
+    } catch (err: any) {
+      alert('Error deleting PDF: ' + err.message);
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -511,6 +546,7 @@ export default function AdminPage() {
               const hasPdf = !!p.pdfUrl.trim();
               const isSaving = savingId === p.id;
               const isUploading = uploadingId === p.id;
+              const isDeleting = deletingId === p.id;
 
               return (
                 <div
@@ -596,11 +632,12 @@ export default function AdminPage() {
 
                     {/* Action buttons row */}
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      {/* Upload PDF */}
                       <button
                         onClick={() => triggerUpload(p.id)}
                         disabled={isUploading}
                         style={{
-                          flex: '1 1 120px',
+                          flex: '1 1 110px',
                           background: '#1e293b',
                           color: '#f8fafc',
                           border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -620,6 +657,7 @@ export default function AdminPage() {
                         <span>{isUploading ? 'Uploading...' : 'Upload PDF'}</span>
                       </button>
 
+                      {/* Preview Button */}
                       {hasPdf && (
                         <a
                           href={p.pdfUrl}
@@ -645,11 +683,39 @@ export default function AdminPage() {
                         </a>
                       )}
 
+                      {/* Delete / Clear PDF Button */}
+                      {hasPdf && (
+                        <button
+                          onClick={() => handleDeletePdf(p)}
+                          disabled={isDeleting}
+                          style={{
+                            flex: '0 0 auto',
+                            background: 'rgba(239, 68, 68, 0.15)',
+                            border: '1px solid rgba(239, 68, 68, 0.35)',
+                            color: '#f87171',
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            fontSize: '0.75rem',
+                            fontWeight: 700,
+                            cursor: isDeleting ? 'not-allowed' : 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '4px',
+                            minHeight: '38px',
+                          }}
+                        >
+                          <span>🗑️</span>
+                          <span>{isDeleting ? 'Deleting...' : 'Delete PDF'}</span>
+                        </button>
+                      )}
+
+                      {/* Save to DB */}
                       <button
                         onClick={() => handleSave(p)}
                         disabled={isSaving}
                         style={{
-                          flex: '1 1 120px',
+                          flex: '1 1 110px',
                           background: 'linear-gradient(135deg, #1e4fd8 0%, #0f2b6e 100%)',
                           color: '#fff',
                           border: '1px solid #3b82f6',
