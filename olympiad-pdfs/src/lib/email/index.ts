@@ -44,9 +44,9 @@ function buildEmailHtml(params: OrderEmailParams): string {
     <tr>
       <td style="padding:6px 0;">
         <a href="${d.url}"
-           style="display:inline-block;background:#1a3a8f;color:#fff;
-                  font-weight:700;font-size:14px;padding:12px 24px;
-                  border-radius:8px;text-decoration:none;">
+           style="display:inline-block;background:#1e4fd8;color:#ffffff;
+                  font-weight:800;font-size:14px;padding:12px 24px;
+                  border-radius:8px;text-decoration:none;box-shadow:0 2px 6px rgba(30,79,216,0.3);">
           ⬇ Download: ${d.productName.replace(/Practice Papers/g, '').trim()}
         </a>
       </td>
@@ -61,65 +61,70 @@ function buildEmailHtml(params: OrderEmailParams): string {
 <body style="margin:0;padding:0;background:#f8f9fc;font-family:Arial,Helvetica,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fc;padding:32px 16px;">
     <tr><td align="center">
-      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.08);border:1px solid #e2e8f0;">
         <!-- Header -->
         <tr>
-          <td style="background:#1a3a8f;padding:28px 32px;text-align:center;">
-            <h1 style="margin:0;font-size:22px;color:#fff;font-weight:800;letter-spacing:-0.5px;">
+          <td style="background:linear-gradient(135deg, #0f2b6e 0%, #1e4fd8 100%);padding:28px 32px;text-align:center;">
+            <h1 style="margin:0;font-size:22px;color:#ffffff;font-weight:900;letter-spacing:-0.5px;">
               📚 OlympiadPDFs
             </h1>
+            <p style="margin:4px 0 0;font-size:12px;color:#f5c518;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;">
+              Expert Practice · Instant Download
+            </p>
           </td>
         </tr>
         <!-- Body -->
         <tr>
           <td style="padding:36px 32px;">
-            <h2 style="margin:0 0 8px;font-size:20px;color:#1a3a8f;font-weight:800;">
+            <h2 style="margin:0 0 8px;font-size:20px;color:#0f2b6e;font-weight:800;">
               🎯 Your Olympiad Practice Paper${downloads.length > 1 ? 's are' : ' is'} Ready!
             </h2>
-            <p style="margin:0 0 24px;font-size:15px;color:#4a5568;line-height:1.6;">
-              Hi ${customerName},<br><br>
-              Thank you for purchasing from <strong>OlympiadPDFs</strong>. Your order has been confirmed and your practice paper${downloads.length > 1 ? 's are' : ' is'} ready to download.
+            <p style="margin:0 0 24px;font-size:15px;color:#475569;line-height:1.6;">
+              Hi <strong>${customerName}</strong>,<br><br>
+              Thank you for purchasing from <strong>OlympiadPDFs</strong>. Your payment was successful and your practice paper${downloads.length > 1 ? 's are' : ' is'} ready to download below.
             </p>
-            <!-- Order Summary -->
-            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f3f9;border-radius:8px;padding:20px;margin-bottom:28px;">
+            <!-- Order Summary Card -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:20px;margin-bottom:28px;">
               <tr>
-                <td style="font-size:13px;color:#6b7a99;padding-bottom:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">
+                <td style="font-size:12px;color:#64748b;padding-bottom:8px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;">
                   Order Summary
                 </td>
               </tr>
               <tr>
-                <td style="font-size:15px;color:#1e293b;font-weight:700;padding-bottom:4px;">
+                <td style="font-size:15px;color:#0f2b6e;font-weight:800;padding-bottom:6px;">
                   ${productTitle}
                 </td>
               </tr>
               <tr>
-                <td style="font-size:13px;color:#6b7a99;padding-bottom:4px;">
-                  Order ID: <span style="color:#1e293b;font-weight:600;">${orderId.slice(0, 8).toUpperCase()}</span>
+                <td style="font-size:13px;color:#64748b;padding-bottom:4px;">
+                  Order ID: <span style="color:#0f2b6e;font-weight:700;font-family:monospace;">${orderId.slice(0, 8).toUpperCase()}</span>
                 </td>
               </tr>
               <tr>
-                <td style="font-size:18px;color:#1a3a8f;font-weight:800;padding-top:8px;">
-                  Amount Paid: ${formatAmount(amount)}
+                <td style="font-size:18px;color:#0f2b6e;font-weight:900;padding-top:8px;border-top:1px solid #e2e8f0;">
+                  Amount Paid: <span style="color:#1e4fd8;">${formatAmount(amount)}</span>
                 </td>
               </tr>
             </table>
+
             <!-- Download Buttons -->
-            <p style="margin:0 0 16px;font-size:15px;color:#1e293b;font-weight:700;">
+            <p style="margin:0 0 16px;font-size:15px;color:#0f2b6e;font-weight:800;">
               Click below to download your PDF${downloads.length > 1 ? 's' : ''}:
             </p>
-            <table cellpadding="0" cellspacing="0">
+            <table cellpadding="0" cellspacing="0" width="100%">
               ${downloadButtons}
             </table>
-            <p style="margin:24px 0 0;font-size:13px;color:#9aa5c4;line-height:1.6;">
-              ⏰ Download links are valid for <strong>72 hours</strong> and can be used up to 5 times.<br>
-              If you have any issues, email us at <a href="mailto:support@olympiadpdfs.com" style="color:#1a3a8f;">support@olympiadpdfs.com</a>
+
+            <p style="margin:28px 0 0;font-size:13px;color:#64748b;line-height:1.6;background:#f1f5f9;padding:12px 16px;border-radius:8px;">
+              ⏰ <strong>Download Validity:</strong> Links are valid for <strong>72 hours</strong> and can be used up to 5 times.<br>
+              Need assistance? Simply reply to this email or reach us at <a href="mailto:support@olympiadpdfs.com" style="color:#1e4fd8;font-weight:700;">support@olympiadpdfs.com</a>.
             </p>
           </td>
         </tr>
         <!-- Footer -->
         <tr>
-          <td style="background:#f8f9fc;padding:20px 32px;text-align:center;border-top:1px solid #e2e6f0;">
-            <p style="margin:0;font-size:12px;color:#9aa5c4;">
+          <td style="background:#f8fafc;padding:20px 32px;text-align:center;border-top:1px solid #e2e8f0;">
+            <p style="margin:0;font-size:12px;color:#94a3b8;">
               OlympiadPDFs · Expert Olympiad Practice Papers<br>
               © ${new Date().getFullYear()} OlympiadPDFs. All rights reserved.
             </p>
@@ -128,7 +133,7 @@ function buildEmailHtml(params: OrderEmailParams): string {
       </table>
     </td></tr>
   </table>
-</body>
+ </body>
 </html>`;
 }
 
@@ -143,12 +148,12 @@ export async function sendOrderEmail(params: OrderEmailParams): Promise<void> {
 
   const resend = new Resend(apiKey);
 
-  const { purchaseType, isBundle, classNumber } = params;
+  const { purchaseType, isBundle, classNumber, downloads } = params;
   let subject = `Your Olympiad Practice Paper is Ready 🎯 — OlympiadPDFs`;
   if (purchaseType === 'bundle_5' || isBundle) {
     subject = `Your Class ${classNumber || ''} Complete Bundle of 5 Olympiad Papers is Ready 🎯 — OlympiadPDFs`;
-  } else if (purchaseType === 'pack_2') {
-    subject = `Your Class ${classNumber || ''} Olympiad Pack of 2 Papers is Ready 🎯 — OlympiadPDFs`;
+  } else if (downloads.length === 1) {
+    subject = `Your ${downloads[0].productName} is Ready 🎯 — OlympiadPDFs`;
   }
 
   await resend.emails.send({

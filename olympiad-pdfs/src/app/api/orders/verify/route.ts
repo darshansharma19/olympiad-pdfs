@@ -77,13 +77,23 @@ export async function POST(req: NextRequest) {
       )
     );
 
-    // ── 5. Send confirmation email ──────────────────────────────
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+    // ── 5. Detect base domain for email links ────────────────────
+    const host = req.headers.get('host') || 'localhost:3000';
+    const proto = req.headers.get('x-forwarded-proto') || (host.includes('localhost') ? 'http' : 'https');
+    const autoBaseUrl = `${proto}://${host}`;
+
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : '') ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '') ||
+      autoBaseUrl;
+
     const downloadLinks = downloads.map((d, i) => ({
       productName: order.items[i].product.name,
       url: `${baseUrl}/api/download/${d.token}`,
     }));
 
+    // ── 6. Send confirmation email directly to user's mailbox ───
     try {
       await sendOrderEmail({
         customerName: order.customer.name,
@@ -100,6 +110,7 @@ export async function POST(req: NextRequest) {
         where: { id: orderId },
         data: { deliveryStatus: 'SENT' },
       });
+      console.log(`[orders/verify] Confirmation email sent successfully to ${order.customer.email}`);
     } catch (emailErr) {
       console.error('[orders/verify] Email failed:', emailErr);
       await prisma.order.update({
