@@ -14,19 +14,74 @@ export const metadata: Metadata = {
 // Revalidate every hour
 export const revalidate = 3600;
 
-async function getProductsByClass(): Promise<Record<number, ClassProduct[]>> {
-  const products = await prisma.product.findMany({
-    where: { isActive: true },
-    orderBy: [{ class: 'asc' }, { subject: 'asc' }],
-    select: { id: true, class: true, subject: true, name: true, price: true, imageUrl: true },
-  });
+const DEFAULT_FALLBACK_PRODUCTS: Record<number, ClassProduct[]> = {
+  6: [
+    { id: 'c6-math', subject: 'mathematics', name: 'Class 6 Mathematics Olympiad (IMO)', price: 9900 },
+    { id: 'c6-sci', subject: 'science', name: 'Class 6 Science Olympiad (ISO)', price: 9900 },
+    { id: 'c6-eng', subject: 'english', name: 'Class 6 English Olympiad (IEO)', price: 9900 },
+    { id: 'c6-cs', subject: 'computer_science', name: 'Class 6 Computer Science Olympiad (ICSO)', price: 9900 },
+    { id: 'c6-rea', subject: 'reasoning', name: 'Class 6 Reasoning Olympiad (IRO)', price: 9900 },
+  ],
+  7: [
+    { id: 'c7-math', subject: 'mathematics', name: 'Class 7 Mathematics Olympiad (IMO)', price: 9900 },
+    { id: 'c7-sci', subject: 'science', name: 'Class 7 Science Olympiad (ISO)', price: 9900 },
+    { id: 'c7-eng', subject: 'english', name: 'Class 7 English Olympiad (IEO)', price: 9900 },
+    { id: 'c7-cs', subject: 'computer_science', name: 'Class 7 Computer Science Olympiad (ICSO)', price: 9900 },
+    { id: 'c7-rea', subject: 'reasoning', name: 'Class 7 Reasoning Olympiad (IRO)', price: 9900 },
+  ],
+  8: [
+    { id: 'c8-math', subject: 'mathematics', name: 'Class 8 Mathematics Olympiad (IMO)', price: 9900 },
+    { id: 'c8-sci', subject: 'science', name: 'Class 8 Science Olympiad (ISO)', price: 9900 },
+    { id: 'c8-eng', subject: 'english', name: 'Class 8 English Olympiad (IEO)', price: 9900 },
+    { id: 'c8-cs', subject: 'computer_science', name: 'Class 8 Computer Science Olympiad (ICSO)', price: 9900 },
+    { id: 'c8-rea', subject: 'reasoning', name: 'Class 8 Reasoning Olympiad (IRO)', price: 9900 },
+  ],
+  9: [
+    { id: 'c9-math', subject: 'mathematics', name: 'Class 9 Mathematics Olympiad (IMO)', price: 9900 },
+    { id: 'c9-sci', subject: 'science', name: 'Class 9 Science Olympiad (ISO)', price: 9900 },
+    { id: 'c9-eng', subject: 'english', name: 'Class 9 English Olympiad (IEO)', price: 9900 },
+    { id: 'c9-cs', subject: 'computer_science', name: 'Class 9 Computer Science Olympiad (ICSO)', price: 9900 },
+    { id: 'c9-rea', subject: 'reasoning', name: 'Class 9 Reasoning Olympiad (IRO)', price: 9900 },
+  ],
+  10: [
+    { id: 'c10-math', subject: 'mathematics', name: 'Class 10 Mathematics Olympiad (IMO)', price: 9900 },
+    { id: 'c10-sci', subject: 'science', name: 'Class 10 Science Olympiad (ISO)', price: 9900 },
+    { id: 'c10-eng', subject: 'english', name: 'Class 10 English Olympiad (IEO)', price: 9900 },
+    { id: 'c10-cs', subject: 'computer_science', name: 'Class 10 Computer Science Olympiad (ICSO)', price: 9900 },
+    { id: 'c10-rea', subject: 'reasoning', name: 'Class 10 Reasoning Olympiad (IRO)', price: 9900 },
+  ],
+};
 
-  const byClass: Record<number, ClassProduct[]> = {};
-  for (const p of products) {
-    if (!byClass[p.class]) byClass[p.class] = [];
-    byClass[p.class].push({ id: p.id, subject: p.subject, name: p.name, price: p.price });
+async function getProductsByClass(): Promise<Record<number, ClassProduct[]>> {
+  try {
+    const products = await prisma.product.findMany({
+      where: { isActive: true },
+      orderBy: [{ class: 'asc' }, { subject: 'asc' }],
+      select: { id: true, class: true, subject: true, name: true, price: true, imageUrl: true },
+    });
+
+    if (!products || products.length === 0) {
+      return DEFAULT_FALLBACK_PRODUCTS;
+    }
+
+    const byClass: Record<number, ClassProduct[]> = {};
+    for (const p of products) {
+      if (!byClass[p.class]) byClass[p.class] = [];
+      byClass[p.class].push({ id: p.id, subject: p.subject, name: p.name, price: p.price });
+    }
+
+    // Fallback if any class is missing
+    for (const cls of [6, 7, 8, 9, 10]) {
+      if (!byClass[cls] || byClass[cls].length === 0) {
+        byClass[cls] = DEFAULT_FALLBACK_PRODUCTS[cls];
+      }
+    }
+
+    return byClass;
+  } catch (err) {
+    console.warn('[getProductsByClass] Falling back to default product catalog:', err);
+    return DEFAULT_FALLBACK_PRODUCTS;
   }
-  return byClass;
 }
 
 const CLASSES = [6, 7, 8, 9, 10];
