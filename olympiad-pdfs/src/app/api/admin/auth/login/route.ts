@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Incorrect password' }, { status: 401 });
     }
 
-    const token = generateSessionToken();
+    const token = await generateSessionToken();
     const response = NextResponse.json({ success: true, message: 'Logged in successfully' });
 
     response.cookies.set({
