@@ -100,7 +100,7 @@ export default async function HomePage() {
 
       <Header />
       <main>
-        {/* ── HERO ──────────────────────────────────────────────── */}
+        {/* ── 1. HERO ──────────────────────────────────────────────── */}
         <section
           style={{
             background:
@@ -258,12 +258,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── INTERACTIVE OLYMPIAD SHOWCASE ─────────────────────── */}
-        <div id="olympiad-subjects">
-          <OlympiadShowcase />
-        </div>
-
-        {/* ── CLASS CARDS ────────────────────────────────────────── */}
+        {/* ── 2. CLASS CARDS (PRODUCT PURCHASE / SELL PART FIRST) ─── */}
         <section id="choose-class" className="section" style={{ background: '#f8fafc', padding: '4.5rem 0' }}>
           <div className="container-site">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
@@ -283,7 +278,7 @@ export default async function HomePage() {
               >
                 Select Your Grade
               </div>
-              <h2 className="section-title" style={{ margin: 0 }}>Choose Your Class & Get Practicing</h2>
+              <h2 className="section-title" style={{ margin: 0 }}>Choose Your Class & Start Practicing</h2>
               <p className="section-subtitle" style={{ margin: '10px auto 0' }}>
                 Get all 5 subjects in a complete bundle for ₹299, or select an individual subject paper for ₹99.
               </p>
@@ -308,8 +303,13 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── HOW IT WORKS ───────────────────────────────────────── */}
-        <section className="section" style={{ background: '#ffffff', padding: '4.5rem 0' }}>
+        {/* ── 3. INTERACTIVE OLYMPIAD SHOWCASE (MOVED AFTER CLASS CARDS) ─── */}
+        <div id="olympiad-subjects">
+          <OlympiadShowcase />
+        </div>
+
+        {/* ── 4. HOW IT WORKS ───────────────────────────────────────── */}
+        <section className="section" style={{ background: '#f8fafc', padding: '4.5rem 0' }}>
           <div className="container-site">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <h2 className="section-title">How It Works</h2>
@@ -333,7 +333,7 @@ export default async function HomePage() {
                   style={{
                     textAlign: 'center',
                     padding: '28px 20px',
-                    background: '#f8fafc',
+                    background: '#ffffff',
                     borderRadius: '16px',
                     border: '1.5px solid #e2e8f0',
                     boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
@@ -369,8 +369,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── WHY STUDENTS LOVE US ───────────────────────────────── */}
-        <section className="section" style={{ background: '#f8fafc', padding: '4.5rem 0' }}>
+        {/* ── 5. WHY STUDENTS LOVE US ───────────────────────────────── */}
+        <section className="section" style={{ background: '#ffffff', padding: '4.5rem 0' }}>
           <div className="container-site">
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <div
@@ -411,7 +411,7 @@ export default async function HomePage() {
                 <div
                   key={f.title}
                   style={{
-                    background: '#fff',
+                    background: '#f8fafc',
                     borderRadius: '16px',
                     padding: '24px 20px',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
@@ -439,8 +439,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── FAQ ────────────────────────────────────────────────── */}
-        <section className="section" style={{ background: '#ffffff', padding: '4.5rem 0' }}>
+        {/* ── 6. FAQ ────────────────────────────────────────────────── */}
+        <section className="section" style={{ background: '#f8fafc', padding: '4.5rem 0' }}>
           <div className="container-site" style={{ maxWidth: '740px', margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
               <h2 className="section-title">Frequently Asked Questions</h2>
@@ -451,7 +451,7 @@ export default async function HomePage() {
                   key={i}
                   className="faq-item"
                   style={{
-                    background: '#f8fafc',
+                    background: '#ffffff',
                     borderRadius: '12px',
                     padding: '0 20px',
                     border: '1.5px solid #e2e8f0',
@@ -484,7 +484,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── GOLD CTA ───────────────────────────────────────────── */}
+        {/* ── 7. GOLD CTA ───────────────────────────────────────────── */}
         <section style={{ background: 'linear-gradient(135deg, #f5c518 0%, #eab308 100%)', padding: '4rem 0' }}>
           <div className="container-site" style={{ textAlign: 'center' }}>
             <h2
