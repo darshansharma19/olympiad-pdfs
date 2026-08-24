@@ -17,26 +17,24 @@ interface ClassCardProps {
   imageUrl: string;
 }
 
-const OLYMPIAD_SUBJECT_LABELS: Record<string, { code: string; icon: string; full: string }> = {
-  mathematics: { code: 'IMO', icon: '📐', full: 'International Mathematics Olympiad (IMO)' },
-  science: { code: 'ISO', icon: '🔬', full: 'International Science Olympiad (ISO)' },
-  english: { code: 'IEO', icon: '📖', full: 'International English Olympiad (IEO)' },
-  computer_science: { code: 'ICSO', icon: '💻', full: 'International Computer Science Olympiad (ICSO)' },
-  reasoning: { code: 'IRO', icon: '🧩', full: 'International Reasoning Olympiad (IRO)' },
+const OLYMPIAD_SUBJECT_LABELS: Record<string, { code: string; icon: string; full: string; color: string }> = {
+  mathematics: { code: 'IMO', icon: '📐', full: 'International Mathematics Olympiad (IMO)', color: '#1e40af' },
+  science: { code: 'ISO', icon: '🔬', full: 'International Science Olympiad (ISO)', color: '#047857' },
+  english: { code: 'IEO', icon: '📖', full: 'International English Olympiad (IEO)', color: '#7c3aed' },
+  computer_science: { code: 'ICSO', icon: '💻', full: 'International Computer Science Olympiad (ICSO)', color: '#0284c7' },
+  reasoning: { code: 'IRO', icon: '🧩', full: 'International Reasoning Olympiad (IRO)', color: '#c2410c' },
 };
 
 const BUNDLE_PRICE = 29900; // ₹299
 const SINGLE_PRICE = 9900;  // ₹99
 
 export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
-  // Single selection state
   const [singleSubject, setSingleSubject] = useState(products[0]?.subject ?? '');
   const [checkoutItem, setCheckoutItem] = useState<CheckoutItem | null>(null);
 
   const hasAllSubjects = products.length === 5;
   const selectedSingleProduct = products.find((p) => p.subject === singleSubject);
 
-  // Action handlers
   function handleBuyBundle() {
     setCheckoutItem({
       type: 'bundle_5',
@@ -61,26 +59,33 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
   return (
     <>
       <div
-        className="card"
+        className="card-hover-lift"
         style={{
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
           padding: 0,
           border: '1.5px solid #e2e8f0',
-          borderRadius: '18px',
-          background: '#fff',
-          boxShadow: '0 4px 18px rgba(15, 23, 42, 0.06)',
-          transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+          borderRadius: '20px',
+          background: '#ffffff',
+          boxShadow: 'var(--shadow-card)',
+          position: 'relative',
         }}
       >
-        {/* Card Header / Banner */}
-        <div style={{ position: 'relative', height: 136, flexShrink: 0, background: 'linear-gradient(135deg, #0f2b6e 0%, #1e4fd8 100%)' }}>
+        {/* ── Card Header Banner ─────────────────────────────────── */}
+        <div
+          style={{
+            position: 'relative',
+            height: 140,
+            flexShrink: 0,
+            background: 'linear-gradient(135deg, #071536 0%, #0f2b6e 60%, #1e4fd8 100%)',
+          }}
+        >
           <Image
             src={imageUrl || `/images/classes/class-${classNumber}.svg`}
             alt={`Class ${classNumber}`}
             fill
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: 'cover', opacity: 0.85 }}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
             unoptimized
           />
@@ -88,34 +93,38 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(to top, rgba(15,43,110,0.92) 0%, rgba(15,43,110,0.2) 70%)',
+              background: 'linear-gradient(to top, rgba(8, 23, 61, 0.95) 0%, rgba(15, 43, 110, 0.4) 60%, rgba(15, 43, 110, 0.1) 100%)',
             }}
           />
-          <div style={{ position: 'absolute', bottom: 12, left: 16, right: 16 }}>
+
+          <div style={{ position: 'absolute', bottom: 14, left: 18, right: 18 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <p
                 style={{
                   margin: 0,
                   fontFamily: 'var(--font-display)',
                   fontWeight: 900,
-                  fontSize: '1.5rem',
-                  color: '#fff',
-                  lineHeight: 1.1,
-                  letterSpacing: '-0.5px',
+                  fontSize: '1.55rem',
+                  color: '#ffffff',
+                  lineHeight: 1,
+                  letterSpacing: '-0.6px',
+                  textShadow: '0 2px 8px rgba(0,0,0,0.3)',
                 }}
               >
                 CLASS {classNumber}
               </p>
               <span
                 style={{
-                  background: 'rgba(245, 197, 24, 0.25)',
-                  border: '1px solid rgba(245, 197, 24, 0.6)',
-                  color: '#fef08a',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  backdropFilter: 'blur(8px)',
+                  color: '#ffffff',
                   fontSize: '0.6875rem',
                   fontWeight: 800,
-                  padding: '2px 8px',
-                  borderRadius: '6px',
+                  padding: '3px 9px',
+                  borderRadius: '9999px',
                   textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
                 }}
               >
                 Grade {classNumber}
@@ -123,12 +132,12 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
             </div>
             <p
               style={{
-                margin: '2px 0 0',
+                margin: '4px 0 0',
                 fontSize: '0.6875rem',
                 fontWeight: 800,
                 color: 'var(--color-brand-gold)',
                 textTransform: 'uppercase',
-                letterSpacing: '0.1em',
+                letterSpacing: '0.08em',
               }}
             >
               5 OLYMPIADS INCLUDED
@@ -136,8 +145,8 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
           </div>
         </div>
 
-        {/* Card Body */}
-        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
+        {/* ── Card Body ──────────────────────────────────────────── */}
+        <div style={{ padding: '18px', display: 'flex', flexDirection: 'column', gap: '14px', flex: 1 }}>
           {products.length === 0 ? (
             <p
               style={{
@@ -145,48 +154,46 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                 color: 'var(--color-neutral-500)',
                 textAlign: 'center',
                 margin: 'auto 0',
-                padding: '24px 0',
+                padding: '28px 0',
               }}
             >
               Practice papers coming soon
             </p>
           ) : (
             <>
-              {/* ─────────────────────────────────────────────────────────────
+              {/* ─────────────────────────────────────────────────────
                   OPTION 1: BUNDLE OF 5 — ₹299 (GOLD HIGHLIGHTED)
-                 ───────────────────────────────────────────────────────────── */}
+                 ───────────────────────────────────────────────────── */}
               <div
                 style={{
-                  background: hasAllSubjects
-                    ? 'linear-gradient(145deg, #fffdf2 0%, #fef8db 100%)'
-                    : 'var(--color-neutral-50)',
-                  border: hasAllSubjects ? '2px solid #f5c518' : '1px solid var(--color-neutral-200)',
-                  borderRadius: '14px',
-                  padding: '14px',
+                  background: 'linear-gradient(145deg, #fffdf2 0%, #fef8db 100%)',
+                  border: '2px solid #f5c518',
+                  borderRadius: '16px',
+                  padding: '16px 14px 14px',
                   position: 'relative',
-                  boxShadow: hasAllSubjects ? '0 4px 14px rgba(245, 197, 24, 0.15)' : 'none',
+                  boxShadow: '0 4px 16px rgba(245, 197, 24, 0.18)',
                 }}
               >
-                {hasAllSubjects && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '-10px',
-                      right: '12px',
-                      background: 'linear-gradient(135deg, #f5c518 0%, #eab308 100%)',
-                      color: 'var(--color-brand-blue)',
-                      fontSize: '0.625rem',
-                      fontWeight: 900,
-                      padding: '3px 10px',
-                      borderRadius: '9999px',
-                      letterSpacing: '0.08em',
-                      textTransform: 'uppercase',
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                    }}
-                  >
-                    ⭐ BEST VALUE (60% OFF)
-                  </div>
-                )}
+                {/* Floating Gold Best Value Ribbon */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '-11px',
+                    right: '12px',
+                    background: 'linear-gradient(135deg, #f5c518 0%, #eab308 100%)',
+                    color: 'var(--color-brand-blue)',
+                    fontSize: '0.625rem',
+                    fontWeight: 900,
+                    padding: '3px 10px',
+                    borderRadius: '9999px',
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    boxShadow: '0 2px 8px rgba(217, 119, 6, 0.35)',
+                    border: '1px solid rgba(255, 255, 255, 0.6)',
+                  }}
+                >
+                  ⭐ BEST VALUE (60% OFF)
+                </div>
 
                 <div
                   style={{
@@ -204,6 +211,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                         fontWeight: 900,
                         fontSize: '1.0625rem',
                         color: 'var(--color-brand-blue)',
+                        lineHeight: 1.2,
                       }}
                     >
                       BUNDLE OF 5
@@ -217,18 +225,20 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                       style={{
                         fontFamily: 'var(--font-display)',
                         fontWeight: 900,
-                        fontSize: '1.375rem',
+                        fontSize: '1.45rem',
                         color: 'var(--color-brand-blue)',
+                        lineHeight: 1,
                       }}
                     >
                       ₹299
                     </span>
                     <span
                       style={{
-                        marginLeft: '4px',
+                        marginLeft: '5px',
                         fontSize: '0.75rem',
                         color: '#94a3b8',
                         textDecoration: 'line-through',
+                        fontWeight: 500,
                       }}
                     >
                       ₹495
@@ -236,7 +246,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                   </div>
                 </div>
 
-                {/* 5 Badges with Icons */}
+                {/* 5 Subject Badges with Icons */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '12px' }}>
                   {[
                     { code: 'IMO', icon: '📐' },
@@ -253,7 +263,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                         color: 'var(--color-brand-blue)',
                         background: 'rgba(15, 43, 110, 0.08)',
                         borderRadius: '6px',
-                        padding: '2px 6px',
+                        padding: '3px 7px',
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '3px',
@@ -267,51 +277,49 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
 
                 <button
                   onClick={handleBuyBundle}
-                  disabled={!hasAllSubjects}
                   style={{
                     width: '100%',
-                    background: hasAllSubjects
-                      ? 'linear-gradient(135deg, #f5c518 0%, #eab308 100%)'
-                      : '#cbd5e1',
-                    color: hasAllSubjects ? 'var(--color-brand-blue)' : '#64748b',
+                    background: 'linear-gradient(135deg, #f5c518 0%, #eab308 100%)',
+                    color: 'var(--color-brand-blue)',
                     border: 'none',
                     borderRadius: '10px',
-                    padding: '11px',
+                    padding: '12px',
                     fontFamily: 'var(--font-display)',
                     fontWeight: 900,
                     fontSize: '0.875rem',
-                    cursor: hasAllSubjects ? 'pointer' : 'not-allowed',
+                    cursor: 'pointer',
                     transition: 'all 0.15s ease',
-                    boxShadow: hasAllSubjects ? '0 2px 8px rgba(245, 197, 24, 0.3)' : 'none',
+                    boxShadow: '0 3px 12px rgba(245, 197, 24, 0.35)',
+                    minHeight: '44px',
                   }}
                 >
-                  {hasAllSubjects ? 'GET BUNDLE — ₹299' : `Coming Soon (${products.length}/5)`}
+                  GET BUNDLE — ₹299
                 </button>
               </div>
 
               {/* Divider */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '-2px 0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '-2px 0' }}>
                 <div style={{ flex: 1, height: 1, background: '#e2e8f0' }} />
                 <span style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94a3b8' }}>OR</span>
                 <div style={{ flex: 1, height: 1, background: '#e2e8f0' }} />
               </div>
 
-              {/* ─────────────────────────────────────────────────────────────
+              {/* ─────────────────────────────────────────────────────
                   OPTION 2: SINGLE PAPER — ₹99
-                 ───────────────────────────────────────────────────────────── */}
+                 ───────────────────────────────────────────────────── */}
               <div
                 style={{
-                  background: '#fff',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '12px',
-                  padding: '12px',
+                  background: '#ffffff',
+                  border: '1.5px solid #e2e8f0',
+                  borderRadius: '14px',
+                  padding: '12px 14px',
                 }}
               >
                 <div
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'flex-start',
+                    alignItems: 'center',
                     marginBottom: '8px',
                   }}
                 >
@@ -335,7 +343,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                     style={{
                       fontFamily: 'var(--font-display)',
                       fontWeight: 900,
-                      fontSize: '1.125rem',
+                      fontSize: '1.1875rem',
                       color: 'var(--color-brand-blue)',
                     }}
                   >
@@ -356,7 +364,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                       fontFamily: 'var(--font-body)',
                       fontWeight: 600,
                       color: '#1e293b',
-                      background: '#fff',
+                      background: '#ffffff',
                       cursor: 'pointer',
                       outline: 'none',
                     }}
@@ -377,7 +385,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                   disabled={!selectedSingleProduct}
                   style={{
                     width: '100%',
-                    background: '#fff',
+                    background: '#ffffff',
                     color: 'var(--color-brand-blue)',
                     border: '1.5px solid var(--color-brand-blue)',
                     borderRadius: '8px',
@@ -387,6 +395,7 @@ export function ClassCard({ classNumber, products, imageUrl }: ClassCardProps) {
                     fontSize: '0.8125rem',
                     cursor: 'pointer',
                     transition: 'all 0.15s ease',
+                    minHeight: '40px',
                   }}
                 >
                   BUY SINGLE — ₹99

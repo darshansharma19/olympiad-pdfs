@@ -159,8 +159,8 @@ export default async function HomePage() {
         <section
           style={{
             background:
-              'radial-gradient(ellipse at 50% -20%, #1e4fd8 0%, #0f2b6e 45%, #08173d 100%)',
-            padding: 'clamp(3rem, 7vw, 5.25rem) 0 clamp(2.5rem, 5vw, 4.25rem)',
+              'radial-gradient(ellipse at 50% -20%, #1e4fd8 0%, #0f2b6e 50%, #071536 100%)',
+            padding: 'clamp(3.5rem, 8vw, 5.5rem) 0 clamp(3rem, 6vw, 4.5rem)',
             position: 'relative',
             overflow: 'hidden',
           }}
@@ -170,10 +170,10 @@ export default async function HomePage() {
             className="animate-float"
             style={{
               position: 'absolute',
-              top: '10%',
+              top: '12%',
               left: '5%',
-              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-              opacity: 0.25,
+              fontSize: 'clamp(1.5rem, 3vw, 2.25rem)',
+              opacity: 0.2,
               userSelect: 'none',
               pointerEvents: 'none',
             }}
@@ -186,13 +186,41 @@ export default async function HomePage() {
               position: 'absolute',
               top: '18%',
               right: '6%',
-              fontSize: 'clamp(1.75rem, 3.5vw, 2.25rem)',
-              opacity: 0.3,
+              fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)',
+              opacity: 0.25,
               userSelect: 'none',
               pointerEvents: 'none',
             }}
           >
             🏆
+          </div>
+          <div
+            className="animate-float"
+            style={{
+              position: 'absolute',
+              bottom: '15%',
+              left: '8%',
+              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+              opacity: 0.2,
+              userSelect: 'none',
+              pointerEvents: 'none',
+            }}
+          >
+            🔬
+          </div>
+          <div
+            className="animate-float-reverse"
+            style={{
+              position: 'absolute',
+              bottom: '18%',
+              right: '10%',
+              fontSize: 'clamp(1.5rem, 3vw, 2.25rem)',
+              opacity: 0.2,
+              userSelect: 'none',
+              pointerEvents: 'none',
+            }}
+          >
+            🧩
           </div>
 
           <div className="container-site" style={{ position: 'relative', textAlign: 'center' }}>
@@ -207,7 +235,7 @@ export default async function HomePage() {
                 backdropFilter: 'blur(12px)',
                 borderRadius: '9999px',
                 padding: '6px 18px',
-                marginBottom: '20px',
+                marginBottom: '22px',
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',
                 maxWidth: '100%',
               }}
@@ -218,9 +246,8 @@ export default async function HomePage() {
                   fontSize: 'clamp(0.6875rem, 2vw, 0.8125rem)',
                   color: '#fbdf6e',
                   fontWeight: 800,
-                  letterSpacing: '0.03em',
+                  letterSpacing: '0.04em',
                   textTransform: 'uppercase',
-                  whiteSpace: 'normal',
                 }}
               >
                 2026 Olympiad Exam Season Preparation
@@ -232,13 +259,13 @@ export default async function HomePage() {
               style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 900,
-                fontSize: 'clamp(1.85rem, 6vw, 3.75rem)',
+                fontSize: 'clamp(2rem, 6.5vw, 3.85rem)',
                 color: '#ffffff',
-                lineHeight: 1.15,
-                letterSpacing: '-1px',
-                margin: '0 auto 16px',
-                maxWidth: '820px',
-                textShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                lineHeight: 1.12,
+                letterSpacing: '-1.2px',
+                margin: '0 auto 18px',
+                maxWidth: '840px',
+                textShadow: '0 4px 24px rgba(0,0,0,0.35)',
               }}
             >
               Master School Olympiads.<br />
@@ -251,8 +278,8 @@ export default async function HomePage() {
                 fontSize: 'clamp(0.9375rem, 2.5vw, 1.25rem)',
                 color: 'rgba(255, 255, 255, 0.92)',
                 maxWidth: '640px',
-                margin: '0 auto 28px',
-                lineHeight: 1.6,
+                margin: '0 auto 32px',
+                lineHeight: 1.65,
                 fontWeight: 400,
                 padding: '0 8px',
               }}
@@ -261,13 +288,13 @@ export default async function HomePage() {
             </p>
 
             {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '32px' }}>
+            <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '34px' }}>
               <a
                 href="#choose-class"
                 className="btn-primary"
                 style={{
-                  fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
-                  padding: '12px 24px',
+                  fontSize: 'clamp(0.9375rem, 2.5vw, 1rem)',
+                  padding: '13px 28px',
                   width: 'min(100%, 320px)',
                   textAlign: 'center',
                 }}
@@ -278,8 +305,8 @@ export default async function HomePage() {
                 href="#olympiad-subjects"
                 className="btn-secondary"
                 style={{
-                  fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
-                  padding: '12px 24px',
+                  fontSize: 'clamp(0.9375rem, 2.5vw, 1rem)',
+                  padding: '13px 26px',
                   width: 'min(100%, 320px)',
                   textAlign: 'center',
                 }}
@@ -289,22 +316,22 @@ export default async function HomePage() {
             </div>
 
             {/* Trust Pills */}
-            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
               {['Expert Olympiad Standard', 'HOTS & Logic Focus', 'Instant PDF Delivery', 'Print Ready'].map((t) => (
                 <span
                   key={t}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '5px',
+                    gap: '6px',
                     fontSize: 'clamp(0.6875rem, 1.8vw, 0.8125rem)',
                     fontWeight: 700,
                     color: 'rgba(255, 255, 255, 0.95)',
                     background: 'rgba(255, 255, 255, 0.08)',
-                    padding: '5px 10px',
+                    padding: '6px 12px',
                     borderRadius: '8px',
                     border: '1px solid rgba(255, 255, 255, 0.12)',
-                    backdropFilter: 'blur(4px)',
+                    backdropFilter: 'blur(6px)',
                   }}
                 >
                   <span style={{ color: 'var(--color-brand-gold)', fontWeight: 900 }}>✓</span> {t}
@@ -315,9 +342,9 @@ export default async function HomePage() {
         </section>
 
         {/* ── 2. CLASS CARDS (PRODUCT PURCHASE / SELL PART FIRST) ─── */}
-        <section id="choose-class" className="section" style={{ background: '#f8fafc', padding: 'clamp(3rem, 6vw, 4.5rem) 0' }}>
+        <section id="choose-class" className="section" style={{ background: '#f8fafc' }}>
           <div className="container-site">
-            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
               <div
                 style={{
                   display: 'inline-block',
@@ -344,7 +371,7 @@ export default async function HomePage() {
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
-                gap: '20px',
+                gap: '22px',
               }}
             >
               {CLASSES.map((cls) => (
@@ -359,15 +386,15 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── 3. INTERACTIVE OLYMPIAD SHOWCASE (MOVED AFTER CLASS CARDS) ─── */}
+        {/* ── 3. INTERACTIVE OLYMPIAD SHOWCASE ───────────────────── */}
         <div id="olympiad-subjects">
           <OlympiadShowcase />
         </div>
 
         {/* ── 4. HOW IT WORKS ───────────────────────────────────────── */}
-        <section className="section" style={{ background: '#f8fafc', padding: 'clamp(3rem, 6vw, 4.5rem) 0' }}>
+        <section className="section" style={{ background: '#f8fafc' }}>
           <div className="container-site">
-            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
               <h2 className="section-title">How It Works</h2>
               <p className="section-subtitle" style={{ margin: '10px auto 0' }}>Four simple steps to start practicing in under 60 seconds.</p>
             </div>
@@ -375,7 +402,7 @@ export default async function HomePage() {
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 210px), 1fr))',
-                gap: '18px',
+                gap: '20px',
               }}
             >
               {[
@@ -386,21 +413,22 @@ export default async function HomePage() {
               ].map((s) => (
                 <div
                   key={s.num}
+                  className="card-hover-lift"
                   style={{
                     textAlign: 'center',
-                    padding: '24px 16px',
+                    padding: '28px 20px',
                     background: '#ffffff',
-                    borderRadius: '16px',
+                    borderRadius: '18px',
                     border: '1.5px solid #e2e8f0',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
+                    boxShadow: 'var(--shadow-card)',
                   }}
                 >
                   <div
                     className="step-number"
                     style={{
-                      margin: '0 auto 14px',
+                      margin: '0 auto 16px',
                       background: 'linear-gradient(135deg, var(--color-brand-blue) 0%, #1e4fd8 100%)',
-                      boxShadow: '0 4px 12px rgba(15, 43, 110, 0.25)',
+                      boxShadow: '0 4px 14px rgba(15, 43, 110, 0.25)',
                     }}
                   >
                     {s.num}
@@ -426,9 +454,9 @@ export default async function HomePage() {
         </section>
 
         {/* ── 5. WHY STUDENTS LOVE US ───────────────────────────────── */}
-        <section className="section" style={{ background: '#ffffff', padding: 'clamp(3rem, 6vw, 4.5rem) 0' }}>
+        <section className="section" style={{ background: '#ffffff' }}>
           <div className="container-site">
-            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '2.75rem' }}>
               <div
                 style={{
                   display: 'inline-block',
@@ -454,7 +482,7 @@ export default async function HomePage() {
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 190px), 1fr))',
-                gap: '16px',
+                gap: '18px',
               }}
             >
               {[
@@ -466,15 +494,16 @@ export default async function HomePage() {
               ].map((f) => (
                 <div
                   key={f.title}
+                  className="card-hover-lift"
                   style={{
                     background: '#f8fafc',
-                    borderRadius: '16px',
-                    padding: '20px 16px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                    borderRadius: '18px',
+                    padding: '24px 18px',
+                    boxShadow: 'var(--shadow-card)',
                     border: '1.5px solid #e2e8f0',
                   }}
                 >
-                  <div style={{ fontSize: '1.875rem', marginBottom: '10px' }}>{f.icon}</div>
+                  <div style={{ fontSize: '2rem', marginBottom: '12px' }}>{f.icon}</div>
                   <h3
                     style={{
                       fontFamily: 'var(--font-display)',
@@ -496,21 +525,20 @@ export default async function HomePage() {
         </section>
 
         {/* ── 6. FAQ ────────────────────────────────────────────────── */}
-        <section className="section" style={{ background: '#f8fafc', padding: 'clamp(3rem, 6vw, 4.5rem) 0' }}>
-          <div className="container-site" style={{ maxWidth: '740px', margin: '0 auto' }}>
+        <section className="section" style={{ background: '#f8fafc' }}>
+          <div className="container-site" style={{ maxWidth: '760px', margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
               <h2 className="section-title">Frequently Asked Questions</h2>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {FAQS.map((faq, i) => (
                 <details
                   key={i}
-                  className="faq-item"
+                  className="faq-card"
                   style={{
                     background: '#ffffff',
-                    borderRadius: '12px',
-                    padding: '0 16px',
-                    border: '1.5px solid #e2e8f0',
+                    borderRadius: '14px',
+                    padding: '0 20px',
                   }}
                 >
                   <summary
@@ -519,7 +547,7 @@ export default async function HomePage() {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      padding: '16px 0',
+                      padding: '18px 0',
                       gap: '12px',
                       cursor: 'pointer',
                     }}
@@ -531,7 +559,7 @@ export default async function HomePage() {
                       +
                     </span>
                   </summary>
-                  <div style={{ paddingBottom: '16px', fontSize: '0.875rem', color: 'var(--color-neutral-600)', lineHeight: 1.65 }}>
+                  <div style={{ paddingBottom: '18px', fontSize: '0.875rem', color: 'var(--color-neutral-600)', lineHeight: 1.65 }}>
                     {faq.a}
                   </div>
                 </details>
@@ -541,13 +569,13 @@ export default async function HomePage() {
         </section>
 
         {/* ── 7. GOLD CTA ───────────────────────────────────────────── */}
-        <section style={{ background: 'linear-gradient(135deg, #f5c518 0%, #eab308 100%)', padding: 'clamp(3rem, 6vw, 4rem) 0' }}>
+        <section style={{ background: 'linear-gradient(135deg, #f5c518 0%, #eab308 100%)', padding: 'clamp(3.5rem, 7vw, 4.5rem) 0' }}>
           <div className="container-site" style={{ textAlign: 'center' }}>
             <h2
               style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 900,
-                fontSize: 'clamp(1.4rem, 4vw, 2.5rem)',
+                fontSize: 'clamp(1.5rem, 4.5vw, 2.6rem)',
                 color: 'var(--color-brand-blue)',
                 margin: '0 0 10px',
                 letterSpacing: '-0.5px',
@@ -555,7 +583,7 @@ export default async function HomePage() {
             >
               Start Practicing for 2026 Olympiads Today
             </h2>
-            <p style={{ fontSize: 'clamp(0.9375rem, 2vw, 1.0625rem)', color: 'rgba(15, 43, 110, 0.9)', margin: '0 0 22px', fontWeight: 700 }}>
+            <p style={{ fontSize: 'clamp(0.9375rem, 2vw, 1.0625rem)', color: 'rgba(15, 43, 110, 0.9)', margin: '0 0 24px', fontWeight: 700 }}>
               ₹299 Complete Bundle of 5 · ₹99 Single Paper · Instant PDF download
             </p>
             <a
@@ -563,14 +591,14 @@ export default async function HomePage() {
               style={{
                 display: 'inline-block',
                 background: 'var(--color-brand-blue)',
-                color: '#fff',
-                padding: '14px 36px',
+                color: '#ffffff',
+                padding: '15px 40px',
                 borderRadius: '12px',
                 textDecoration: 'none',
                 fontFamily: 'var(--font-display)',
                 fontWeight: 900,
                 fontSize: '1rem',
-                boxShadow: '0 6px 20px rgba(15,43,110,0.35)',
+                boxShadow: '0 8px 24px rgba(15,43,110,0.35)',
                 transition: 'transform 0.15s ease',
                 width: 'min(100%, 300px)',
               }}
