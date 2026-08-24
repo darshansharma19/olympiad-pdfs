@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 
-const FROM = process.env.FROM_EMAIL ?? 'OlympiadPDFs <noreply@olympiadpdfs.com>';
+const FROM = process.env.FROM_EMAIL ?? 'OlympiadPDFs <onboarding@resend.dev>';
 
 interface DownloadLink {
   productName: string;
@@ -137,13 +137,11 @@ function buildEmailHtml(params: OrderEmailParams): string {
 </html>`;
 }
 
-export async function sendOrderEmail(params: OrderEmailParams): Promise<void> {
+export async function sendOrderEmail(params: OrderEmailParams): Promise<{ success: boolean; error?: string }> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey || apiKey === 're_xxxxxxxxxxxx') {
     console.log('[email] RESEND_API_KEY not configured — skipping email send');
-    console.log('[email] Would send to:', params.customerEmail);
-    console.log('[email] Downloads:', params.downloads.map((d) => d.url));
-    return;
+    return { success: false, error: 'RESEND_API_KEY not configured' };
   }
 
   const resend = new Resend(apiKey);
@@ -156,10 +154,23 @@ export async function sendOrderEmail(params: OrderEmailParams): Promise<void> {
     subject = `Your ${downloads[0].productName} is Ready 🎯 — OlympiadPDFs`;
   }
 
-  await resend.emails.send({
-    from: FROM,
-    to: params.customerEmail,
-    subject,
-    html: buildEmailHtml(params),
-  });
+  try {
+    const res = await resend.emails.send({
+      from: FROM,
+      to: params.customerEmail,
+      subject,
+      html: buildEmailHtml(params),
+    });
+
+    if (res.error) {
+      console.error('[email] Resend API Error:', res.error);
+      return { success: false, error: res.error.message };
+    }
+
+    console.log(`[email] Email delivered successfully to ${params.customerEmail} (ID: ${res.data?.id})`);
+    return { success: true };
+  } catch (err: any) {
+    console.error('[email] Exception sending email:', err);
+    return { success: false, error: err.message };
+  }
 }
