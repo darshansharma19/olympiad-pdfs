@@ -186,14 +186,21 @@ export async function POST(req: NextRequest) {
         amount,
         paymentStatus: 'PENDING',
         deliveryStatus: 'PENDING',
-        items: {
-          create: productIds.map((pid) => ({
-            productId: pid,
-            price: Math.round(amount / productIds.length),
-          })),
-        },
       },
     });
+
+    // Create items separately to avoid implicit transactions (not supported by Neon HTTP adapter)
+    await Promise.all(
+      productIds.map((pid) =>
+        prisma.orderItem.create({
+          data: {
+            orderId: order.id,
+            productId: pid,
+            price: Math.round(amount / productIds.length),
+          },
+        })
+      )
+    );
 
     // ── Create Razorpay Order ────────────────────────────────────
     const razorpay = getRazorpayInstance();
