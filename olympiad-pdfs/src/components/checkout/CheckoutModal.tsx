@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { SuccessModal } from './SuccessModal';
 
 export interface CheckoutItem {
@@ -50,12 +50,24 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
 
   useEffect(() => {
     nameRef.current?.focus();
+    // Save original scroll state, lock body
     const prevOverflow = document.body.style.overflow;
+    const prevHeight = document.documentElement.style.height;
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.height = '100%';
     return () => {
-      document.body.style.overflow = prevOverflow;
+      // ALWAYS restore on unmount — handles every exit path
+      document.body.style.overflow = prevOverflow || '';
+      document.documentElement.style.height = prevHeight || '';
     };
   }, []);
+
+  // Explicit close — unlock scroll then fire parent handler
+  const handleClose = useCallback(() => {
+    document.body.style.overflow = '';
+    document.documentElement.style.height = '';
+    onClose();
+  }, [onClose]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -69,7 +81,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
     setLoading(true);
     try {
       // Step 1: Create Razorpay order server-side
-      const payload: Record<string, any> = {
+      const payload: Record<string, unknown> = {
         type: item.type,
         customerName: name.trim(),
         customerEmail: email.trim().toLowerCase(),
@@ -145,7 +157,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
           },
         },
         modal: {
-          ondismiss: () => setLoading(false),
+          ondismiss: () => { setLoading(false); },
           backdropclose: false,
           escape: true,
           handleback: true,
@@ -179,7 +191,9 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
               return;
             }
 
-            // Step 5: Show success
+            // Step 5: Unlock scroll BEFORE switching modal so page is scrollable again
+            document.body.style.overflow = '';
+            document.documentElement.style.height = '';
             setSuccessData({
               orderId: verifyData.orderId,
               productName: item.productName,
@@ -196,7 +210,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
       };
 
       const rzp = new window.Razorpay(rzpOptions);
-      rzp.on('payment.failed', function (resp: any) {
+      rzp.on('payment.failed', function (resp: { error?: { description?: string } }) {
         setError(resp.error?.description || 'Payment was unsuccessful. Please try again.');
         setLoading(false);
       });
@@ -208,7 +222,7 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
   }
 
   if (successData) {
-    return <SuccessModal data={successData} onClose={onClose} />;
+    return <SuccessModal data={successData} onClose={handleClose} />;
   }
 
   return (
@@ -217,105 +231,123 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
         position: 'fixed',
         inset: 0,
         zIndex: 1000,
-        background: 'rgba(15,23,42,0.7)',
-        backdropFilter: 'blur(5px)',
+        background: 'rgba(9,18,45,0.8)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '12px',
+        padding: '16px',
         overflowY: 'auto',
       }}
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget) handleClose();
       }}
     >
       <div
         style={{
-          background: '#fff',
-          borderRadius: '16px',
-          padding: 'clamp(20px, 5vw, 28px)',
-          maxWidth: '440px',
+          background: 'linear-gradient(160deg, #ffffff 0%, #f5f8ff 100%)',
+          borderRadius: '20px',
           width: '100%',
+          maxWidth: '440px',
           maxHeight: '92vh',
           overflowY: 'auto',
-          boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
-          animation: 'slideUp 0.25s ease',
-          border: '1px solid #e2e8f0',
+          boxShadow: '0 32px 80px rgba(9,18,75,0.22), 0 0 0 1px rgba(99,120,255,0.1)',
+          animation: 'checkoutSlideUp 0.3s cubic-bezier(0.16,1,0.3,1)',
           boxSizing: 'border-box',
         }}
       >
         {/* Header */}
-        <div style={{ marginBottom: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <h2
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontWeight: 800,
-                fontSize: 'clamp(1.125rem, 3vw, 1.25rem)',
-                color: 'var(--color-brand-blue)',
-                margin: 0,
-              }}
-            >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 22px 14px', borderBottom: '1px solid #eef0f8' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+            <span style={{ fontSize: '1.25rem' }}>🛒</span>
+            <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'clamp(1rem,3vw,1.2rem)', color: '#0f2b6e', letterSpacing: '-0.3px' }}>
               Complete Purchase
             </h2>
-            <button
-              onClick={onClose}
-              style={{
-                background: 'none',
-                border: 'none',
-                fontSize: '1.25rem',
-                cursor: 'pointer',
-                color: 'var(--color-neutral-400)',
-                padding: '6px',
-                lineHeight: 1,
-              }}
-            >
-              ✕
-            </button>
           </div>
-
-          <div
+          <button
+            onClick={handleClose}
+            aria-label="Close"
             style={{
-              background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
-              borderRadius: '10px',
-              padding: '10px 12px',
-              border: '1px solid #e2e8f0',
+              background: '#f1f4ff',
+              border: 'none',
+              borderRadius: '50%',
+              width: '34px',
+              height: '34px',
+              fontSize: '1rem',
+              color: '#64748b',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              transition: 'background 0.15s, transform 0.15s',
             }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#e2e8f0'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#f1f4ff'; }}
           >
-            <p style={{ margin: '0 0 2px', fontSize: '0.8125rem', color: 'var(--color-neutral-600)', fontWeight: 600 }}>
-              {item.productName}
-            </p>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 900,
-                  fontSize: '1.375rem',
-                  color: 'var(--color-brand-blue)',
-                }}
-              >
-                ₹{(item.amount / 100).toFixed(0)}
-              </span>
-              <span style={{ fontSize: '0.6875rem', color: 'var(--color-neutral-500)', fontWeight: 600 }}>
-                (Instant delivery)
-              </span>
-            </div>
+            ✕
+          </button>
+        </div>
+
+        {/* Product card */}
+        <div style={{
+          margin: '16px 20px 6px',
+          background: 'linear-gradient(135deg, #0f2b6e 0%, #1e4fd8 100%)',
+          borderRadius: '14px',
+          padding: '14px 16px',
+          position: 'relative',
+          overflow: 'hidden',
+        }}>
+          <div style={{
+            position: 'absolute', top: '-30px', right: '-30px',
+            width: '110px', height: '110px',
+            background: 'rgba(255,255,255,0.07)',
+            borderRadius: '50%',
+          }} />
+          <div style={{
+            display: 'inline-block',
+            background: 'rgba(255,255,255,0.15)',
+            border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: '20px',
+            padding: '3px 10px',
+            fontSize: '0.6rem',
+            fontWeight: 800,
+            color: 'rgba(255,255,255,0.9)',
+            letterSpacing: '0.08em',
+            marginBottom: '8px',
+          }}>✨ SECURE CHECKOUT</div>
+          <p style={{ margin: '0 0 8px', fontSize: '0.8125rem', fontWeight: 700, color: 'rgba(255,255,255,0.85)', lineHeight: 1.35 }}>
+            {item.productName}
+          </p>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
+            <span style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 900,
+              fontSize: '1.625rem',
+              color: '#f5c518',
+              letterSpacing: '-0.5px',
+              textShadow: '0 2px 8px rgba(245,197,24,0.3)',
+            }}>
+              ₹{(item.amount / 100).toFixed(0)}
+            </span>
+            <span style={{
+              fontSize: '0.6875rem',
+              fontWeight: 700,
+              color: 'rgba(255,255,255,0.7)',
+              background: 'rgba(255,255,255,0.1)',
+              borderRadius: '20px',
+              padding: '2px 8px',
+            }}>⚡ Instant delivery</span>
           </div>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div>
-            <label
-              style={{
-                fontSize: '0.8125rem',
-                fontWeight: 700,
-                color: 'var(--color-neutral-700)',
-                display: 'block',
-                marginBottom: '4px',
-              }}
-            >
-              Full Name *
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px', padding: '10px 20px 22px' }}>
+          {/* Name */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+            <label style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#334155' }}>
+              Full Name <span style={{ color: '#e11d48' }}>*</span>
             </label>
             <input
               ref={nameRef}
@@ -327,31 +359,27 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
               placeholder="e.g. Priya Sharma"
               style={{
                 width: '100%',
-                padding: '10px 12px',
-                border: '1.5px solid #cbd5e1',
-                borderRadius: '8px',
+                padding: '11px 13px',
+                border: '1.5px solid #dde3f0',
+                borderRadius: '10px',
                 fontSize: '0.9375rem',
+                color: '#1e293b',
+                background: '#fff',
                 outline: 'none',
                 boxSizing: 'border-box',
-                fontFamily: 'var(--font-body)',
+                fontFamily: 'inherit',
+                transition: 'border-color 0.15s, box-shadow 0.15s',
               }}
+              onFocus={e => { e.currentTarget.style.borderColor = '#1e4fd8'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,79,216,0.12)'; }}
+              onBlur={e => { e.currentTarget.style.borderColor = '#dde3f0'; e.currentTarget.style.boxShadow = 'none'; }}
             />
           </div>
 
-          <div>
-            <label
-              style={{
-                fontSize: '0.8125rem',
-                fontWeight: 700,
-                color: 'var(--color-neutral-700)',
-                display: 'block',
-                marginBottom: '4px',
-              }}
-            >
-              Email Address *{' '}
-              <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--color-neutral-500)' }}>
-                (PDFs sent here)
-              </span>
+          {/* Email */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+            <label style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#334155' }}>
+              Email Address <span style={{ color: '#e11d48' }}>*</span>{' '}
+              <span style={{ fontWeight: 500, color: '#94a3b8', fontSize: '0.75rem' }}>(PDFs sent here)</span>
             </label>
             <input
               type="email"
@@ -361,44 +389,39 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
               placeholder="e.g. priya@example.com"
               style={{
                 width: '100%',
-                padding: '10px 12px',
-                border: '1.5px solid #cbd5e1',
-                borderRadius: '8px',
+                padding: '11px 13px',
+                border: '1.5px solid #dde3f0',
+                borderRadius: '10px',
                 fontSize: '0.9375rem',
+                color: '#1e293b',
+                background: '#fff',
                 outline: 'none',
                 boxSizing: 'border-box',
-                fontFamily: 'var(--font-body)',
+                fontFamily: 'inherit',
+                transition: 'border-color 0.15s, box-shadow 0.15s',
               }}
+              onFocus={e => { e.currentTarget.style.borderColor = '#1e4fd8'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,79,216,0.12)'; }}
+              onBlur={e => { e.currentTarget.style.borderColor = '#dde3f0'; e.currentTarget.style.boxShadow = 'none'; }}
             />
           </div>
 
-          <div>
-            <label
-              style={{
-                fontSize: '0.8125rem',
-                fontWeight: 700,
-                color: 'var(--color-neutral-700)',
-                display: 'block',
-                marginBottom: '4px',
-              }}
-            >
-              Mobile Number *
+          {/* Mobile */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+            <label style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#334155' }}>
+              Mobile Number <span style={{ color: '#e11d48' }}>*</span>
             </label>
-            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-              <span
-                style={{
-                  padding: '10px 10px',
-                  background: '#f1f5f9',
-                  border: '1.5px solid #cbd5e1',
-                  borderRadius: '8px',
-                  fontSize: '0.875rem',
-                  fontWeight: 700,
-                  color: '#334155',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                +91
-              </span>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <span style={{
+                padding: '11px 12px',
+                background: '#f1f5fd',
+                border: '1.5px solid #dde3f0',
+                borderRadius: '10px',
+                fontSize: '0.875rem',
+                fontWeight: 700,
+                color: '#334155',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+              }}>🇮🇳 +91</span>
               <input
                 type="tel"
                 required
@@ -408,70 +431,137 @@ export function CheckoutModal({ item, onClose }: CheckoutModalProps) {
                 maxLength={10}
                 style={{
                   flex: 1,
-                  padding: '10px 12px',
-                  border: '1.5px solid #cbd5e1',
-                  borderRadius: '8px',
+                  padding: '11px 13px',
+                  border: '1.5px solid #dde3f0',
+                  borderRadius: '10px',
                   fontSize: '0.9375rem',
+                  color: '#1e293b',
+                  background: '#fff',
                   outline: 'none',
                   boxSizing: 'border-box',
-                  fontFamily: 'var(--font-body)',
+                  fontFamily: 'inherit',
+                  transition: 'border-color 0.15s, box-shadow 0.15s',
                 }}
+                onFocus={e => { e.currentTarget.style.borderColor = '#1e4fd8'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(30,79,216,0.12)'; }}
+                onBlur={e => { e.currentTarget.style.borderColor = '#dde3f0'; e.currentTarget.style.boxShadow = 'none'; }}
               />
             </div>
           </div>
 
+          {/* Error */}
           {error && (
-            <div
-              style={{
-                background: '#fef2f2',
-                border: '1px solid #fca5a5',
-                borderRadius: '8px',
-                padding: '8px 12px',
-                fontSize: '0.8125rem',
-                color: '#991b1b',
-                lineHeight: 1.4,
-              }}
-            >
-              ⚠️ {error}
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '8px',
+              background: '#fff1f2',
+              border: '1px solid #fecdd3',
+              borderRadius: '10px',
+              padding: '10px 13px',
+              fontSize: '0.8125rem',
+              color: '#9f1239',
+              lineHeight: 1.4,
+              animation: 'errorShake 0.4s cubic-bezier(0.36,0.07,0.19,0.97)',
+            }}>
+              <span>⚠️</span>
+              <span>{error}</span>
             </div>
           )}
 
+          {/* Pay button */}
           <button
             type="submit"
             disabled={loading}
             style={{
-              background: loading ? '#94a3b8' : 'var(--color-brand-blue)',
+              background: loading
+                ? 'linear-gradient(135deg, #475569, #64748b)'
+                : 'linear-gradient(135deg, #0f2b6e 0%, #1e4fd8 100%)',
               color: '#fff',
               border: 'none',
-              borderRadius: '10px',
-              padding: '13px',
-              fontSize: '0.9375rem',
+              borderRadius: '12px',
+              padding: '15px',
+              fontSize: '1rem',
               fontWeight: 800,
               cursor: loading ? 'not-allowed' : 'pointer',
               fontFamily: 'var(--font-display)',
-              marginTop: '4px',
-              boxShadow: '0 4px 12px rgba(26, 58, 143, 0.25)',
-              transition: 'all 0.15s',
-              minHeight: '46px',
+              marginTop: '2px',
+              boxShadow: loading ? 'none' : '0 6px 20px rgba(15,43,110,0.3)',
+              transition: 'all 0.2s cubic-bezier(0.16,1,0.3,1)',
+              minHeight: '52px',
+              position: 'relative',
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+            }}
+            onMouseEnter={e => {
+              if (!loading) {
+                (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)';
+                (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 10px 28px rgba(15,43,110,0.4)';
+              }
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = loading ? 'none' : '0 6px 20px rgba(15,43,110,0.3)';
             }}
           >
-            {loading ? '⏳ Preparing Gateway...' : `🔒 Pay ₹${(item.amount / 100).toFixed(0)} with UPI / Cards`}
+            {loading ? (
+              <>
+                <span style={{
+                  width: '16px',
+                  height: '16px',
+                  border: '2.5px solid rgba(255,255,255,0.35)',
+                  borderTopColor: '#fff',
+                  borderRadius: '50%',
+                  display: 'inline-block',
+                  animation: 'btnSpin 0.7s linear infinite',
+                  flexShrink: 0,
+                }} />
+                Connecting to Payment Gateway...
+              </>
+            ) : (
+              `🔒 Pay ₹${(item.amount / 100).toFixed(0)} — UPI / Cards`
+            )}
           </button>
 
-          <p
-            style={{
-              margin: '2px 0 0',
-              fontSize: '0.6875rem',
-              color: 'var(--color-neutral-500)',
-              textAlign: 'center',
-              lineHeight: 1.4,
-            }}
-          >
-            ⚡ UPI (GPay, PhonePe, Paytm, QR) · Cards · Net Banking
-          </p>
+          {/* Trust row */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+            fontSize: '0.6875rem',
+            color: '#94a3b8',
+            fontWeight: 500,
+            flexWrap: 'wrap',
+            textAlign: 'center',
+          }}>
+            <span>🔐 256-bit SSL</span>
+            <span>·</span>
+            <span>⚡ UPI · Cards · Net Banking</span>
+            <span>·</span>
+            <span>🛡️ Razorpay Secured</span>
+          </div>
         </form>
       </div>
-      <style>{`@keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }`}</style>
+      <style>{`
+        @keyframes checkoutSlideUp {
+          from { opacity: 0; transform: translateY(24px) scale(0.97); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes btnSpin {
+          to { transform: rotate(360deg); }
+        }
+        @keyframes errorShake {
+          0%,100% { transform: translateX(0); }
+          20%      { transform: translateX(-5px); }
+          40%      { transform: translateX(5px); }
+          60%      { transform: translateX(-3px); }
+          80%      { transform: translateX(3px); }
+        }
+      `}</style>
     </div>
   );
 }
+

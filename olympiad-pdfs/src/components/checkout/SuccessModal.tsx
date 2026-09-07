@@ -30,9 +30,13 @@ export function SuccessModal({ data, onClose }: SuccessModalProps) {
   // Lock page scrolling while modal is open
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
+    const originalHeight = document.documentElement.style.height;
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.height = '100%';
     return () => {
-      document.body.style.overflow = originalOverflow;
+      // Restore scroll on every unmount path
+      document.body.style.overflow = originalOverflow || '';
+      document.documentElement.style.height = originalHeight || '';
     };
   }, []);
 
@@ -49,8 +53,9 @@ export function SuccessModal({ data, onClose }: SuccessModalProps) {
         position: 'fixed',
         inset: 0,
         zIndex: 1000,
-        background: 'rgba(15, 23, 42, 0.75)',
-        backdropFilter: 'blur(4px)',
+        background: 'rgba(9,18,45,0.82)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -63,22 +68,21 @@ export function SuccessModal({ data, onClose }: SuccessModalProps) {
       <div
         style={{
           background: '#fff',
-          borderRadius: '16px',
+          borderRadius: '20px',
           maxWidth: '540px',
           width: '100%',
-          maxHeight: '88vh',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.3)',
+          maxHeight: '90vh',
+          boxShadow: '0 32px 80px rgba(9,18,75,0.25), 0 0 0 1px rgba(99,120,255,0.1)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          animation: 'scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+          animation: 'successScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
-        {/* ── 1. FIXED HEADER ────────────────────────────────────── */}
         <div
           style={{
-            padding: 'clamp(14px, 3.5vw, 18px) clamp(16px, 4vw, 24px)',
-            borderBottom: '1px solid var(--color-neutral-100)',
+            padding: 'clamp(16px,3.5vw,22px) clamp(18px,4vw,26px)',
+            background: 'linear-gradient(135deg, #0f2b6e 0%, #1e4fd8 100%)',
             display: 'flex',
             alignItems: 'flex-start',
             justifyContent: 'space-between',
@@ -87,22 +91,23 @@ export function SuccessModal({ data, onClose }: SuccessModalProps) {
           }}
         >
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '1.375rem', lineHeight: 1 }}>🎉</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+              <span style={{ fontSize: '1.5rem', lineHeight: 1 }}>🎉</span>
               <h2
                 style={{
                   fontFamily: 'var(--font-display)',
                   fontWeight: 900,
-                  fontSize: 'clamp(1.0625rem, 3vw, 1.25rem)',
-                  color: 'var(--color-brand-blue)',
+                  fontSize: 'clamp(1.0625rem, 3vw, 1.3rem)',
+                  color: '#fff',
                   margin: 0,
+                  letterSpacing: '-0.3px',
                 }}
               >
                 Payment Successful!
               </h2>
             </div>
-            <p style={{ margin: '3px 0 0', fontSize: '0.75rem', color: 'var(--color-neutral-500)' }}>
-              Thank you for preparing with OlympiadPDFs.
+            <p style={{ margin: 0, fontSize: '0.8125rem', color: 'rgba(255,255,255,0.75)' }}>
+              Your practice papers are ready to download.
             </p>
           </div>
 
@@ -110,19 +115,22 @@ export function SuccessModal({ data, onClose }: SuccessModalProps) {
             onClick={onClose}
             aria-label="Close modal"
             style={{
-              background: 'var(--color-neutral-100)',
-              border: 'none',
+              background: 'rgba(255,255,255,0.15)',
+              border: '1px solid rgba(255,255,255,0.2)',
               borderRadius: '50%',
-              width: '32px',
-              height: '32px',
+              width: '34px',
+              height: '34px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '1.125rem',
-              color: 'var(--color-neutral-600)',
+              fontSize: '1rem',
+              color: '#fff',
               cursor: 'pointer',
               flexShrink: 0,
+              transition: 'background 0.15s',
             }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.25)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.15)'; }}
           >
             ✕
           </button>
@@ -311,14 +319,29 @@ export function SuccessModal({ data, onClose }: SuccessModalProps) {
       </div>
 
       <style>{`
-        @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.96); }
-          to { opacity: 1; transform: scale(1); }
+        @keyframes successScaleIn {
+          from { opacity: 0; transform: scale(0.94) translateY(10px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .pdf-download-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: #fff;
+          border: 1.5px solid #e8edf8;
+          border-radius: 10px;
+          padding: 10px 14px;
+          text-decoration: none;
+          color: var(--color-neutral-800);
+          min-height: 48px;
+          transition: all 0.18s ease;
+          gap: 10px;
         }
         .pdf-download-row:hover {
-          border-color: var(--color-brand-blue) !important;
-          background: var(--color-brand-blue-50) !important;
-          transform: translateY(-1px);
+          border-color: #1e4fd8;
+          background: #f0f5ff;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(30,79,216,0.12);
         }
       `}</style>
     </div>
