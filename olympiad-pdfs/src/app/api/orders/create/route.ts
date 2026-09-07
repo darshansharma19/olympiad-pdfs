@@ -35,24 +35,24 @@ function getRazorpayInstance() {
 const schema = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('single'),
-    productId: z.string().uuid(),
-    customerName: z.string().min(2),
-    customerEmail: z.string().email(),
-    customerMobile: z.string().min(10).max(10).regex(/^\d+$/),
+    productId: z.string().min(1, 'Product ID is required'),
+    customerName: z.string().min(2, 'Name must be at least 2 characters'),
+    customerEmail: z.string().email('Invalid email address'),
+    customerMobile: z.string().min(10).max(10).regex(/^\d+$/, 'Mobile must be 10 digits'),
   }),
   z.object({
     type: z.literal('pack_2'),
-    productIds: z.array(z.string().uuid()).length(2),
-    customerName: z.string().min(2),
-    customerEmail: z.string().email(),
-    customerMobile: z.string().min(10).max(10).regex(/^\d+$/),
+    productIds: z.array(z.string().min(1)).length(2, 'Exactly 2 products required'),
+    customerName: z.string().min(2, 'Name must be at least 2 characters'),
+    customerEmail: z.string().email('Invalid email address'),
+    customerMobile: z.string().min(10).max(10).regex(/^\d+$/, 'Mobile must be 10 digits'),
   }),
   z.object({
     type: z.literal('bundle_5'),
     classNumber: z.number().int().min(6).max(10),
-    customerName: z.string().min(2),
-    customerEmail: z.string().email(),
-    customerMobile: z.string().min(10).max(10).regex(/^\d+$/),
+    customerName: z.string().min(2, 'Name must be at least 2 characters'),
+    customerEmail: z.string().email('Invalid email address'),
+    customerMobile: z.string().min(10).max(10).regex(/^\d+$/, 'Mobile must be 10 digits'),
   }),
 ]);
 
@@ -61,8 +61,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const parsed = schema.safeParse(body);
     if (!parsed.success) {
+      const issues = parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join(', ');
       return NextResponse.json(
-        { error: 'Invalid input', details: parsed.error.flatten() },
+        { error: `Invalid input (${issues})`, details: parsed.error.flatten() },
         { status: 400 }
       );
     }
@@ -76,8 +77,10 @@ export async function POST(req: NextRequest) {
 
     if (data.type === 'single') {
       purchaseType = 'single';
-      const product = await prisma.product.findUnique({
-        where: { id: data.productId },
+      const product = await prisma.product.findFirst({
+        where: {
+          OR: [{ id: data.productId }, { slug: data.productId }],
+        },
       });
 
       if (!product || !product.isActive) {
@@ -102,7 +105,7 @@ export async function POST(req: NextRequest) {
 
       const products = await prisma.product.findMany({
         where: {
-          id: { in: [id1, id2] },
+          OR: [{ id: { in: [id1, id2] } }, { slug: { in: [id1, id2] } }],
           isActive: true,
         },
       });

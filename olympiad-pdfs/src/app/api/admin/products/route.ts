@@ -4,14 +4,14 @@ import { isAuthenticatedAdmin } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
-const CLASSES = [6, 7, 8, 9, 10];
+const CLASSES = [6, 7, 8, 9, 10] as const;
 const SUBJECTS = [
   { slug: 'mathematics', name: 'International Mathematics Olympiad (IMO)' },
   { slug: 'science', name: 'International Science Olympiad (ISO)' },
   { slug: 'english', name: 'International English Olympiad (IEO)' },
   { slug: 'computer_science', name: 'International Computer Science Olympiad (ICSO)' },
   { slug: 'reasoning', name: 'International Reasoning Olympiad (IRO)' },
-];
+] as const;
 
 async function ensureDefaultProducts() {
   try {
