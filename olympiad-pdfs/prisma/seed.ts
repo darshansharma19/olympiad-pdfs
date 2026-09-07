@@ -1,13 +1,4 @@
-import * as path from 'path';
-import { PrismaClient } from '@prisma/client';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-
-// Resolve absolute path to dev.db and format as file: URL
-const dbPath = path.resolve(process.cwd(), 'dev.db');
-const dbUrl = `file:${dbPath.replace(/\\/g, '/')}`;
-
-const adapter = new PrismaBetterSqlite3({ url: dbUrl });
-const prisma = new PrismaClient({ adapter });
+import { prisma } from '../src/lib/db';
 
 const CLASSES = [6, 7, 8, 9, 10] as const;
 
@@ -23,7 +14,7 @@ const INDIVIDUAL_PRICE = 9900; // ₹99 in paise
 
 async function main() {
   console.log('🌱 Syncing OlympiadPDFs database with Olympiad products...\n');
-  console.log(`   DB: ${dbUrl}\n`);
+  console.log(`   DB: remote/configured\n`);
 
   let updated = 0;
 

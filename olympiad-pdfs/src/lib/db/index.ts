@@ -29,11 +29,10 @@ function createPrismaClient(): PrismaClient {
   // ── Neon / PostgreSQL (production on Vercel) ──────────────────
   if (rawUrl.startsWith('postgresql://') || rawUrl.startsWith('postgres://')) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { neon } = require('@neondatabase/serverless');
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { PrismaNeon } = require('@prisma/adapter-neon');
-    const sql = neon(rawUrl);
-    const adapter = new PrismaNeon(sql);
+    const { PrismaNeonHttp } = require('@prisma/adapter-neon');
+    
+    // Fallback options for neon
+    const adapter = new PrismaNeonHttp(rawUrl, { fetchOptions: { cache: 'no-store' } });
     return new PrismaClient({
       adapter,
       log: ['error'],
